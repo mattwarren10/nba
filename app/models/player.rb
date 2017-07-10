@@ -3,9 +3,12 @@ require 'net/https'
 
 class Player < ApplicationRecord
   belongs_to :team
+  
 
 	# Request (GET )
-	def send_request
+	def self.send_request
+      user = ENV['NBA_USER']
+  	  pass = ENV['NBA_PASS']
 	  uri = URI("https://www.mysportsfeeds.com/api/feed/pull/nba/2017-playoff/active_players.json")
 
 	  # Create client
@@ -16,14 +19,13 @@ class Player < ApplicationRecord
 	  # Create Request
 	  req =  Net::HTTP::Get.new(uri)
 	  # Add headers
-	  req.add_field "Authorization", "Basic " + base64_encode(ENV['USER'] + ":" + ENV['PASS'])
+	  req.add_field "Authorization", "Basic " + Base64.encode64("#{user}:#{pass}")
 
 	  # Fetch Request
-	  res = http.request(req)
-	  @result = JSON.parse(res)
-	  puts "Response HTTP Status Code: #{res.code}"
-	  puts "Response HTTP Response Body: #{res.body}"
-	rescue StandardError => e
-	  puts "HTTP Request failed (#{e.message})"
+	  response = http.request(req)	  
+	  puts "Response HTTP Status Code: #{response.code}"
+	  puts "Response HTTP Response Body: #{response.body}"	  
+
+	  result = JSON.parse(response.body)
 	end
 end

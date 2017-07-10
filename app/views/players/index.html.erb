@@ -1,0 +1,33 @@
+<h1>Players</h1>
+
+<table>
+	<thead>
+		<td>Last Name</td>
+		<td>First Name</td>
+		<td>Number</td>
+		<td>Position</td>
+		<td>Height</td>
+		<td>Weight</td>
+		<td>Birthday</td>
+		<td>Age</td>
+		<td>Rookie?</td>
+		<td>Team</td>
+		<td></td>
+	</thead>
+	<tbody>
+	<% @result['activeplayers']['playerentry'].each do |data| %>
+		<tr>
+			<td><%= data['player']['LastName'] %></td>
+			<td><%= data['player']['FirstName'] %></td>
+			<td><%= data['player']['JerseyNumber'] %></td>
+			<td><%= data['player']['Position'] %></td>
+			<td><%= data['player']['Height'] %></td>
+			<td><%= data['player']['Weight'] %></td>
+			<td><%= data['player']['BirthDate'] %></td>
+			<td><%= data['player']['Age'] %></td>
+			<td><%= data['player']['IsRookie'] %></td>
+			
+		</tr>
+	<% end %>
+	</tbody>
+</table>

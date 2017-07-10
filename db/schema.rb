@@ -10,18 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170710162546) do
+ActiveRecord::Schema.define(version: 20170710202448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "nba_teams", force: :cascade do |t|
-    t.string "city"
-    t.string "name"
-    t.string "abbreviation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "players", force: :cascade do |t|
     t.bigint "team_id"
