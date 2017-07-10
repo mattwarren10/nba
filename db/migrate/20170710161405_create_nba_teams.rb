@@ -1,7 +1,6 @@
-class CreateTeams < ActiveRecord::Migration[5.1]
+class CreateNbaTeams < ActiveRecord::Migration[5.1]
   def change
-    create_table :teams do |t|
-      t.integer :id
+    create_table :nba_teams do |t|
       t.string :city
       t.string :name
       t.string :abbreviation
