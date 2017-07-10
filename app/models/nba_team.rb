@@ -1,2 +1,0 @@
-class NbaTeam < ApplicationRecord
-end
