@@ -6,6 +6,7 @@ class Player < ApplicationRecord
   validates :last_name, presence: true
   validates :first_name, presence: true
   validates :jersey_number, presence: true
+  validates :position, presence: true
   validates :height, presence: true
   validates :weight, presence: true
   validates :birth_date, presence: true
