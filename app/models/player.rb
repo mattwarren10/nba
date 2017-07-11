@@ -3,6 +3,14 @@ require 'net/https'
 
 class Player < ApplicationRecord
   belongs_to :team
+  validates :last_name, presence: true
+  validates :first_name, presence: true
+  validates :jersey_number, presence: true
+  validates :height, presence: true
+  validates :weight, presence: true
+  validates :birth_date, presence: true
+  validates :age, presence: true
+  validates :birth_city, presence: true
   
 
 	# Request (GET )
