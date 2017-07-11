@@ -4,16 +4,15 @@ require 'net/https'
 class Player < ApplicationRecord
   belongs_to :team
   
-  # validates :team_id, presence: true,
-  # validates :last_name, presence: true
-  # validates :first_name, presence: true
-  # validates :jersey_number, presence: true
-  # validates :position, presence: true
-  # validates :height, presence: true
-  # validates :weight, presence: true
-  # validates :birth_date, presence: true
-  # validates :age, presence: true
-  # validates :birth_city, presence: true
+  validates_presence_of :last_name, 
+  						:first_name, 
+  						:jersey_number, 
+  						:position, 
+  						:height, 
+  						:weight, 
+  						:birth_date, 
+  						:age, 
+  						:birth_city
   
 
 	# Request (GET )
