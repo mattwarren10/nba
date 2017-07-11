@@ -3,6 +3,8 @@ require 'net/https'
 
 class Player < ApplicationRecord
   belongs_to :team
+  
+  validates :team_id, presence: true,
   validates :last_name, presence: true
   validates :first_name, presence: true
   validates :jersey_number, presence: true
