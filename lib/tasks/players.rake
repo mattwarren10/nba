@@ -14,14 +14,9 @@ namespace :players do
   			age: data['player']['Age'].to_i,
   			is_rookie: data['player']['IsRookie']
   		)
-
-  		Team.create!(
-  			id: data['team']['ID'].to_i,
-  			city: data['team']['City'],
-  			name: data['team']['Name'],
-  			abbreviation: data['team']['Abbreviation']
-  		)
   	end
+    
+    puts "Total players created: " + Player.all.count
   end
 
   desc "updates the records for each player from the mysportsfeeds api."
