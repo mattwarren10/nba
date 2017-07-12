@@ -5,15 +5,15 @@ class Player < ApplicationRecord
 
   
   validates_presence_of :last_name, 
-  						:first_name, 
-  						:jersey_number, 
-  						:position, 
-  						:height, 
-  						:weight, 
-  						:birth_date, 
-  						:age, 
-  						:birth_city
-  
+            						:first_name, 
+            						:jersey_number, 
+            						:position, 
+            						:height, 
+            						:weight, 
+            						:birth_date, 
+            						:age, 
+            						:birth_city
+            
 	def self.call_active_players_from_api
 		send_request("2016-2017-regular", "active_players")
 	end

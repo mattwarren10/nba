@@ -11,10 +11,9 @@
 		<td>Birthday</td>
 		<td>Age</td>
 		<td>Rookie?</td>
-		<td>Team</td>
-		<td></td>
 	</thead>
 	<tbody>
+	<% player_count = 0 %>
 	<% @result['activeplayers']['playerentry'].each do |data| %>
 		<tr>
 			<td><%= data['player']['LastName'] %></td>
@@ -28,6 +27,8 @@
 			<td><%= data['player']['IsRookie'] %></td>
 			
 		</tr>
+		<% player_count += 1 %>
 	<% end %>
+	<p><%= player_count%></p>
 	</tbody>
 </table>
