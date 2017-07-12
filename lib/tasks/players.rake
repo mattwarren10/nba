@@ -1,10 +1,9 @@
-namespace :nba_players do
+namespace :players do
   desc "generates a record for each player and team from the mysportsfeeds api."
   task create: :environment do
   	result = Player.send_request
   	result['activeplayers']['playerentry'].each do |data|
   		Player.create!(
-  			team_id: data['team']['ID'].to_i,
   			last_name: data['player']['LastName'],
   			first_name: data['player']['FirstName'],
   			jersey_number: data['player']['JerseyNumber'],

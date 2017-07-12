@@ -4,7 +4,11 @@ RSpec.describe Player, type: :model do
 	before do 		
 		@player = FactoryGirl.create(:player)		
 	end
-	describe 'creation' do		
+	describe 'creation' do	
+		it 'can be created without a team is' do
+			@player.team_id = nil
+			expect(@player).to be_valid
+		end	
 		it 'can not be created without a last name' do
 			@player.last_name = nil
 			expect(@player).to_not be_valid
