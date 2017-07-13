@@ -1,6 +1,6 @@
 FactoryGirl.define do
-	factory :player do
-		team_id 1
+	factory :static_player do
+		static_team_id 1
 		last_name "Warren"
 		first_name "Matt"
 		jersey_number "33"
@@ -11,6 +11,6 @@ FactoryGirl.define do
 		birth_city "Bloomington, IN"
 		is_rookie false
 		position "PG"
-		team
+		static_team
 	end
 end

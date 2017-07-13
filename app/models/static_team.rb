@@ -1,7 +1,7 @@
-class Team < ApplicationRecord
+class StaticTeam < ApplicationRecord
 	extend MySportsApi
 
-	has_many :players
+	has_many :static_players
 
 	validates :city, presence: true, uniqueness: true
 	validates :name, presence: true, uniqueness: true

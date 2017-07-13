@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  team: one
+  static_team: one
   last_name: MyString
   first_name: MyString
   jersey_number: MyString
@@ -13,7 +13,7 @@ one:
   is_rookie: false
 
 two:
-  team: two
+  static_team: two
   last_name: MyString
   first_name: MyString
   jersey_number: MyString

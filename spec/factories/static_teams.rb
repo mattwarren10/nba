@@ -1,11 +1,11 @@
 FactoryGirl.define do
-	factory :team do
+	factory :static_team do
 		city "Indiana"
 		name "Pacers"
 		abbreviation "IND"
 	end
 
-	factory :team_duplicate, class: "Team" do
+	factory :static_team_duplicate, class: "StaticTeam" do
 		city "Indiana"
 		name "Pacers"
 		abbreviation "IND"

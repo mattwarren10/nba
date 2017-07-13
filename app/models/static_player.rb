@@ -1,7 +1,7 @@
 
-class Player < ApplicationRecord
+class StaticPlayer < ApplicationRecord
   extend MySportsApi
-  belongs_to :team, optional: true
+  belongs_to :static_team, optional: true
 
   
   validates_presence_of :last_name, 

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PlayersControllerTest < ActionDispatch::IntegrationTest
+class StaticPlayersControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get players_index_url
     assert_response :success
