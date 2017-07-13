@@ -11,6 +11,7 @@ FactoryGirl.define do
 		birth_city "Bloomington, IN"
 		is_rookie false
 		position "PG"
+		nba_com 202330
 		static_team
 	end
 end

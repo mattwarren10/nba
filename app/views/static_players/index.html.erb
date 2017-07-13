@@ -11,6 +11,7 @@
 		<td>Birthday</td>
 		<td>Age</td>
 		<td>Rookie?</td>
+		<td>NBA.com ID</td>
 	</thead>
 	<tbody>
 	<% player_count = 0 %>
@@ -25,6 +26,13 @@
 			<td><%= data['player']['BirthDate'] %></td>
 			<td><%= data['player']['Age'] %></td>
 			<td><%= data['player']['IsRookie'] %></td>
+			<td>
+				<% if data['player']['externalMapping'].nil? %>
+					<%= "unidentified" %>
+				<% else %>
+					<%= data['player']['externalMapping']['ID'].to_i %>
+				<% end %>
+			</td>
 			
 		</tr>
 		<% player_count += 1 %>

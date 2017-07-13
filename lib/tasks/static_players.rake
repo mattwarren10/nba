@@ -13,8 +13,9 @@ namespace :static_players do
   			height: data['player']['Height'],
   			weight: data['player']['Weight'],
   			birth_date: data['player']['BirthDate'],
-  			age: data['player']['Age'],
+  			age: data['player']['Age'].to_i,
   			is_rookie: data['player']['IsRookie']
+        # nba_com: data['team']
   		)
       static_player_counter += 1
   	end
