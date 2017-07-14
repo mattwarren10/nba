@@ -14,8 +14,7 @@ class StaticPlayer < ApplicationRecord
             						:weight, 
             						:birth_date, 
             						:age, 
-            						:birth_city,
-                        :nba_com
+            						:birth_city
             
 	def self.call_active_players_from_api
 		send_request("2016-2017-regular", "active_players")

@@ -45,9 +45,9 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.birth_city = nil
 			expect(@static_player).to_not be_valid
 		end
-		it 'can not be created without a nba_com' do
+		it 'can be created without a nba_com' do
 			@static_player.nba_com = nil
-			expect(@static_player).to_not be_valid
+			expect(@static_player).to be_valid
 		end
 	end
 end
