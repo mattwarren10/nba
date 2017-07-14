@@ -16,6 +16,7 @@
 	</thead>
 	<tbody>
 	<% player_count = 0 %>
+	<% nba_com = 0 %>
 	<% @result['activeplayers']['playerentry'].each do |data| %>
 		<tr>
 			
@@ -33,19 +34,19 @@
 					<%= 0 %>
 				<% else %>
 					<%= data['player']['externalMapping']['ID'].to_i %>
+					<% nba_com += 1 %>
 				<% end %>
 			</td>
 			<td>
-				<% if data['team']['ID'].nil? %>
-					<%= "No team yet" %>
-				<% else %>
-					<%= data['team']['ID'].to_i %>
-				<% end %>									
+				<%= data['team'] %>
+					
+													
 			</td>
 			
 		</tr>
 		<% player_count += 1 %>
 	<% end %>
-	<p><%= player_count%></p>
+	<p><%= "Player count #{player_count}" %></p>
+	<p><%= "Players with nba_com #{nba_com}" %></p>
 	</tbody>
 </table>

@@ -1,10 +1,7 @@
 
 class StaticPlayer < ApplicationRecord
   extend MySportsApi
-  belongs_to :static_team, optional: true
-
-  attribute :nba_com, if: :nba_official_id_available?
-
+  belongs_to :static_team
   
   validates_presence_of :last_name, 
             						:first_name, 
@@ -20,11 +17,4 @@ class StaticPlayer < ApplicationRecord
 		send_request("2016-2017-regular", "active_players")
 	end
 
-  def nba_official_id_available?
-    if data['player']['externalMapping'].nil?
-      0
-    else
-      data['player']['externalMapping']['ID'].to_i
-    end
-  end
 end

@@ -15,7 +15,6 @@ namespace :static_players do
   			birth_date: data['player']['BirthDate'],
   			age: data['player']['Age'].to_i,
   			is_rookie: data['player']['IsRookie']
-        nba_com: data['player']['externalMapping']['ID'].to_i
   		)
       static_player_counter += 1
   	end
