@@ -1,7 +1,7 @@
 <h1>Players</h1>
 
 <table>
-	<thead>
+	<thead>		
 		<td>Last Name</td>
 		<td>First Name</td>
 		<td>Number</td>
@@ -12,11 +12,13 @@
 		<td>Age</td>
 		<td>Rookie?</td>
 		<td>NBA.com ID</td>
+		<td>Team ID</td>
 	</thead>
 	<tbody>
 	<% player_count = 0 %>
 	<% @result['activeplayers']['playerentry'].each do |data| %>
 		<tr>
+			
 			<td><%= data['player']['LastName'] %></td>
 			<td><%= data['player']['FirstName'] %></td>
 			<td><%= data['player']['JerseyNumber'] %></td>
@@ -28,10 +30,17 @@
 			<td><%= data['player']['IsRookie'] %></td>
 			<td>
 				<% if data['player']['externalMapping'].nil? %>
-					<%= "unidentified" %>
+					<%= 0 %>
 				<% else %>
 					<%= data['player']['externalMapping']['ID'].to_i %>
 				<% end %>
+			</td>
+			<td>
+				<% if data['team']['ID'].nil? %>
+					<%= "No team yet" %>
+				<% else %>
+					<%= data['team']['ID'].to_i %>
+				<% end %>									
 			</td>
 			
 		</tr>

@@ -2,7 +2,7 @@ namespace :static_players do
   desc "generates a record for each player and team from the mysportsfeeds api."
   task create: :environment do
     static_player_counter = 0
-  	result = StaticPlayer.send_request
+  	result = StaticPlayer.call_active_players_from_api
   	result['activeplayers']['playerentry'].each do |data|
   		StaticPlayer.create!(
         static_team_id: data['team']['ID'].to_i,
@@ -15,7 +15,7 @@ namespace :static_players do
   			birth_date: data['player']['BirthDate'],
   			age: data['player']['Age'].to_i,
   			is_rookie: data['player']['IsRookie']
-        # nba_com: data['team']
+        nba_com: data['player']['externalMapping']['ID'].to_i
   		)
       static_player_counter += 1
   	end
