@@ -3,7 +3,7 @@ class StaticTeam < ApplicationRecord
 
 	has_many :static_players
 
-	validates :city, presence: true, uniqueness: true
+	validates :city, presence: true
 	validates :name, presence: true, uniqueness: true
 	validates :abbreviation, presence: true, uniqueness: true
 	validates :nba_com, presence: true, uniqueness: true

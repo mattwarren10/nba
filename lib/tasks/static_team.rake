@@ -14,4 +14,17 @@ namespace :static_team do
     end
     puts "#{nba_teams_created_counter} StaticTeam database records created"
   end
+
+  desc "downloads team logos from nba.com"
+  task get_logos: :environment do
+    nba_team_logos_created = 0
+    @teams = StaticTeam.all
+    @teams.each do |team| 
+      img = open("http://i.cdn.turner.com/nba/nba/assets/logos/teams/primary/web/#{team.abbreviation}.svg")
+      IO.copy_stream(img, "../../app/assets/images/nba_team_logos/#{team.abbreviation}.svg")
+      nba_team_logos += 1
+    end
+    puts "#{nba_team_logos} team logos have been downloaded to the assets directory"
+  end
 end
+
