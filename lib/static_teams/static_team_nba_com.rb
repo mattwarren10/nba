@@ -3,7 +3,7 @@ require 'selenium-webdriver'
 
 module StaticTeamNbaCom		
 
-	def self.navigate_to_page
+	def self.call_selenium
 		Selenium::WebDriver::Chrome.driver_path="/Users/mattwarren/dev/chrome_web_driver/chromedriver"
 		driver = Selenium::WebDriver.for :chrome
 		get_data_from(driver)	

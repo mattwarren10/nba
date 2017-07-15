@@ -5,7 +5,7 @@ module StaticTeamAttributes
 	include StaticTeamNbaCom
 	include StaticTeamWikipedia
 
-	@@ids = StaticTeamNbaCom.navigate_to_page
+	@@ids = StaticTeamNbaCom.call_selenium
 	@@teams = StaticTeamWikipedia.retrieve_from_wikipedia # @@teams is updated to have ids when get_teams is called
 
 	def self.add_nba_com_to_teams
