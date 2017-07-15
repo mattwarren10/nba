@@ -43,11 +43,9 @@ module StaticTeamNbaCom
   		sorted_nba_com_teams_hash
   	end
 
-  	def self.search abbr
-  		@@ids[abbr]
-  	end
-
-  	@@ids = StaticTeamNbaCom.navigate_to_page
+  	# def self.search abbr
+  	# 	@@ids[abbr]
+  	# end
 end
 
 

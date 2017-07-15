@@ -2,15 +2,15 @@ require 'rubygems'
 require 'open-uri'
 require 'nokogiri'
 
-
 module StaticTeamWikipedia
-  def retrieve_from_wikipedia
-    WIKI_URL = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
-    nba_wikipedia_page = Nokogiri::HTML(open(WIKI_URL))
+  def self.retrieve_from_wikipedia
+    wiki_url = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
+    nba_wikipedia_page = Nokogiri::HTML(open(wiki_url))
     table = nba_wikipedia_page.css("tr").text 
+    convert_to_arr(table)
   end
 
-  def convert_to_arr data
+  def self.convert_to_arr data
     arr = []        
     arr = data.split("\n")
     4.times { arr.shift }
@@ -18,7 +18,7 @@ module StaticTeamWikipedia
     isolate_strings(arr)
   end
 
-  def isolate_strings arr    
+  def self.isolate_strings arr    
     team_names = []
     team_cities = []
     team_abbr = []
@@ -36,7 +36,7 @@ module StaticTeamWikipedia
     create_hash(team_cities, team_names, team_abbr)
   end
 
-  def create_hash cities, names, abbr
+  def self.create_hash team_cities, team_names, team_abbr
     teams = []
     30.times do |i|
       teams_hash = {}  
@@ -48,13 +48,3 @@ module StaticTeamWikipedia
     teams
   end
 end
-
-
-
-
-
-
-# p teams[0][:city]
-
-@@id = StaticTeamNbaCom.search("IND")
-p @@id
