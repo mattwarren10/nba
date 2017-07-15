@@ -20,7 +20,3 @@ module StaticTeamAttributes
 		@@teams
 	end
 end
-
-
-
-# p teams[0][:city]
