@@ -12,7 +12,7 @@ namespace :static_team do
         nba_com: team[:nba_com]
       )
       if t.valid?        
-        "#{t.city} #{t.name} team has been created"
+        puts "#{t.city} #{t.name} team has been created"
         nba_teams_created_counter += 1
       else
         puts "Rails tried to create: #{t} but failed"
@@ -27,9 +27,15 @@ namespace :static_team do
     nba_team_logos_created = 0
     @teams = StaticTeam.all
     @teams.each do |team| 
-      img = open("http://i.cdn.turner.com/nba/nba/assets/logos/teams/primary/web/#{team.abbreviation}.svg")
-      IO.copy_stream(img, "app/assets/images/nba_team_logos/#{team.abbreviation}.svg")
-      nba_team_logos_created += 1
+      img_src = open("http://i.cdn.turner.com/nba/nba/assets/logos/teams/primary/web/#{team.abbreviation}.svg")
+      img_dest = "app/assets/images/nba_team_logos/#{team.abbreviation}.svg"
+      IO.copy_stream(img_src, img_dest)
+      if File.file? img_dest
+        puts "#{team.city} #{team.name}'s svg image has been stored at #{img_dest}"
+        nba_team_logos_created += 1
+      else
+        puts "Failed to store #{team.city} #{team.name}'s svg"
+      end
     end
     puts "#{nba_team_logos_created} team logos have been downloaded to the assets directory"
   end
