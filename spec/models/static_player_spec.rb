@@ -39,7 +39,7 @@ RSpec.describe StaticPlayer, type: :model do
 		end
 		it 'can not be created without a age' do
 			@static_player.age = nil
-			expect(@static_player).to_not be_valid
+			expect(@static_player).to be_valid
 		end
 		it 'can not be created without a birth city' do
 			@static_player.birth_city = nil
