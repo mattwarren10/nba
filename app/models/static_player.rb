@@ -11,6 +11,7 @@ class StaticPlayer < ApplicationRecord
             						:weight, 
             						:birth_date, 
             						:which_pick,
+                        :years_pro,
             						:before_nba
             
 	def self.call_active_players_from_api

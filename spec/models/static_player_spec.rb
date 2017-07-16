@@ -41,7 +41,7 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.age = nil
 			expect(@static_player).to be_valid
 		end
-		it 'can not be created without a birth city' do
+		it 'can not be created without a before_nba attr' do
 			@static_player.before_nba = nil
 			expect(@static_player).to_not be_valid
 		end
@@ -49,8 +49,12 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.nba_com = nil
 			expect(@static_player).to be_valid
 		end
-		it 'can be created without a nba_com' do
+		it 'can not be created without a which_pick attr' do
 			@static_player.which_pick = nil
+			expect(@static_player).to_not be_valid
+		end
+		it 'can not be created without a years_pro attr' do
+			@static_player.years_pro = nil
 			expect(@static_player).to_not be_valid
 		end
 	end

@@ -9,10 +9,11 @@ FactoryGirl.define do
 		birth_date DateTime.now
 		age 18
 		before_nba "Bloomington, IN"
-		is_rookie false
+		is_rookie true
 		position "PG"
 		nba_com 202330
 		which_pick "2010 Rnd 1 Pick 1"
+		years_pro 0
 		static_team
 	end
 end
