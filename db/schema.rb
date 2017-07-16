@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716181747) do
+ActiveRecord::Schema.define(version: 20170716205844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20170716181747) do
     t.integer "nba_com"
     t.datetime "age"
     t.datetime "birth_date"
+    t.string "which_pick"
     t.index ["static_team_id"], name: "index_static_players_on_static_team_id"
   end
 

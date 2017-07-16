@@ -1,17 +1,5 @@
-
 require 'open-uri'
 require 'selenium-webdriver'
-
-# html_data = open('http://nba.com/players')
-# nokogiri_object = Nokogiri::HTML(html_data)
-# # tagcloud_elements = nokogiri_object.xpath("//a/@href")
-# # tagcloud_elements = nokogiri_object.xpath("//a[contains(@href, '/players/')]/@href")
-# tagcloud_elements = nokogiri_object.xpath("//a/@href")
-
-# tagcloud_elements.each do |tagcloud_element|
-#   puts tagcloud_element.text
-# end
-
 
 module StaticPlayerNbaCom
 	def call_selenium

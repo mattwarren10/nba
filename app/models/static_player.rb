@@ -10,7 +10,7 @@ class StaticPlayer < ApplicationRecord
             						:height, 
             						:weight, 
             						:birth_date, 
-            						# :age, to be rendered in views to grab current time a user visits the page
+            						:which_pick,
             						:before_nba
             
 	def self.call_active_players_from_api
