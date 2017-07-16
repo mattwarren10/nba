@@ -15,24 +15,36 @@ require 'selenium-webdriver'
 # get static_team_id from team logo src
 #
 
-module StaticPlayer
+module StaticPlayerNbaCom
 Selenium::WebDriver::Chrome.driver_path="/Users/mattwarren/dev/chrome_web_driver/chromedriver"
 driver = Selenium::WebDriver.for :chrome
 driver.navigate.to 'http://nba.com/players'
 static_player_nba_com = driver.find_elements(:css, 'a.row.playerList')
+static_player_team_abbr = driver.find_elements(:css, 'a.row.playerList abbr')
+
+
 player_links = []
+player_team_abbr = []
 elements = []
 players = []
-end
+
 static_player_nba_com.each do |data|
 	player_links.push(data.attribute("href"))
 	# ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i) <= this was a regex that grabbed the id in the url
 end
 
+static_player_team_abbr.each do |data|
+	player_team_abbr.push(data.text)
+end
 
 
-player_links.each do |link|
-	elements.push(link.gsub(/http:\/\/www.nba.com\/players\//, '').split("/"))
+
+
+player_links.each_with_index do |link, i|
+	player = []
+	player = link.gsub(/http:\/\/www.nba.com\/players\//, '').split("/")
+	player.push(player_team_abbr[i])
+	elements.push(player)
 end
 
 elements.each do |e|
@@ -40,8 +52,10 @@ elements.each do |e|
   player_hash[:first_name] = e[0]
   player_hash[:last_name] = e[1]
   player_hash[:nba_com] = e[2].to_i
+  player_hash[:static_team_id] = e[3]
   players.push(player_hash)
 end
 
 p players
 p static_player_nba_com.length
+end
