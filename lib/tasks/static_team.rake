@@ -17,6 +17,7 @@ namespace :static_team do
       else
         puts "Rails tried to create: #{t} but failed"
         puts t.errors.full_messages
+        break
       end
     end
     puts "#{nba_teams_created_counter} StaticTeam database records created"
@@ -35,6 +36,7 @@ namespace :static_team do
         nba_team_logos_created += 1
       else
         puts "Failed to store #{team.city} #{team.name}'s svg"
+        break
       end
     end
     puts "#{nba_team_logos_created} team logos have been downloaded to the assets directory"

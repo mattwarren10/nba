@@ -2,20 +2,20 @@ require 'open-uri'
 require 'selenium-webdriver'
 
 module StaticPlayerNbaCom
-	def call_selenium
+	def self.call_selenium
 		Selenium::WebDriver::Chrome.driver_path="/Users/mattwarren/dev/chrome_web_driver/chromedriver"
 		driver = Selenium::WebDriver.for :chrome
 		get_data_from(driver)
 	end
 
-	def get_data_from driver
+	def self.get_data_from driver
 		driver.navigate.to 'http://nba.com/players'
 		selenium_nba_com = driver.find_elements(:css, 'a.row.playerList')
 		selenium_team_abbr = driver.find_elements(:css, 'a.row.playerList abbr')
 		parse_data(selenium_nba_com, selenium_team_abbr)
 	end
 
-	def parse_data selenium_nba_com, selenium_team_abbr
+	def self.parse_data selenium_nba_com, selenium_team_abbr
 		player_links = []
 		player_team_abbr = []
 		selenium_nba_com.each do |data|
@@ -29,7 +29,7 @@ module StaticPlayerNbaCom
 		collect_each_element(player_links, player_team_abbr)
 	end
 
-	def collect_each_element player_links, player_team_abbr
+	def self.collect_each_element player_links, player_team_abbr
 		elements = []
 		player_links.each_with_index do |link, i|
 			player = []
@@ -40,7 +40,7 @@ module StaticPlayerNbaCom
 		create_new_hash(elements)
 	end
 
-	def create_new_hash elements
+	def self.create_new_hash elements
 		players = []
 		elements.each do |e|
 		  player_hash = {}
