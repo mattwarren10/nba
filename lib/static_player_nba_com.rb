@@ -12,6 +12,10 @@ require 'selenium-webdriver'
 #   puts tagcloud_element.text
 # end
 
+# get static_team_id from team logo src
+#
+
+module StaticPlayer
 Selenium::WebDriver::Chrome.driver_path="/Users/mattwarren/dev/chrome_web_driver/chromedriver"
 driver = Selenium::WebDriver.for :chrome
 driver.navigate.to 'http://nba.com/players'
@@ -19,6 +23,7 @@ static_player_nba_com = driver.find_elements(:css, 'a.row.playerList')
 player_links = []
 elements = []
 players = []
+end
 static_player_nba_com.each do |data|
 	player_links.push(data.attribute("href"))
 	# ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i) <= this was a regex that grabbed the id in the url
