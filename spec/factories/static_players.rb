@@ -1,14 +1,14 @@
 FactoryGirl.define do
-	factory :static_player do
+	factory :static_player, class: "StaticPlayer" do
 		static_team_id 1
 		last_name "Warren"
 		first_name "Matt"
 		jersey_number "33"
 		height "6'2"
 		weight "175"
-		birth_date "1991-11-20"
+		birth_date Time.now
 		age 25
-		birth_city "Bloomington, IN"
+		before_nba "Bloomington, IN"
 		is_rookie false
 		position "PG"
 		nba_com 202330

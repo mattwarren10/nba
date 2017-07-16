@@ -11,7 +11,7 @@ class StaticPlayer < ApplicationRecord
             						:weight, 
             						:birth_date, 
             						# :age, to be rendered in views to grab current time a user visits the page
-            						:birth_city
+            						:before_nba
             
 	def self.call_active_players_from_api
 		send_request("2016-2017-regular", "active_players")

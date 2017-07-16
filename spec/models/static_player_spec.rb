@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe StaticPlayer, type: :model do
 	before do 		
-		@static_player = FactoryGirl.create(:static_player)
+		@static_player = FactoryGirl.create(:static_player)		
 	end
 	describe 'creation' do	
 		it 'can be created without a team id' do
@@ -42,7 +42,7 @@ RSpec.describe StaticPlayer, type: :model do
 			expect(@static_player).to be_valid
 		end
 		it 'can not be created without a birth city' do
-			@static_player.birth_city = nil
+			@static_player.before_nba = nil
 			expect(@static_player).to_not be_valid
 		end
 		it 'can be created without a nba_com' do
