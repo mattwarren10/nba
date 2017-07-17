@@ -13,6 +13,14 @@ module Team
 		end
 	end
 
+	module CityAndName
+		include Send
+		# get team cities and names
+		# find corresponding css classes that contain the city and name
+		# split the city from the name
+		# store in array of 30 hashes with keys being city and name
+	end
+
 	module Abbr	
 		include Send	
 		def self.parse_abbr
