@@ -1,44 +1,61 @@
 require 'open-uri'
 require 'selenium-webdriver'
-require_relative 'selenium.rb'
 
 module StaticTeamAttr
 	include CallSelenium
-	def self.get_data
-		link = 'http://stats.nba.com/teams'
-		CallSelenium.get_selenium_from link		
-		static_teams_links = driver.find_elements(:css, 'a.stats-team-list__link')
-		static_teams_img_abbr = driver.find_elements(:css, 'img.stats-team-list__team-logo.team-img')
-		strip_data([static_teams_links, static_teams_img_abbr])
+	module Abbr
+		def self.get_data
+			driver = CallSelenium.call
+			url = 'http://stats.nba.com/teams'				
+			driver.navigate.to url
+			static_teams_img_abbr = driver.find_elements(:css, 'img.stats-team-list__team-logo.team-img')
+		end
+
+		def self.parse_abbr
+			selenium_elements = get_data
+			team_abbreviations = []
+			selenium_elements.each do |data|
+				team_abbreviations.push(data.attribute("abbr"))
+			end
+			team_abbreviations
+		end
 	end
 
-	def self.strip_data arr
-		team_nba_com_ids = []
-		team_abbreviations = []
-		arr[0].each do |data|
-			team_nba_com_ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i)
+	module NbaCom		
+		def self.get_data
+			driver = CallSelenium.call
+			url = 'http://stats.nba.com/teams'				
+			driver.navigate.to url			
+			static_teams_links = driver.find_elements(:css, 'a.stats-team-list__link')			
+			static_teams_links
 		end
-		arr[1].each do |data|
-			team_abbreviations.push(data.attribute("abbr"))
+
+		def self.parse_ids
+			selenium_elements = get_data
+			team_nba_com_ids = []			
+			selenium_elements.each do |data|
+				team_nba_com_ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i)
+			end			
+			team_nba_com_ids
 		end
-		create_hash_from_arrays([team_abbreviations, team_nba_com_ids])
+	end
 
-	end 
+	module ReturnAttr
+		def self.combine
+			abbr = Abbr.parse_abbr
+			ids = NbaCom.parse_ids
+			static_teams = Hash[abbr.map {|x| [x, 1]}]
+			static_teams.each_with_index do |(key, value), i|
+	  			static_teams[key] = ids[i]
+	  		end
+	  		sort_hash(static_teams)			
 
-	def self.create_hash_from_arrays arr
-		static_teams_nba_com_hash = Hash[arr[0].map {|x| [x, 1]}]
-		static_teams_nba_com_hash.each_with_index do |(key, value), i|
-  			static_teams_nba_com_hash[key] = arr[1][i]
-  		end
-  		sort_hash(static_teams_nba_com_hash)
-
-  	end
-
-  	def self.sort_hash h
-  		# returns abbreviation of team as key and nba_com as value
-  		sorted_nba_com_teams_hash = Hash[ h.sort_by { |key, value| key } ]  		
-  			
-  	end
+	  	end
+	  	def self.sort_hash h
+	  		# returns abbreviation of team as key and nba_com as value
+	  		sorted_hash = Hash[ h.sort_by { |key, value| key } ]  			  			
+	  	end
+	end
 
 end
 
