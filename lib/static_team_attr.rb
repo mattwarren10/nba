@@ -3,16 +3,20 @@ require 'selenium-webdriver'
 
 module StaticTeamAttr
 	include CallSelenium
-	module Abbr
-		def self.get_data
-			driver = CallSelenium.call
-			url = 'http://stats.nba.com/teams'				
-			driver.navigate.to url
-			static_teams_img_abbr = driver.find_elements(:css, 'img.stats-team-list__team-logo.team-img')
-		end
 
+	module Send
+		def self.css str
+			driver = CallSelenium.call
+			url = 'http://stats.nba.com/teams'
+			driver.navigate.to url
+			e = driver.find_elements(:css, str)
+		end
+	end
+
+	module Abbr	
+		include Send	
 		def self.parse_abbr
-			selenium_elements = get_data
+			selenium_elements = Send.css('img.stats-team-list__team-logo.team-img')
 			team_abbreviations = []
 			selenium_elements.each do |data|
 				team_abbreviations.push(data.attribute("abbr"))
@@ -21,17 +25,10 @@ module StaticTeamAttr
 		end
 	end
 
-	module NbaCom		
-		def self.get_data
-			driver = CallSelenium.call
-			url = 'http://stats.nba.com/teams'				
-			driver.navigate.to url			
-			static_teams_links = driver.find_elements(:css, 'a.stats-team-list__link')			
-			static_teams_links
-		end
-
+	module NbaCom
+		include Send			
 		def self.parse_ids
-			selenium_elements = get_data
+			selenium_elements = Send.css('a.stats-team-list__link')			
 			team_nba_com_ids = []			
 			selenium_elements.each do |data|
 				team_nba_com_ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i)
@@ -51,8 +48,7 @@ module StaticTeamAttr
 	  		sort_hash(static_teams)			
 
 	  	end
-	  	def self.sort_hash h
-	  		# returns abbreviation of team as key and nba_com as value
+	  	def self.sort_hash h	  		
 	  		sorted_hash = Hash[ h.sort_by { |key, value| key } ]  			  			
 	  	end
 	end
