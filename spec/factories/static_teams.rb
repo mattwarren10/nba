@@ -13,7 +13,7 @@ FactoryGirl.define do
 		nba_com 1610612754
 	end
 
-	factory :other_static_team, class: "StaticTeam" do
+	factory :static_team_boston, class: "StaticTeam" do
 		city "Boston"
 		name "Celtics"
 		abbreviation "BOS"

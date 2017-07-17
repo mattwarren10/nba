@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe StaticPlayer, type: :model do
 	before do 		
-		@static_player = FactoryGirl.create(:static_player)		
+		@static_player = FactoryGirl.create(:static_player)	
 	end
 	describe 'creation' do	
 		it 'can be created without a team id' do
@@ -57,5 +57,16 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.years_pro = nil
 			expect(@static_player).to_not be_valid
 		end
+	end
+
+	describe 'uniqueness' do
+		it 'cannot be duplicated' do
+			@duplicate_static_player = FactoryGirl.build_stubbed(:duplicate_static_player)			
+			@duplicate_static_player.nba_com = 202330
+			expect(@duplicate_static_player).to_not be_valid
+		end
+	end
+
+	xit 'can be on the same as another player' do
 	end
 end

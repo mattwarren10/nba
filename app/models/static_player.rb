@@ -13,6 +13,8 @@ class StaticPlayer < ApplicationRecord
             						:which_pick,
                         :years_pro,
             						:before_nba
+  
+  validates_uniqueness_of :nba_com                         
             
 	def self.call_active_players_from_api
 		send_request("2016-2017-regular", "active_players")
