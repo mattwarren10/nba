@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'selenium-webdriver'
 
-module StaticTeamAttr
+module Team
 	include CallSelenium
 
 	module Send
@@ -38,7 +38,7 @@ module StaticTeamAttr
 	end
 
 	module Attr
-		def self.get
+		def self.get #invoke this method to return a hash with abbr as keys and nba_com as values
 			abbr = Abbr.parse_abbr
 			ids = NbaCom.parse_ids
 			static_teams = Hash[abbr.map {|x| [x, 1]}]
