@@ -40,8 +40,8 @@ module StaticTeamAttr
 		end
 	end
 
-	module ReturnAttr
-		def self.combine
+	module Attr
+		def self.get
 			abbr = Abbr.parse_abbr
 			ids = NbaCom.parse_ids
 			static_teams = Hash[abbr.map {|x| [x, 1]}]
