@@ -1,16 +1,12 @@
 require 'open-uri'
 require 'selenium-webdriver'
+require_relative 'selenium.rb'
 
-module StaticTeamNbaCom		
-
-	def self.call_selenium
-		Selenium::WebDriver::Chrome.driver_path="/Users/mattwarren/dev/chrome_web_driver/chromedriver"
-		driver = Selenium::WebDriver.for :chrome
-		get_data_from(driver)	
-	end
-
-	def self.get_data_from driver
-		driver.navigate.to 'http://stats.nba.com/teams'
+module StaticTeamAttr
+	include CallSelenium
+	def self.get_data
+		link = 'http://stats.nba.com/teams'
+		CallSelenium.get_selenium_from link		
 		static_teams_links = driver.find_elements(:css, 'a.stats-team-list__link')
 		static_teams_img_abbr = driver.find_elements(:css, 'img.stats-team-list__team-logo.team-img')
 		strip_data([static_teams_links, static_teams_img_abbr])
@@ -39,13 +35,11 @@ module StaticTeamNbaCom
   	end
 
   	def self.sort_hash h
+  		# returns abbreviation of team as key and nba_com as value
   		sorted_nba_com_teams_hash = Hash[ h.sort_by { |key, value| key } ]  		
-  		sorted_nba_com_teams_hash
+  			
   	end
 
-  	# def self.search abbr
-  	# 	@@ids[abbr]
-  	# end
 end
 
 

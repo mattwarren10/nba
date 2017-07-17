@@ -66,7 +66,4 @@ RSpec.describe StaticPlayer, type: :model do
 			expect(@duplicate_static_player).to_not be_valid
 		end
 	end
-
-	xit 'can be on the same as another player' do
-	end
 end

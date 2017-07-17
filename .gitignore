@@ -19,3 +19,5 @@
 .byebug_history
 
 /app/assets/images/.DS_Store
+lib/.DS_Store
+.DS_Store
