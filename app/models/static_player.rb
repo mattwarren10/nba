@@ -12,7 +12,8 @@ class StaticPlayer < ApplicationRecord
             						:birth_date, 
             						:which_pick,
                         :years_pro,
-            						:before_nba
+            						:before_nba,
+                        :nba_com
   
   validates_uniqueness_of :nba_com                         
             

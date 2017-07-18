@@ -45,9 +45,9 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.before_nba = nil
 			expect(@static_player).to_not be_valid
 		end
-		it 'can be created without a nba_com' do
+		it 'can not be created without a nba_com' do
 			@static_player.nba_com = nil
-			expect(@static_player).to be_valid
+			expect(@static_player).to_not be_valid
 		end
 		it 'can not be created without a which_pick attr' do
 			@static_player.which_pick = nil
