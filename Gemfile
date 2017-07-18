@@ -33,6 +33,8 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'httparty', '~> 0.15.5'
+
 # Color the console and tasks
 gem 'awesome_print', '~> 1.8', require: "ap"
 gem 'colorize', '~> 0.8.1'
