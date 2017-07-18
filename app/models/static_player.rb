@@ -2,7 +2,8 @@
 class StaticPlayer < ApplicationRecord
   extend MySportsApi
   belongs_to :static_team
-  
+  enum status: { active: 0, retired: 1 }
+
   validates_presence_of :last_name, 
             						:first_name, 
             						:jersey_number, 

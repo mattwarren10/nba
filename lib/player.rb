@@ -1,4 +1,5 @@
 
 module Player
-	include CallSelenium
+	include ChromeSelenium
+	URL = ''
 end
