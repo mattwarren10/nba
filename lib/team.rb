@@ -4,7 +4,7 @@ module Team
 	URL = 'http://stats.nba.com/teams'
 	
 	module CityAndName
-		def self.parse_city_and_name			
+		def self.retrieve			
 			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)
 			team_cities_and_names = []
 			selenium_elements.each do |data|
@@ -14,7 +14,7 @@ module Team
 		end
 
 		def self.separate
-			team_cities_and_names = parse_city_and_name		
+			team_cities_and_names = retrieve		
 			teams = []
 			team_cities_and_names.each do |team|
 				team_hash = {}
@@ -34,7 +34,7 @@ module Team
 	end
 
 	module Abbr		
-		def self.parse_abbr
+		def self.retrieve
 			selenium_elements = ChromeSelenium.send('img.stats-team-list__team-logo.team-img', URL)
 			team_abbreviations = []
 			selenium_elements.each do |data|
@@ -45,7 +45,7 @@ module Team
 	end
 
 	module NbaCom			
-		def self.parse_ids
+		def self.retrieve
 			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)			
 			team_nba_com_ids = []			
 			selenium_elements.each do |data|
@@ -58,8 +58,8 @@ module Team
 	module Attr
 		def self.get #invoke this method to return an array of hashes containing team city, name, abbreviation, and nba_com
 			teams = CityAndName.separate
-			abbr = Abbr.parse_abbr
-			ids = NbaCom.parse_ids							  		
+			abbr = Abbr.retrieve
+			ids = NbaCom.retrieve							  		
 	  		teams.each_with_index do |team_hash, i|
 	  			team_hash[:abbreviation] = abbr[i]
 	  			team_hash[:nba_com] = ids[i]
