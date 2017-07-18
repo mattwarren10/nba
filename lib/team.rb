@@ -1,25 +1,16 @@
 
-module Team
-	include CallSelenium
-
-	module Send
-		def self.css str
-			driver = CallSelenium.call
-			url = 'http://stats.nba.com/teams'
-			driver.navigate.to url
-			e = driver.find_elements(:css, str)
-		end
-	end
-
+module Team	
+	include ChromeSelenium	
+	URL = 'http://stats.nba.com/teams'
+	
 	module CityAndName
-		include Send
-		def self.parse_city_and_name
-			selenium_elements = Send.css('a.stats-team-list__link')
+		def self.parse_city_and_name			
+			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)
 			team_cities_and_names = []
 			selenium_elements.each do |data|
 				team_cities_and_names.push(data.text)			
 			end
-			team_cities_and_names
+			team_cities_and_names			
 		end
 
 		def self.separate
@@ -42,10 +33,9 @@ module Team
 				
 	end
 
-	module Abbr	
-		include Send	
+	module Abbr		
 		def self.parse_abbr
-			selenium_elements = Send.css('img.stats-team-list__team-logo.team-img')
+			selenium_elements = ChromeSelenium.send('img.stats-team-list__team-logo.team-img', URL)
 			team_abbreviations = []
 			selenium_elements.each do |data|
 				team_abbreviations.push(data.attribute("abbr"))
@@ -54,10 +44,9 @@ module Team
 		end		
 	end
 
-	module NbaCom
-		include Send			
+	module NbaCom			
 		def self.parse_ids
-			selenium_elements = Send.css('a.stats-team-list__link')			
+			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)			
 			team_nba_com_ids = []			
 			selenium_elements.each do |data|
 				team_nba_com_ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i)
@@ -76,9 +65,8 @@ module Team
 	  			team_hash[:nba_com] = ids[i]
 	  		end
 			teams.sort_by { |team_hash| team_hash[:city] }   		
-	  	end	  	
-	end
-
+	  	end		  	
+	end	
 end
 
 
