@@ -69,7 +69,7 @@ module Team
 	end
 
 	module Attr
-		def self.get #invoke this method to return a hash with abbr as keys and nba_com as values
+		def self.get #invoke this method to return an array of hashes containing team city, name, abbreviation, and nba_com
 			teams = CityAndName.separate
 			abbr = Abbr.parse_abbr
 			ids = NbaCom.parse_ids							  		

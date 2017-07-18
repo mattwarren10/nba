@@ -1,10 +1,11 @@
-require_relative '../static_teams/static_team_attributes'
+require 'colorize'
+
 namespace :static_team do
   desc "creates a record for each nba team from static_team modules"
   task create: :environment do
-    @teams = StaticTeamAttributes.get_teams
-    nba_teams_created_counter = 0
-    @teams.each do |team|
+    teams = Team::Attr.get
+    teams_created = 0
+    teams.each do |team|
       t = StaticTeam.create(
         city: team[:city],
         name: team[:name],
@@ -12,15 +13,16 @@ namespace :static_team do
         nba_com: team[:nba_com]
       )
       if t.valid?        
-        puts "#{t.city} #{t.name} team has been created"
-        nba_teams_created_counter += 1
+        puts "#{t.abbreviation} (id: #{t.id}) has been created.".green
+        puts "     ==> NBA.com id: #{t.nba_com}".green.bold
+        teams_created += 1
       else
-        puts "Rails tried to create: #{t} but failed"
-        puts t.errors.full_messages
+        puts "Failure: tried to create: #{t}".red.bold
+        puts "     ==> #{t.errors.full_messages.red}"
         break
       end
     end
-    puts "#{nba_teams_created_counter} StaticTeam database records created"
+    puts "#{teams_created} StaticTeam database records created.".light_blue.bold
   end
 
   desc "downloads team logos from nba.com"
@@ -41,5 +43,11 @@ namespace :static_team do
     end
     puts "#{nba_team_logos_created} team logos have been downloaded to the assets directory"
   end
+  # desc "test colors"
+  # task test_colors: :environment do
+  #   puts "green bold".green.bold
+  #   puts "light blue italic".light_blue.italic
+  # end
+
 end
 
