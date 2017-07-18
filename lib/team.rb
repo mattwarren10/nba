@@ -15,10 +15,33 @@ module Team
 
 	module CityAndName
 		include Send
-		# get team cities and names
-		# find corresponding css classes that contain the city and name
-		# split the city from the name
-		# store in array of 30 hashes with keys being city and name
+		def self.parse_city_and_name
+			selenium_elements = Send.css('a.stats-team-list__link')
+			team_cities_and_names = []
+			selenium_elements.each do |data|
+				team_cities_and_names.push(data.text)			
+			end
+			team_cities_and_names
+		end
+
+		def self.separate
+			team_cities_and_names = parse_city_and_name		
+			teams = []
+			team_cities_and_names.each do |team|
+				team_hash = {}
+				unless team == "Portland Trail Blazers"
+			    	team_hash[:city] = team[0..team.rindex(' ')].rstrip
+			    	team_hash[:name] = team.split.last
+			    	teams.push(team_hash)			    
+				else 
+			    	team_hash[:city] = team.split.first
+			    	team_hash[:name] = team.split.last(2).join(" ")
+			    	teams.push(team_hash)			    
+				end			 
+			end
+			teams
+		end
+				
 	end
 
 	module Abbr	
@@ -30,7 +53,7 @@ module Team
 				team_abbreviations.push(data.attribute("abbr"))
 			end
 			team_abbreviations
-		end
+		end		
 	end
 
 	module NbaCom
@@ -47,18 +70,15 @@ module Team
 
 	module Attr
 		def self.get #invoke this method to return a hash with abbr as keys and nba_com as values
+			teams = CityAndName.separate
 			abbr = Abbr.parse_abbr
-			ids = NbaCom.parse_ids
-			static_teams = Hash[abbr.map {|x| [x, 1]}]
-			static_teams.each_with_index do |(key, value), i|
-	  			static_teams[key] = ids[i]
+			ids = NbaCom.parse_ids							  		
+	  		teams.each_with_index do |team_hash, i|
+	  			team_hash[:abbreviation] = abbr[i]
+	  			team_hash[:nba_com] = ids[i]
 	  		end
-	  		sort_hash(static_teams)			
-
-	  	end
-	  	def self.sort_hash h	  		
-	  		sorted_hash = Hash[ h.sort_by { |key, value| key } ]  			  			
-	  	end
+			teams.sort_by { |team_hash| team_hash[:city] }   		
+	  	end	  	
 	end
 
 end
