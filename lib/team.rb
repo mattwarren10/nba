@@ -1,5 +1,3 @@
-require 'open-uri'
-require 'selenium-webdriver'
 
 module Team
 	include CallSelenium

@@ -1,8 +1,7 @@
 require 'open-uri'
 require 'selenium-webdriver'
 
-# Need to remove underscores from player names who have spaces
-# capitalize letters in names that are not first (Lebron => LeBron, Mcgee => McGee)
+# refactor this shit
 
 module StaticPlayerNbaCom
 	def self.call_selenium
