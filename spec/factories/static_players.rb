@@ -13,6 +13,7 @@ FactoryGirl.define do
 		nba_com 202330
 		which_pick "2010 Rnd 1 Pick 1"
 		years_pro 0
+		status 0
 		static_team
 	end
 
@@ -30,6 +31,7 @@ FactoryGirl.define do
 		nba_com 202331
 		which_pick "2010 Rnd 1 Pick 1"
 		years_pro 0
+		status 0
 		static_team
 	end
 end

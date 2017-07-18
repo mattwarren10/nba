@@ -57,6 +57,10 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.years_pro = nil
 			expect(@static_player).to_not be_valid
 		end
+		it 'can not be created without a status' do
+			@static_player.status = nil
+			expect(@static_player).to_not be_valid
+		end
 	end
 
 	describe 'uniqueness' do
