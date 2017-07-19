@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170718193129) do
+ActiveRecord::Schema.define(version: 20170719194529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20170718193129) do
     t.string "first_name"
     t.string "jersey_number"
     t.string "height"
-    t.string "weight"
+    t.integer "weight"
     t.string "before_nba"
     t.boolean "is_rookie"
     t.datetime "created_at", null: false
