@@ -4,13 +4,15 @@ module Team
 	URL = 'http://stats.nba.com/teams'
 	
 	module CityAndName
-		def self.retrieve			
+		def self.retrieve
 			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)
 			team_cities_and_names = []
-			selenium_elements.each do |data|
+			selenium_elements.first.each do |data|
 				team_cities_and_names.push(data.text)			
 			end
-			team_cities_and_names			
+			ChromeSelenium.quit(selenium_elements.last)
+			team_cities_and_names
+
 		end
 
 		def self.separate
@@ -37,10 +39,11 @@ module Team
 		def self.retrieve
 			selenium_elements = ChromeSelenium.send('img.stats-team-list__team-logo.team-img', URL)
 			team_abbreviations = []
-			selenium_elements.each do |data|
+			selenium_elements.first.each do |data|
 				team_abbreviations.push(data.attribute("abbr"))
 			end
-			team_abbreviations
+			ChromeSelenium.quit(selenium_elements.last)
+			team_abbreviations			
 		end		
 	end
 
@@ -48,9 +51,10 @@ module Team
 		def self.retrieve
 			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)			
 			team_nba_com_ids = []			
-			selenium_elements.each do |data|
+			selenium_elements.first.each do |data|
 				team_nba_com_ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i)
-			end			
+			end
+			ChromeSelenium.quit(selenium_elements.last)			
 			team_nba_com_ids
 		end
 	end
