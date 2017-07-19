@@ -34,25 +34,26 @@ module Player
 		end
 	end
 
+	module NbaCom
+		def self.retrieve
+			selenium_elements = Info::retrieve
+			player_nba_com_ids = []
+			selenium_elements.first.each do |data|
+				player_nba_com_ids.push(data.attribute("href").gsub(/[^\d]/, '').to_i)
+			end
+			ChromeSelenium.quit(selenium_elements.last)
+			player_nba_com_ids
+		end
+	end
+
 	module Attr
 		def self.get
-			names = Name.separate
+			players = Name.separate
+			ids = NbaCom.retrieve
+			players.each_with_index do |player_hash, i|
+				player_hash[:nba_com] = ids[i]
+			end
+			players
 		end
 	end
 end
-
-# xpath:
-# //a[@class='players-list__name']/@href ==> player urls
-# //a[@class='players-list__name'] ==> player names
-
-
-###############Selenium####################
-# selenium_elements = ChromeSelenium.send('a.players-list__name', 'http://stats.nba.com/players/list#!?Historic=Y')
-# selenium_elements
-# names = []
-# nba_com = []
-# selenium_elements.each do |data|
-# 	# names.push(data.text)
-# 	nba_com.push(data.attribute('href'))
-# end
-# [names, nba_com]
