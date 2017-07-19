@@ -28,8 +28,6 @@ module ChromeSelenium
 		puts "Finding elements:"
 		puts "==> #{elements}"
 		e = driver.find_elements(:css, elements)
-
-		puts "Quitting driver..."
 		return e, driver	
 	end
 
