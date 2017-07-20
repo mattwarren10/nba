@@ -12,7 +12,6 @@ module Team
 			end
 			ChromeSelenium.quit(selenium_elements.last)
 			team_cities_and_names
-
 		end
 
 		def self.separate
