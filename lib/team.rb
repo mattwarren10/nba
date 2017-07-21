@@ -33,14 +33,23 @@ module Team
 		        team_abbr.push(abbr)
 		      end
 		    end
-		    team_cities, team_names, team_abbr
+		    return team_cities, team_names, team_abbr
 		end
 				
 	end
 
 	module Attr
 		def self.get #invoke this method to return an array of hashes containing team city, name, abbreviation, and nba_com
-			  		
+			team_components = CityNameAbbr.isolate
+			teams = []
+			team_components[0].count.times do |i|
+				team_hash = {}
+				team_hash[:city] = team_components[0][i]
+				team_hash[:name] = team_components[1][i]
+				team_hash[:abbreviation] = team_components[2][i]
+				teams.push(team_hash)
+			end
+			teams
 	  	end		  	
 	end	
 end
