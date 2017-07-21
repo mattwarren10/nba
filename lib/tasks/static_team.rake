@@ -9,12 +9,10 @@ namespace :static_team do
       t = StaticTeam.create(
         city: team[:city],
         name: team[:name],
-        abbreviation: team[:abbreviation],
-        nba_com: team[:nba_com]
+        abbreviation: team[:abbreviation],        
       )
       if t.valid?        
-        puts "#{t.abbreviation} (id: #{t.id}) has been created.".green
-        puts "     ==> NBA.com id: #{t.nba_com}".green.bold
+        puts "#{t.abbreviation} (id: #{t.id}) has been created.".green        
         teams_created += 1
       else
         puts "Failure: tried to create: #{t}".red.bold
@@ -22,7 +20,7 @@ namespace :static_team do
         break
       end
     end
-    puts "#{teams_created} StaticTeam database records created.".light_blue.bold
+    puts "#{teams_created} StaticTeam database records created.".bold
   end
 
   desc "downloads team logos from nba.com"

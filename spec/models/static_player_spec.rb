@@ -44,11 +44,7 @@ RSpec.describe StaticPlayer, type: :model do
 		it 'can not be created without a before_nba attr' do
 			@static_player.before_nba = nil
 			expect(@static_player).to_not be_valid
-		end
-		it 'can not be created without a nba_com' do
-			@static_player.nba_com = nil
-			expect(@static_player).to_not be_valid
-		end
+		end		
 		it 'can not be created without a which_pick attr' do
 			@static_player.which_pick = nil
 			expect(@static_player).to_not be_valid
@@ -63,11 +59,4 @@ RSpec.describe StaticPlayer, type: :model do
 		end
 	end
 
-	describe 'uniqueness' do
-		it 'cannot be duplicated' do
-			@duplicate_static_player = FactoryGirl.build_stubbed(:duplicate_static_player)			
-			@duplicate_static_player.nba_com = 202330
-			expect(@duplicate_static_player).to_not be_valid
-		end
-	end
 end

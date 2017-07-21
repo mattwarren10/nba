@@ -9,8 +9,7 @@ FactoryGirl.define do
 		age 18
 		before_nba "Bloomington, IN"
 		is_rookie true
-		position "PG"
-		nba_com 202330
+		position "PG"		
 		which_pick "2010 Rnd 1 Pick 1"
 		years_pro 0
 		status 0
@@ -27,8 +26,7 @@ FactoryGirl.define do
 		age 18
 		before_nba "Bloomington, IN"
 		is_rookie true
-		position "PG"
-		nba_com 202331
+		position "PG"		
 		which_pick "2010 Rnd 1 Pick 1"
 		years_pro 0
 		status 0

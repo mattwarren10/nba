@@ -17,10 +17,6 @@ RSpec.describe StaticTeam, type: :model do
 			@static_team.abbreviation = nil
 			expect(@static_team).to_not be_valid
 		end
-		it 'will not be created when nba_com is empty' do
-			@static_team.nba_com = nil
-			expect(@static_team).to_not be_valid
-		end
 	end
 
 	describe 'static_team uniqueness' do

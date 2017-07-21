@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170719194529) do
+ActiveRecord::Schema.define(version: 20170721204121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20170719194529) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "position"
-    t.integer "nba_com"
     t.datetime "age"
     t.datetime "birth_date"
     t.string "which_pick"
@@ -42,7 +41,6 @@ ActiveRecord::Schema.define(version: 20170719194529) do
     t.string "abbreviation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "nba_com"
   end
 
   add_foreign_key "static_players", "static_teams"
