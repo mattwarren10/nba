@@ -1,35 +1,19 @@
 
 module Team	
-	include ChromeSelenium	
-	URL = 'http://stats.nba.com/teams'
+	include CallNokogiri	
+	URL = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
 	
-	module CityAndName
+	module CityNameAbbr
 		def self.retrieve
-			selenium_elements = ChromeSelenium.send('a.stats-team-list__link', URL)
-			team_cities_and_names = []
-			selenium_elements.first.each do |data|
-				team_cities_and_names.push(data.text)			
-			end
-			ChromeSelenium.quit(selenium_elements.last)
-			team_cities_and_names
+			table = CallNokogiri.from URL, "tr"
+
 		end
 
 		def self.separate
-			team_cities_and_names = retrieve		
-			teams = []
-			team_cities_and_names.each do |team|
-				team_hash = {}
-				unless team == "Portland Trail Blazers"
-			    	team_hash[:city] = team[0..team.rindex(' ')].rstrip
-			    	team_hash[:name] = team.split.last
-			    	teams.push(team_hash)			    
-				else 
-			    	team_hash[:city] = team.split.first
-			    	team_hash[:name] = team.split.last(2).join(" ")
-			    	teams.push(team_hash)			    
-				end			 
-			end
-			teams
+			noko_string = retrieve
+			arr = noko_string.split("\n")
+		    4.times { arr.shift }
+		    arr.delete("")		
 		end
 				
 	end

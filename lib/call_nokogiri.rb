@@ -2,8 +2,9 @@ require 'nokogiri'
 require 'open-uri'
 
 module CallNokogiri
-	def self.from url
-    	page = Nokogiri::HTML(open(url))	
+	def self.from url, elements
+    	page = Nokogiri::HTML(open(url))
+    	page.css(elements).text	
 	end
 end
 
