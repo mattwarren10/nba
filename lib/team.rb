@@ -3,6 +3,18 @@ module Team
 	include CallNokogiri
 	include ChromeSelenium
 
+	module Roster
+		def self.urls
+			teams = StaticTeam.all
+			urls = []			
+			teams.each do |team|
+				urls.push("https://en.wikipedia.org/wiki/Template:#{team.city}_#{team.name}_roster")	
+			end					
+			urls
+		end
+	end
+	end
+
 	module Logo
 		def self.retrieve
 			url = 'http://www.sportslogos.net/teams/list_by_league/6/National_Basketball_Association/NBA/logos/'
