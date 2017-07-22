@@ -9,12 +9,12 @@ module CallNokogiri
 
 	def self.css url, elements
 		page = from url
-		page.css(elements).text	
+		page.css(elements)
 	end
 
 	def self.xpath url, elements
 		page = from url
-		page.xpath(elements).text
+		page.xpath(elements)
 	end
 end
 

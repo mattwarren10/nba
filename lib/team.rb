@@ -7,13 +7,10 @@ module Team
 		def self.urls
 			teams = StaticTeam.all
 			urls = []			
-			teams.each do |team|
-				city = team.city.sub(" ", "_")
-				name = team.name.sub(" ", "_")
-				
-				urls.push("https://en.wikipedia.org/wiki/Template:#{city}_#{name}_roster")	
+			teams.each do |team|								
+				urls.push("vendor/rosters/#{team.abbreviation}.html")
 			end					
-			urls
+			urls			
 		end
 
 		def self.retrieve
@@ -28,7 +25,7 @@ module Team
 			end	
 			puts "Received rosters from #{count} teams"
 			rosters			
-		end		
+		end
 	end
 
 	module Logo
