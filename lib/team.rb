@@ -8,11 +8,27 @@ module Team
 			teams = StaticTeam.all
 			urls = []			
 			teams.each do |team|
-				urls.push("https://en.wikipedia.org/wiki/Template:#{team.city}_#{team.name}_roster")	
+				city = team.city.sub(" ", "_")
+				name = team.name.sub(" ", "_")
+				
+				urls.push("https://en.wikipedia.org/wiki/Template:#{city}_#{name}_roster")	
 			end					
 			urls
 		end
-	end
+
+		def self.retrieve
+			urls = Roster.urls
+			rosters = []
+			count = 0
+			puts "Iterating through urls..."
+			urls.each do |url|
+				puts "Calling Nokogiri for #{url}"
+				rosters.push(CallNokogiri.css url, "table table tr")
+				count += 1
+			end	
+			puts "Received rosters from #{count} teams"
+			rosters			
+		end		
 	end
 
 	module Logo
@@ -37,12 +53,12 @@ module Team
 	module CityNameAbbr
 		def self.retrieve
 			url = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
-			table = CallNokogiri.from url, "tr"
+			table = CallNokogiri.css url, "tr"
 
 		end
 
 		def self.separate
-			noko_string = retrieve
+			noko_string = retrieve.text
 			arr = noko_string.split("\n")
 		    4.times { arr.shift }
 		    arr.delete("")	
