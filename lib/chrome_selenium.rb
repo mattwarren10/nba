@@ -27,7 +27,7 @@ module ChromeSelenium
 
 		puts "Finding elements:"
 		puts "==> #{elements}"
-		e = driver.find_elements(:css, elements)
+		e = driver.find_elements(:xpath, elements)
 		return e, driver	
 	end
 

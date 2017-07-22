@@ -1,11 +1,31 @@
 
 module Team	
-	include CallNokogiri	
-	URL = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
+	include CallNokogiri
+	include ChromeSelenium
+
+	module Logo
+		def self.retrieve
+			url = 'http://www.sportslogos.net/teams/list_by_league/6/National_Basketball_Association/NBA/logos/'
+			links = ChromeSelenium.send "//ul/li/a/img", url
+		end
+
+		def self.src
+			images = retrieve
+			srcs = []
+			images.first.each_with_index do |image, i|
+				if i <= 29
+					srcs.push(image.attribute("src"))
+				end
+			end
+			ChromeSelenium.quit(images.last)
+			srcs
+		end
+	end	
 	
 	module CityNameAbbr
 		def self.retrieve
-			table = CallNokogiri.from URL, "tr"
+			url = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
+			table = CallNokogiri.from url, "tr"
 
 		end
 
