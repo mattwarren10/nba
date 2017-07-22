@@ -23,7 +23,7 @@ namespace :static_team do
     puts "#{teams_created} StaticTeam database records created.".bold
   end
 
-  desc "downloads team logos"
+  desc "downloads team logos from sportslogos.net"
   task logo: :environment do
     nba_team_logos_created = 0
     logo_srcs = Team::Logo.src
@@ -42,11 +42,26 @@ namespace :static_team do
     end
     puts "#{nba_team_logos_created} team logos have been downloaded to the assets directory".bold
   end
-  # desc "test colors"
-  # task test_colors: :environment do
-  #   puts "green bold".green.bold
-  #   puts "light blue italic".light_blue.italic
-  # end
 
+  namespace :roster do
+    desc 'downloads team rosters from wikipedia.org'
+    task download: :environment do
+      nba_rosters_created = 0
+      roster_urls = Team::Roster.urls
+      @teams = StaticTeam.all
+      roster_urls.each_with_index do |src, i|
+        page_src = open(src)
+        page_dest = "vendor/rosters/#{@teams[i].abbreviation}.html"
+        IO.copy_stream(page_src, page_dest)
+        if File.file? page_dest
+          puts "#{@teams[i].abbreviation}'s roster downloaded to #{page_dest}".green
+          nba_rosters_created += 1
+        else
+          puts "Failed to download #{@teams[i].abbreviation}'s roster".red.bold
+          break
+        end
+      end
+      puts "#{nba_rosters_created} team rosters have been downloaded to vender directory".bold
+    end
+  end
 end
-
