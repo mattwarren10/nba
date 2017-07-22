@@ -23,9 +23,12 @@ module Team
 		    team_cities = []
 		    team_abbr = []
 		    arr.each_with_index do |str, i|
-		      if i.odd?
+		      if i.odd? && str != "Portland Trail Blazers"
 		        team_names.push(str.split.last)
 		        team_cities.push(str[0..str.rindex(' ')].rstrip)
+		      elsif i.odd?
+		      	team_names.push(str.split.last(2).join(" "))
+		      	team_cities.push(str.split.first)
 		      end
 		    end
 		    arr.each_with_index do |abbr, i|
