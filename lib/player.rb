@@ -33,8 +33,8 @@ module Player
 					arr.first.gsub!(/[\W+\d+]/, '')
 					arr[2] = arr[2].split(", ")					
 					str = arr[2][1]
-					unless arr[2][1].nil?
-					  str = str.slice(0..str.index(" ").to_i).delete("(").rstrip
+					unless str.nil? || !str.include?(" ")
+					  str = str.slice(0..str.index(" ")).delete("(")
 					end
 					arr[2][1] = str
 					arr[3][0..19] = ''
