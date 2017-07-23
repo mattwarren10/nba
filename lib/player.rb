@@ -8,24 +8,25 @@ module Player
 
 		def self.parse
 			noko_arr = retrieve
-			teams = []
+			rosters = []
 			noko_arr.each_with_index do |t, i|
 				team = []
 				noko_arr[i].delete(noko_arr[i][0])
 				t.each do |player|					
 					team.push(player.text)
 				end
-				teams.push(team)
+				rosters.push(team)
 			end
-			teams
+			rosters
 		end
 
 		def self.separate
-			teams = parse
-			league = []
+			teams = StaticTeam.all
+			rosters = parse
+			league = {}
 			team_count = 0
 			player_count = 0
-			teams.each do |team|
+			rosters.each_with_index do |team, i|
 				team_roster = []
 				team.each do |player|					
 					arr = player.split("\n")
@@ -33,8 +34,8 @@ module Player
 					arr.first.gsub!(/[\W+\d+]/, '')
 					arr[2] = arr[2].split(", ")					
 					str = arr[2][1]
-					unless str.nil? || !str.include?(" ")
-					  str = str.slice(0..str.index(" ")).delete("(")
+					unless str.nil? || !str.include?("(")
+					  str = str.slice(0..str.index("(")).delete("(").gsub!(/\u00A0/, "")
 					end
 					arr[2][1] = str
 					arr[3][0..19] = ''
@@ -57,7 +58,7 @@ module Player
 					player_count += 1
 					puts "Player #{player_count}: #{player_hash[:last_name]}'s hash has been created"
 				end				
-				league.push(team_roster)
+				league[teams[i].abbreviation] = team_roster
 				team_count += 1
 				puts "#{team_count} team arrays created"
 			end
