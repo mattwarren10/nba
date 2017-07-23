@@ -20,13 +20,10 @@ module Player
 			rosters
 		end
 
-		def self.separate
-			teams = StaticTeam.all
+		def self.separate			
 			rosters = parse
-			league = {}
-			team_count = 0
-			player_count = 0
-			rosters.each_with_index do |team, i|
+			teams = []
+			rosters.each do |team|
 				team_roster = []
 				team.each do |player|					
 					arr = player.split("\n")
@@ -42,35 +39,37 @@ module Player
 					arr[3] = arr[3][0..5].gsub!(/\D+/, '')
 					arr[3] = arr[3][0].to_i * 12 + arr[3][1].to_i
 					arr[4] = arr[4][0..2].to_i
-					arr[5] = DateTime.parse arr[5]					
-
-					player_hash = {}
-					player_hash[:position] = arr[0]
-					player_hash[:jersey_number] = arr[1]
-					player_hash[:last_name] = arr[2][0]
-					player_hash[:first_name] = arr[2][1]
-					player_hash[:height] = arr[3]
-					player_hash[:weight] = arr[4]
-					player_hash[:birth_date] = arr[5]
-					player_hash[:before_nba] = arr[6]
-
-					team_roster.push(player_hash)
-					player_count += 1
-					puts "Player #{player_count}: #{player_hash[:last_name]}'s hash has been created"
-				end				
-				league[teams[i].abbreviation] = team_roster
-				team_count += 1
-				puts "#{team_count} team arrays created"
+					arr[5] = DateTime.parse arr[5]	
+					team_roster.push(arr)									
+				end
+				teams.push(team_roster)				
 			end
-			league
+			teams
 		end
-
-
 	end
 
 	module Attr
 		def self.get
-			
+			teams = StaticTeam.all
+			rosters = Credentials.separate
+			league = {}
+			rosters.each_with_index do |team, i|
+				team_roster = []
+				team.each do |player|
+					player_hash = {}
+					player_hash[:position] = player[0]
+					player_hash[:jersey_number] = player[1]
+					player_hash[:last_name] = player[2][0]
+					player_hash[:first_name] = player[2][1]
+					player_hash[:height] = player[3]
+					player_hash[:weight] = player[4]
+					player_hash[:birth_date] = player[5]
+					player_hash[:before_nba] = player[6]
+					team_roster.push(player_hash) 
+				end
+				league[teams[i].abbreviation] = team_roster
+			end
+			league			
 		end
 	end
 end
