@@ -39,7 +39,7 @@ module ActivePlayer
 			noko_arr.last.each_with_index do |player, i|
 				team = []
 				player.each do |link|
-					team.push(link.attribute('href').value)
+					team.push(link.attribute('href').value.gsub('/wiki/', ''))
 				end
 				links.push(team)
 			end
@@ -97,6 +97,7 @@ module ActivePlayer
 				end
 				league[teams[i].abbreviation] = team_roster
 			end
+			# a hash of keys which are team abbreviations whose values are an array of hashes of players
 			league			
 		end
 	end
