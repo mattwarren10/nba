@@ -9,17 +9,17 @@ module ActivePlayer
 
 	# wikipedia
 	# xpath for selecting born location, which pick in draft, stats from wikipedia player pages
-	# //table[1]/tbody/tr[contains(., 'Born')]/td|//table[1]/tbody/tr[contains(., 'NBA draft')]/td|//h3[contains(., 'Regular season')]/following-sibling::table[1]/tbody/tr[last()-1]
+	# //table[1]/tbody/tr[contains(., 'Born')]/td|//table[1]/tbody/tr[contains(., 'NBA draft')]/td|//h3/following-sibling::table[1]/tbody/tr[contains(., '2016–17')]
 
 	module Credentials
 		def self.retrieve
 			credentials = Team::Roster.retrieve
-			rosters = credentials.first
+			info = credentials.first
 			player_links = credentials.last
-			return rosters, player_links
+			return info, player_links
 		end
 
-		def self.parse
+		def self.parse_players
 			noko_arr = retrieve
 			rosters = []
 			noko_arr.first.each_with_index do |t, i|
@@ -33,8 +33,21 @@ module ActivePlayer
 			rosters
 		end
 
+		def self.parse_links
+			noko_arr = retrieve
+			links = []
+			noko_arr.last.each_with_index do |player, i|
+				team = []
+				player.each do |link|
+					team.push(link.attribute('href').value)
+				end
+				links.push(team)
+			end
+			links
+		end
+
 		def self.separate			
-			rosters = parse
+			rosters = parse_players
 			teams = []
 			rosters.each do |team|
 				team_roster = []
@@ -65,10 +78,11 @@ module ActivePlayer
 		def self.get
 			teams = StaticTeam.all
 			rosters = Credentials.separate
+			links = Credentials.parse_links
 			league = {}
 			rosters.each_with_index do |team, i|
 				team_roster = []
-				team.each do |player|
+				team.each_with_index do |player, l|
 					player_hash = {}
 					player_hash[:position] = player[0]
 					player_hash[:jersey_number] = player[1]
@@ -78,6 +92,7 @@ module ActivePlayer
 					player_hash[:weight] = player[4]
 					player_hash[:birth_date] = player[5]
 					player_hash[:before_nba] = player[6]
+					player_hash[:link] = links[i][l]
 					team_roster.push(player_hash) 
 				end
 				league[teams[i].abbreviation] = team_roster
