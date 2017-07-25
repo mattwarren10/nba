@@ -1,11 +1,16 @@
 
-module Player
+module ActivePlayer
 	# xpath for name, years pro (or hall of fame induction if retired), career stats, and img link: 
 	# //div/h1|//div[@itemscope]/p[contains(., 'Draft')]|//div[@itemscope]/p[last()]|//div[@class='stats_pullout']/div/div/p[last()]|//div[@id='meta']/div/img/@src
 
+	# same xpath except for last year stats (for active players)
+	# //div/h1|//div[@itemscope]/p[contains(., 'Draft')]|//div[@itemscope]/p[last()]|//div[@class='stats_pullout']/div/div/p[1]|//div[@id='meta']/div/img/@src
+
 	module Credentials
 		def self.retrieve
-			rosters = Team::Roster.retrieve
+			credentials = Team::Roster.retrieve
+			rosters = credentials.first
+			player_links = credentials.last
 		end
 
 		def self.parse

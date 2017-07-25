@@ -16,15 +16,17 @@ module Team
 		def self.retrieve
 			urls = Roster.urls
 			rosters = []
+			player_links = []
 			count = 0
 			puts "Iterating through urls..."
 			urls.each do |url|
 				puts "Calling Nokogiri for #{url}"
 				rosters.push(CallNokogiri.css url, "table table tr")
+				player_links.push(CallNokogiri.css url, "table table tr td[3] a[href]")
 				count += 1
 			end	
 			puts "Received rosters from #{count} teams"
-			rosters			
+			return rosters, player_links
 		end
 	end
 
