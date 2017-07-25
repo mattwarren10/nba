@@ -1,24 +1,30 @@
 
 module ActivePlayer
-	# xpath for name, years pro (or hall of fame induction if retired), career stats, and img link: 
+	# basketball-reference
+	# xpath for name, years pro (or hall of fame induction if retired), career stats, and img link basketball-reference
 	# //div/h1|//div[@itemscope]/p[contains(., 'Draft')]|//div[@itemscope]/p[last()]|//div[@class='stats_pullout']/div/div/p[last()]|//div[@id='meta']/div/img/@src
 
-	# same xpath except for last year stats (for active players)
+	# same xpath except for last year stats (for active players) basketball-reference
 	# //div/h1|//div[@itemscope]/p[contains(., 'Draft')]|//div[@itemscope]/p[last()]|//div[@class='stats_pullout']/div/div/p[1]|//div[@id='meta']/div/img/@src
+
+	# wikipedia
+	# xpath for selecting born location, which pick in draft, stats from wikipedia player pages
+	# //table[1]/tbody/tr[contains(., 'Born')]/td|//table[1]/tbody/tr[contains(., 'NBA draft')]/td|//h3[contains(., 'Regular season')]/following-sibling::table[1]/tbody/tr[last()-1]
 
 	module Credentials
 		def self.retrieve
 			credentials = Team::Roster.retrieve
 			rosters = credentials.first
 			player_links = credentials.last
+			return rosters, player_links
 		end
 
 		def self.parse
 			noko_arr = retrieve
 			rosters = []
-			noko_arr.each_with_index do |t, i|
+			noko_arr.first.each_with_index do |t, i|
 				team = []
-				noko_arr[i].delete(noko_arr[i][0])
+				noko_arr.first[i].delete(noko_arr.first[i][0])
 				t.each do |player|					
 					team.push(player.text)
 				end
