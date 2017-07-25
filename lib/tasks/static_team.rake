@@ -23,35 +23,36 @@ namespace :static_team do
     puts "#{teams_created} StaticTeam database records created.".bold
   end
 
-  desc "downloads team logos from sportslogos.net"
-  task logo: :environment do
-    nba_team_logos_created = 0
-    logo_srcs = Team::Logo.src
-    @teams = StaticTeam.all
-    logo_srcs.each_with_index do |src, i| 
-      img_src = open(src)
-      img_dest = "app/assets/images/nba_team_logos/#{@teams[i].abbreviation}.gif"
-      IO.copy_stream(img_src, img_dest)
-      if File.file? img_dest
-        puts "#{@teams[i].city} #{@teams[i].name}'s gif image has been stored at #{img_dest}".green
-        nba_team_logos_created += 1
-      else
-        puts "Failed to store #{@teams[i].city} #{@teams[i].name}'s gif".red.bold
-        break
-      end
-    end
-    puts "#{nba_team_logos_created} team logos have been downloaded to the assets directory".bold
-  end
 
-  namespace :roster do
+  namespace :download do
+    desc "downloads team logos from sportslogos.net"
+    task logo: :environment do
+      nba_team_logos_created = 0
+      logo_srcs = Team::Logo.src
+      @teams = StaticTeam.all
+      logo_srcs.each_with_index do |src, i| 
+        img_src = open(src)
+        img_dest = "app/assets/images/nba_team_logos/#{@teams[i].abbreviation}.gif"
+        IO.copy_stream(img_src, img_dest)
+        if File.file? img_dest
+          puts "#{@teams[i].city} #{@teams[i].name}'s gif image has been stored at #{img_dest}".green
+          nba_team_logos_created += 1
+        else
+          puts "Failed to store #{@teams[i].city} #{@teams[i].name}'s gif".red.bold
+          break
+        end
+      end
+      puts "#{nba_team_logos_created} team logos have been downloaded to the assets directory".bold
+    end
+
     desc 'downloads team rosters from wikipedia.org'
-    task download: :environment do
+    task roster: :environment do
       nba_rosters_created = 0
       roster_urls = Team::Roster.urls
       @teams = StaticTeam.all
       roster_urls.each_with_index do |src, i|
         page_src = open(src)
-        page_dest = "vendor/rosters/#{@teams[i].abbreviation}.html"
+        page_dest = "vendor/rosters/#{@teams[i].abbreviation.downcase}.html"
         IO.copy_stream(page_src, page_dest)
         if File.file? page_dest
           puts "#{@teams[i].abbreviation}'s roster downloaded to #{page_dest}".green
@@ -64,4 +65,5 @@ namespace :static_team do
       puts "#{nba_rosters_created} team rosters have been downloaded to vender directory".bold
     end
   end
+
 end
