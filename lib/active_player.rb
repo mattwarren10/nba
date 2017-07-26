@@ -12,6 +12,23 @@ module ActivePlayer
 	# //table[1]/tbody/tr[contains(., 'Born')]/td|//table[1]/tbody/tr[contains(., 'NBA draft')]/td|//h3/following-sibling::table[1]/tbody/tr[contains(., '2016–17')]
 
 	module Credentials
+		module LocationDraftStats
+			def self.retrieve				
+				# league = Player::Attr.get
+				# url = "vendor/#{abbr.downcase}/#{player[:link]}"
+				url = "vendor/player_wiki/atl/Dewayne_Dedmon.html"
+				xpath = "//table[1]/tr[contains(., 'Born')]/td|//table[1]/tr[contains(., 'NBA draft')]/td|//h3/following-sibling::table[1]/tr[contains(., '2016–17')]"
+				data = CallNokogiri.xpath url, xpath
+				
+
+				array = []
+				data.each do |item|
+					array.push(item.text)
+				end
+				array
+			end
+		end
+
 		def self.retrieve
 			credentials = Team::Roster.retrieve
 			info = credentials.first
