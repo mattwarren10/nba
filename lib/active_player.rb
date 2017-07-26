@@ -12,23 +12,6 @@ module ActivePlayer
 	# //table[1]/tbody/tr[contains(., 'Born')]/td|//table[1]/tbody/tr[contains(., 'NBA draft')]/td|//h3/following-sibling::table[1]/tbody/tr[contains(., '2016–17')]
 
 	module Credentials
-		module LocationDraftStats
-			def self.retrieve				
-				# league = Player::Attr.get
-				# url = "vendor/#{abbr.downcase}/#{player[:link]}"
-				url = "vendor/player_wiki/atl/Dewayne_Dedmon.html"
-				xpath = "//table[1]/tr[contains(., 'Born')]/td|//table[1]/tr[contains(., 'NBA draft')]/td|//h3/following-sibling::table[1]/tr[contains(., '2016–17')]"
-				data = CallNokogiri.xpath url, xpath
-				
-
-				array = []
-				data.each do |item|
-					array.push(item.text)
-				end
-				array
-			end
-		end
-
 		def self.retrieve
 			credentials = Team::Roster.retrieve
 			info = credentials.first
@@ -89,9 +72,45 @@ module ActivePlayer
 			end
 			teams
 		end
+
+		module LocationDraftStats
+			def self.retrieve
+				league_hash = Attr.get
+				league_data = []
+				league_hash.each do |abbr, team|
+					team_data = []
+					team.each do |player|										
+						url = "vendor/player_wiki/#{abbr.downcase}/#{player[:link]}.html"												
+						xpath = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td|//h3/following-sibling::table[@class='wikitable sortable']"
+						puts "Calling Nokogiri for #{player[:last_name]}, #{player[:first_name]}"
+						puts "==> #{player[:link]}"
+						data = CallNokogiri.xpath url, xpath						
+						player_data = data.text.split("\n")
+						team_data.push(player_data)						
+					end
+					league_data.push(team_data)
+				end	
+				league_data
+			end
+
+			def self.modify
+				league_data = retrieve
+				league_data.each do |team_data|					
+					team_data.each do |player_data|
+						player_data.each_with_index do |str, i|
+							
+						end
+					end	
+				end
+			end
+		end
 	end
 
 	module Attr
+		def self.update				
+				
+		end
+
 		def self.get
 			teams = StaticTeam.all
 			rosters = Credentials.separate
@@ -110,6 +129,9 @@ module ActivePlayer
 					player_hash[:birth_date] = player[5]
 					player_hash[:before_nba] = player[6]
 					player_hash[:link] = links[i][l]
+					# player_hash[:born_from] = arr[0][1]
+					# player_hash[:which_pick] = arr[1][0]
+					# player_hash[:stats] = arr[2..-1]
 					team_roster.push(player_hash) 
 				end
 				league[teams[i].abbreviation] = team_roster
