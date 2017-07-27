@@ -35,15 +35,16 @@ module ActivePlayer
 
 		def self.parse_links
 			noko_arr = retrieve
+			teams = Team::Attr.get
 			links = []
 			noko_arr.last.each_with_index do |player, i|
 				team = []
 				player.each do |link|
 					team.push(link.attribute('href').value.gsub('/wiki/', ''))
-				end
-				links.push(team)
+					teams[i][:player_links] = team
+				end				
 			end
-			links
+			teams
 		end
 
 		def self.separate			
@@ -73,23 +74,22 @@ module ActivePlayer
 			teams
 		end
 
-		module ImgBirthLocationDraftStats
-			def self.retrieve
-				league_hash = Attr.get
+		module Wiki			
+			def self.retrieve				
+				teams = Credentials.parse_links				
 				league_data = []
-				league_hash.each do |abbr, team|
+				teams.each do |team_hash|
 					team_data = []
-					team.each do |player|										
-						url = "vendor/player_wiki/#{abbr.downcase}/#{player[:link]}.html"												
+					team_hash[:player_links].each do |link|
+						url = "vendor/player_wiki/#{team_hash[:abbreviation]}/#{link}.html"
 						xpath = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td|//h3/following-sibling::table[@class='wikitable sortable']|//table[@class='infobox vcard']/tr/td/a/img/@src"
-						puts "Calling Nokogiri for #{player[:last_name]}, #{player[:first_name]}"
-						puts "==> #{player[:link]}"
-						data = CallNokogiri.xpath url, xpath						
+						puts "Calling Nokogiri for #{link}"
+						data = CallNokogiri.xpath url, xpath
 						player_data = data.text.split("\n")
-						team_data.push(player_data)						
+						team_data.push(player_data)
 					end
 					league_data.push(team_data)
-				end	
+				end
 				league_data
 			end
 
@@ -116,7 +116,7 @@ module ActivePlayer
 		def self.get
 			teams = StaticTeam.all
 			rosters = Credentials.separate
-			links = Credentials.parse_links
+			# links = Credentials.parse_links
 			league = {}
 			rosters.each_with_index do |team, i|
 				team_roster = []
@@ -130,7 +130,7 @@ module ActivePlayer
 					player_hash[:weight] = player[4]
 					player_hash[:birth_date] = player[5]
 					player_hash[:before_nba] = player[6]
-					player_hash[:link] = links[i][l]
+					# player_hash[:link] = links[i][l]
 					# player_hash[:born_from] = arr[0][1]
 					# player_hash[:which_pick] = arr[1][0]
 					# player_hash[:stats] = arr[2..-1]
