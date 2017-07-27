@@ -73,7 +73,7 @@ module ActivePlayer
 			teams
 		end
 
-		module LocationDraftStats
+		module ImgBirthLocationDraftStats
 			def self.retrieve
 				league_hash = Attr.get
 				league_data = []
@@ -81,7 +81,7 @@ module ActivePlayer
 					team_data = []
 					team.each do |player|										
 						url = "vendor/player_wiki/#{abbr.downcase}/#{player[:link]}.html"												
-						xpath = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td|//h3/following-sibling::table[@class='wikitable sortable']"
+						xpath = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td|//h3/following-sibling::table[@class='wikitable sortable']|//table[@class='infobox vcard']/tr/td/a/img/@src"
 						puts "Calling Nokogiri for #{player[:last_name]}, #{player[:first_name]}"
 						puts "==> #{player[:link]}"
 						data = CallNokogiri.xpath url, xpath						
@@ -95,11 +95,13 @@ module ActivePlayer
 
 			def self.modify
 				league_data = retrieve
-				league_data.each do |team_data|					
+				league = []
+				league_data.each do |team_data|	
+					team = []
+					stats = []		
 					team_data.each do |player_data|
-						player_data.each_with_index do |str, i|
-							
-						end
+						player = []						
+											
 					end	
 				end
 			end
