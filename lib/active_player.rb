@@ -100,10 +100,36 @@ module ActivePlayer
 					team = []
 					stats = []		
 					team_data.each do |player_data|
-						player = []						
-											
-					end	
+						player_data.delete ""
+						player = []
+						if player_data[0].include?("upload.wikimedia.org")
+						  player.push(player_data[0][0..player_data[0].index('(')].delete('('))
+						end
+						if player_data[1].include?(",")
+						  player.push(player_data[1])
+						end
+						draft = player_data.grep(/draft/)[0]
+						index = player_data.index(draft) + 1
+						which_pick = player_data[index]
+						player.push(which_pick)
+						stats = []
+						player_data.each do |str|
+						  if str.include?("\u2013")
+						    str.gsub!("\u2013", "-")
+						    str.gsub!("\u2020", "")
+						    if player_data.count(str) == 1
+						      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12])
+						    elsif player_data.count(str) > 1						     
+						        stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])						      
+						    end
+						  end
+						end
+						player.push(stats)
+						team.push(player)
+					end
+					league.push(team)
 				end
+				league				
 			end
 		end
 	end
