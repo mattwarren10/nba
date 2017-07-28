@@ -102,7 +102,7 @@ module ActivePlayer
 					team_data.each do |player_data|
 						player_data.delete ""
 						player = []
-						if player_data[0].include?("upload.wikimedia.org")
+						if player_data[0].include?("upload.wikimedia.org")						  
 						  player.push(player_data[0][0..player_data[0].index('(')].delete('('))
 						end
 						if player_data[1].include?(",")
@@ -114,13 +114,12 @@ module ActivePlayer
 						player.push(which_pick)
 						stats = []
 						player_data.each do |str|
-						  if str.include?("\u2013")
-						    str.gsub!("\u2013", "-")
+						  if str.include?("\u2013")						    
 						    str.gsub!("\u2020", "")
 						    if player_data.count(str) == 1
 						      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12])
 						    elsif player_data.count(str) > 1						     
-						        stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])						      
+						      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])						      
 						    end
 						  end
 						end
