@@ -41,7 +41,7 @@ module ActivePlayer
 				team = []
 				player.each do |link|
 					team.push(link.attribute('href').value.gsub('/wiki/', ''))
-					teams[i][:player_links] = team
+					teams[i][:wiki_links] = team
 				end				
 			end
 			teams
@@ -80,7 +80,7 @@ module ActivePlayer
 				league_data = []
 				teams.each do |team_hash|
 					team_data = []
-					team_hash[:player_links].each do |link|
+					team_hash[:wiki_links].each do |link|
 						url = "vendor/player_wiki/#{team_hash[:abbreviation]}/#{link}.html"
 						xpath = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td|//h3/following-sibling::table[@class='wikitable sortable']|//table[@class='infobox vcard']/tr/td/a/img/@src"
 						puts "Calling Nokogiri for #{link}"
@@ -139,13 +139,14 @@ module ActivePlayer
 		end
 
 		def self.get
+			player_wikis = Credentials::Wiki.modify
 			teams = StaticTeam.all
 			rosters = Credentials.separate
-			# links = Credentials.parse_links
+			links = Credentials.parse_links
 			league = {}
 			rosters.each_with_index do |team, i|
 				team_roster = []
-				team.each_with_index do |player, l|
+				team.each_with_index do |player, j|
 					player_hash = {}
 					player_hash[:position] = player[0]
 					player_hash[:jersey_number] = player[1]
@@ -155,10 +156,11 @@ module ActivePlayer
 					player_hash[:weight] = player[4]
 					player_hash[:birth_date] = player[5]
 					player_hash[:before_nba] = player[6]
-					# player_hash[:link] = links[i][l]
-					# player_hash[:born_from] = arr[0][1]
-					# player_hash[:which_pick] = arr[1][0]
-					# player_hash[:stats] = arr[2..-1]
+					player_hash[:image_link] = player_wikis[i][j].grep(/upload.wikimedia/)[0]
+					player_hash[:from] = player_wikis[i][j].grep(/,\ /)[0]
+					player_hash[:which_pick] = player_wikis[i][j].grep(/\ \/ /)[0]
+					player_hash[:regular_season_stats] = player_wikis[i][j][-1]
+					player_hash[:wiki_link] = links[i][:wiki_links][j]
 					team_roster.push(player_hash) 
 				end
 				league[teams[i].abbreviation] = team_roster
