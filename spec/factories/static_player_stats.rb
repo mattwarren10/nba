@@ -1,6 +1,5 @@
 FactoryGirl.define do
-  factory :static_player_stat do
-    static_player nil
+  factory :static_player_stat do    
     season "MyString"
     team "MyString"
     games_played 1
@@ -14,5 +13,6 @@ FactoryGirl.define do
     steals_per_game 1
     blocks_per_game 1
     points_per_game 1
+    static_player
   end
 end
