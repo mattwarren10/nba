@@ -110,20 +110,23 @@ module ActivePlayer
 						end
 						draft = player_data.grep(/draft/)[0]
 						index = player_data.index(draft) + 1
-						which_pick = player_data[index]
-						player.push(which_pick)
-						stats = []
+						which_pick = player_data[index]						
+						player.push(which_pick)			
+						years_pro = Time.now.year - which_pick[0..3].to_i
+						player.push(years_pro)			
+						stats = []						
 						player_data.each do |str|							
-						  if str.include?("\u2013")						    
+						  if str.include?("\u2013")						  	
 						  	str.gsub!("\u2013", "-")
 						    str.gsub!("\u2020", "")
-						    if player_data.count(str) == 1
+						    if player_data.count(str) == 1						    	
 						      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12])
 						    elsif player_data.count(str) > 1						     
 						      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
 						    end
 						  end
 						end
+						
 						player.push(stats)
 						team.push(player)
 					end
@@ -160,6 +163,7 @@ module ActivePlayer
 					player_hash[:image_link] = player_wikis[i][j].grep(/upload.wikimedia/)[0]
 					player_hash[:from] = player_wikis[i][j].grep(/,\ /)[0]
 					player_hash[:which_pick] = player_wikis[i][j].grep(/\ \/ /)[0]
+					player_hash[:years_pro] = player_wikis[i][j][-2]
 					player_hash[:regular_season_stats] = player_wikis[i][j][-1]
 					player_hash[:wiki_link] = links[i][:wiki_links][j]
 					team_roster.push(player_hash) 
