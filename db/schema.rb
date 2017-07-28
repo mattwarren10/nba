@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170728193948) do
+ActiveRecord::Schema.define(version: 20170728202256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "static_player_stats", force: :cascade do |t|
+    t.bigint "static_player_id"
+    t.string "season"
+    t.string "team"
+    t.integer "games_played"
+    t.integer "games_started"
+    t.integer "minutes_per_game"
+    t.integer "field_goal_percent"
+    t.integer "three_point_percent"
+    t.integer "free_throw_percent"
+    t.integer "rebounds_per_game"
+    t.integer "assists_per_game"
+    t.integer "steals_per_game"
+    t.integer "blocks_per_game"
+    t.integer "points_per_game"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["static_player_id"], name: "index_static_player_stats_on_static_player_id"
+  end
 
   create_table "static_players", force: :cascade do |t|
     t.bigint "static_team_id"
@@ -46,5 +66,6 @@ ActiveRecord::Schema.define(version: 20170728193948) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "static_player_stats", "static_players"
   add_foreign_key "static_players", "static_teams"
 end
