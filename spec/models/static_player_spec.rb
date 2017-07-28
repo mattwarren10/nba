@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe StaticPlayer, type: :model do
 	before do 		
-		@static_player = FactoryGirl.create(:static_player)	
+		@static_player = FactoryGirl.create(:static_player)
 	end
 	describe 'creation' do	
 		it 'can be created without a team id' do
@@ -53,8 +53,12 @@ RSpec.describe StaticPlayer, type: :model do
 			@static_player.years_pro = nil
 			expect(@static_player).to_not be_valid
 		end
-		it 'can not be created without a status' do
+		it 'can not be created without a status' do			
 			@static_player.status = nil
+			expect(@static_player).to_not be_valid
+		end		
+		it 'cannot be created without a wiki_link attr' do
+			@static_player.wiki_link = nil
 			expect(@static_player).to_not be_valid
 		end
 	end
