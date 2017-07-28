@@ -159,13 +159,13 @@ module ActivePlayer
 					player_hash[:height] = player[3]
 					player_hash[:weight] = player[4]
 					player_hash[:birth_date] = player[5]
-					player_hash[:before_nba] = player[6]
-					player_hash[:image_link] = player_wikis[i][j].grep(/upload.wikimedia/)[0]
-					player_hash[:from] = player_wikis[i][j].grep(/,\ /)[0]
+					player_hash[:before_nba] = player[6]					
+					player_hash[:from_city] = player_wikis[i][j].grep(/,\ /)[0]
 					player_hash[:which_pick] = player_wikis[i][j].grep(/\ \/ /)[0]
-					player_hash[:years_pro] = player_wikis[i][j][-2]
-					player_hash[:regular_season_stats] = player_wikis[i][j][-1]
+					player_hash[:years_pro] = player_wikis[i][j][-2]					
 					player_hash[:wiki_link] = links[i][:wiki_links][j]
+					player_hash[:image_link] = player_wikis[i][j].grep(/upload.wikimedia/)[0]
+					player_hash[:regular_season_stats] = player_wikis[i][j][-1]
 					team_roster.push(player_hash) 
 				end
 				league[teams[i].abbreviation] = team_roster
