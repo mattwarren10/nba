@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170728202256) do
+ActiveRecord::Schema.define(version: 20170729153634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,15 +21,15 @@ ActiveRecord::Schema.define(version: 20170728202256) do
     t.string "team"
     t.integer "games_played"
     t.integer "games_started"
-    t.integer "minutes_per_game"
-    t.integer "field_goal_percent"
-    t.integer "three_point_percent"
-    t.integer "free_throw_percent"
-    t.integer "rebounds_per_game"
-    t.integer "assists_per_game"
-    t.integer "steals_per_game"
-    t.integer "blocks_per_game"
-    t.integer "points_per_game"
+    t.decimal "minutes_per_game", precision: 3, scale: 1
+    t.decimal "field_goal_percent", precision: 3, scale: 3
+    t.decimal "three_point_percent", precision: 3, scale: 3
+    t.decimal "free_throw_percent", precision: 3, scale: 3
+    t.decimal "rebounds_per_game", precision: 3, scale: 1
+    t.decimal "assists_per_game", precision: 3, scale: 1
+    t.decimal "steals_per_game", precision: 3, scale: 1
+    t.decimal "blocks_per_game", precision: 3, scale: 1
+    t.decimal "points_per_game", precision: 3, scale: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["static_player_id"], name: "index_static_player_stats_on_static_player_id"
