@@ -115,7 +115,8 @@ module ActivePlayer
 						years_pro = Time.now.year - which_pick[0..3].to_i
 						player.push(years_pro)			
 						stats = []						
-						player_data.each do |str|							
+						player_data.each do |str|
+						  str.gsub!("*", "")							
 						  if str.include?("\u2013")						  	
 						  	str.gsub!("\u2013", "-")
 						    str.gsub!("\u2020", "")
