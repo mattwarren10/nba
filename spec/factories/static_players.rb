@@ -5,8 +5,7 @@ FactoryGirl.define do
 		jersey_number "33"
 		height "6'2"
 		weight "175"
-		birth_date DateTime.now
-		age 18
+		birth_date DateTime.now		
 		before_nba "Indiana"
 		is_rookie true
 		position "PG"

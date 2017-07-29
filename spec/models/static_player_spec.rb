@@ -36,11 +36,7 @@ RSpec.describe StaticPlayer, type: :model do
 		it 'can not be created without a birth date' do
 			@static_player.birth_date = nil
 			expect(@static_player).to_not be_valid
-		end
-		it 'can not be created without a age' do
-			@static_player.age = nil
-			expect(@static_player).to be_valid
-		end
+		end		
 		it 'can not be created without a before_nba attr' do
 			@static_player.before_nba = nil
 			expect(@static_player).to_not be_valid
