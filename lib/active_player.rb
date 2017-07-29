@@ -113,6 +113,12 @@ module ActivePlayer
 						which_pick = player_data[index]						
 						player.push(which_pick)			
 						years_pro = Time.now.year - which_pick[0..3].to_i
+						if years_pro == 0
+						  is_rookie = true 
+						else 
+						  is_rookie = false
+						end
+						player.push(is_rookie)
 						player.push(years_pro)			
 						stats = []						
 						player_data.each do |str|
@@ -157,10 +163,11 @@ module ActivePlayer
 					player_hash[:jersey_number] = player[1]
 					player_hash[:last_name] = player[2][0]
 					player_hash[:first_name] = player[2][1]
-					player_hash[:height] = player[3]
-					player_hash[:weight] = player[4]
+					player_hash[:height] = player[3].to_i
+					player_hash[:weight] = player[4].to_i
 					player_hash[:birth_date] = player[5]
-					player_hash[:before_nba] = player[6]					
+					player_hash[:before_nba] = player[6]						
+					player_hash[:is_rookie] = player_wikis[i][j][-3]			
 					player_hash[:from_city] = player_wikis[i][j].grep(/,\ /)[0]
 					player_hash[:which_pick] = player_wikis[i][j].grep(/\ \/ /)[0]
 					player_hash[:years_pro] = player_wikis[i][j][-2]					
