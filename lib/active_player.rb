@@ -169,7 +169,7 @@ module ActivePlayer
 					player_hash[:before_nba] = player[6]						
 					player_hash[:is_rookie] = player_wikis[i][j][-3]			
 					player_hash[:from_city] = player_wikis[i][j].grep(/,\ /)[0]
-					player_hash[:which_pick] = player_wikis[i][j].grep(/\ \/ /)[0]
+					player_hash[:which_pick] = player_wikis[i][j][-4]
 					player_hash[:years_pro] = player_wikis[i][j][-2]					
 					player_hash[:wiki_link] = links[i][:wiki_links][j]
 					player_hash[:image_link] = player_wikis[i][j].grep(/upload.wikimedia/)[0]
