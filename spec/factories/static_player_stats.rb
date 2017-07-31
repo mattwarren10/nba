@@ -13,6 +13,6 @@ FactoryGirl.define do
     steals_per_game 2.1
     blocks_per_game 1.0
     points_per_game 26.4
-    static_player
+    player
   end
 end

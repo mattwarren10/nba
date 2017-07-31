@@ -1,5 +1,5 @@
 
-class StaticPlayer < ApplicationRecord
+class Player < ApplicationRecord
   extend MySportsApi
   enum status: { active: 0, retired: 1 }
 

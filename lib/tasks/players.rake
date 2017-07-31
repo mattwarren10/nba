@@ -1,6 +1,6 @@
 require 'fileutils'
 
-namespace :static_players do
+namespace :players do
 
   desc "updates the records for each player"
   task update: :environment do
@@ -9,7 +9,7 @@ namespace :static_players do
   namespace :download do
     desc 'downloads player wikis from wikipedia.org'
     task wiki: :environment do
-      static_player_wikis = 0
+      player_wikis_count = 0
       teams_looped_through = 0
       league = ActivePlayer::Attr.get
       league.each do |abbr, players|
@@ -19,8 +19,8 @@ namespace :static_players do
           link_dest = "vendor/player_wiki/#{abbr.downcase}/#{player[:link]}.html"          
           IO.copy_stream(link_src, link_dest)
           if File.file? link_dest
-            static_player_wikis += 1
-            puts "#{static_player_wikis}: #{player[:last_name]}'s wiki has been stored at".green
+            player_wikis_count += 1
+            puts "#{player_wikis_count}: #{player[:last_name]}'s wiki has been stored at".green
             puts "==>#{link_dest}"
           else
             puts "Failed to store #{player[:last_name]}'s wiki page".red.bold
@@ -30,7 +30,7 @@ namespace :static_players do
         teams_looped_through += 1
         puts "#{teams_looped_through} teams looped through".light_blue
       end
-      "#{static_player_wikis} player wikis downloaded".bold
+      "#{player_wikis_count} player wikis downloaded".bold
     end
   
   end

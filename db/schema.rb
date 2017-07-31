@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731190629) do
+ActiveRecord::Schema.define(version: 20170731194502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,26 @@ ActiveRecord::Schema.define(version: 20170731190629) do
   create_table "leagues", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "last_name"
+    t.string "first_name"
+    t.string "jersey_number"
+    t.integer "height"
+    t.integer "weight"
+    t.string "before_nba"
+    t.boolean "is_rookie"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "position"
+    t.datetime "birth_date"
+    t.string "which_pick"
+    t.integer "years_pro"
+    t.integer "status", default: 0
+    t.string "wiki_link"
+    t.string "image_link"
+    t.string "from_city"
   end
 
   create_table "static_player_stats", force: :cascade do |t|
@@ -45,28 +65,6 @@ ActiveRecord::Schema.define(version: 20170731190629) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["static_player_id"], name: "index_static_player_stats_on_static_player_id"
-  end
-
-  create_table "static_players", force: :cascade do |t|
-    t.bigint "static_team_id"
-    t.string "last_name"
-    t.string "first_name"
-    t.string "jersey_number"
-    t.integer "height"
-    t.integer "weight"
-    t.string "before_nba"
-    t.boolean "is_rookie"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "position"
-    t.datetime "birth_date"
-    t.string "which_pick"
-    t.integer "years_pro"
-    t.integer "status", default: 0
-    t.string "wiki_link"
-    t.string "image_link"
-    t.string "from_city"
-    t.index ["static_team_id"], name: "index_static_players_on_static_team_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -94,6 +92,5 @@ ActiveRecord::Schema.define(version: 20170731190629) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "static_player_stats", "static_players"
-  add_foreign_key "static_players", "teams", column: "static_team_id"
+  add_foreign_key "static_player_stats", "players", column: "static_player_id"
 end

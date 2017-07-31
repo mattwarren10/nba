@@ -1,6 +1,6 @@
 require 'colorize'
 
-namespace :static_team do
+namespace :teams do
   desc "creates a record for each nba team from team modules"
   task create: :environment do
     teams = Team::Attr.get

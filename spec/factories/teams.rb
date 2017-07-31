@@ -1,5 +1,5 @@
 FactoryGirl.define do
-	factory :team do
+	factory :team, class: "Team" do
 		city "Indiana"
 		name "Pacers"
 		abbreviation "IND"		

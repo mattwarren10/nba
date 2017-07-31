@@ -1,6 +1,5 @@
 class StaticPlayerStat < ApplicationRecord
-  belongs_to :static_player
-
+  
   validates_presence_of :season,
   						:team,
   						:games_played,
