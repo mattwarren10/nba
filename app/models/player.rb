@@ -3,6 +3,9 @@ class Player < ApplicationRecord
   extend MySportsApi
   enum status: { active: 0, retired: 1 }
 
+  has_many :league_players
+  has_many :leagues, through: :league_players
+
   validates_presence_of :last_name, 
             						:first_name, 
             						:jersey_number, 
