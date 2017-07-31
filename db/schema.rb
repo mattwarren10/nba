@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731183051) do
+ActiveRecord::Schema.define(version: 20170731184640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20170731183051) do
     t.index ["static_team_id"], name: "index_static_players_on_static_team_id"
   end
 
-  create_table "static_teams", force: :cascade do |t|
+  create_table "teams", force: :cascade do |t|
     t.string "city"
     t.string "name"
     t.string "abbreviation"
@@ -88,5 +88,5 @@ ActiveRecord::Schema.define(version: 20170731183051) do
   end
 
   add_foreign_key "static_player_stats", "static_players"
-  add_foreign_key "static_players", "static_teams"
+  add_foreign_key "static_players", "teams", column: "static_team_id"
 end

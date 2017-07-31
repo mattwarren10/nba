@@ -6,7 +6,7 @@ RSpec.describe StaticPlayer, type: :model do
 	end
 	describe 'creation' do	
 		it 'can be created without a team id' do
-			@static_player.static_team_id = nil
+			@static_player.team_id = nil
 			expect(@static_player).to_not be_valid
 		end	
 		it 'can not be created without a last name' do

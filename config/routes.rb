@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   # scope league and nest teams and players inside
   resources :static_players, only: [:index, :show]
-  resources :static_teams, only: [:index, :show]
+  resources :teams, only: [:index, :show]
 
   
 

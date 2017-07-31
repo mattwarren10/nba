@@ -1,5 +1,5 @@
 
-module Team	
+module AuthenticTeam	
 	include CallNokogiri
 	include ChromeSelenium
 
