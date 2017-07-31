@@ -9,7 +9,8 @@ namespace :team do
       t = Team.create(
         city: team[:city],
         name: team[:name],
-        abbreviation: team[:abbreviation],        
+        abbreviation: team[:abbreviation], 
+        category: 0       
       )
       if t.valid?        
         puts "#{t.abbreviation} (id: #{t.id}) has been created.".green        
