@@ -4,6 +4,7 @@ module AuthenticTeam
 	include ChromeSelenium
 
 	module Roster
+		#  creates local urls to iterate through
 		def self.urls
 			teams = Team.all
 			urls = []			
@@ -38,7 +39,7 @@ module AuthenticTeam
 			links = ChromeSelenium.send "//ul/li/a/img", url
 		end
 
-		# 
+		# returns the image src attribute of each team after calling selenium
 		def self.src
 			images = retrieve
 			srcs = []
@@ -53,12 +54,14 @@ module AuthenticTeam
 	end	
 	
 	module CityNameAbbr
+		# grabs each city, name, and abbreviation from wikipedia
 		def self.retrieve
 			url = 'https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Basketball_Association/National_Basketball_Association_team_abbreviations'
 			table = CallNokogiri.css url, "tr"
 
 		end
 
+		# parses nokogiri string into an array and removes headers from table
 		def self.separate
 			noko_string = retrieve.text
 			arr = noko_string.split("\n")
@@ -67,6 +70,7 @@ module AuthenticTeam
 		    arr	
 		end
 
+		# isolates each team city, name, and abbreviation into its own array
 		def self.isolate
 			arr = separate
 			team_names = []
@@ -74,17 +78,14 @@ module AuthenticTeam
 		    team_abbr = []
 		    arr.each_with_index do |str, i|
 		      if i.odd? && str != "Portland Trail Blazers"
-		        team_names.push(str.split.last)
-		        team_cities.push(str[0..str.rindex(' ')].rstrip)
+		        team_names.push(str.split.last) # splits string of team city and name into just name
+		        team_cities.push(str[0..str.rindex(' ')].rstrip) # grabs all characters in city and name string until a space occurs
 		      elsif i.odd?
-		      	team_names.push(str.split.last(2).join(" "))
+		      	team_names.push(str.split.last(2).join(" ")) # takes 'Trail', 'Blazers' and joins them into one string
 		      	team_cities.push(str.split.first)
-		      end
-		    end
-		    arr.each_with_index do |abbr, i|
-		      if i.even?
-		        team_abbr.push(abbr)
-		      end
+		      elsif i.even?
+		        team_abbr.push(str)
+		      end		      
 		    end
 		    return team_cities, team_names, team_abbr
 		end
@@ -92,7 +93,7 @@ module AuthenticTeam
 	end
 
 	module Attr
-		def self.get #invoke this method to return an array of hashes containing team city, name, abbreviation, and nba_com
+		def self.get #invoke this method to return an array of hashes containing team city, name, abbreviation
 			team_components = CityNameAbbr.isolate
 			teams = []
 			team_components[0].count.times do |i|
