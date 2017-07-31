@@ -39,8 +39,9 @@ gem 'httparty', '~> 0.15.5'
 gem 'awesome_print', '~> 1.8', require: "ap"
 gem 'colorize', '~> 0.8.1'
 
-# Progress bar
+
 gem 'progress_bar', '~> 1.1'
+gem 'devise', '~> 4.3'
 
 
 group :development, :test do
