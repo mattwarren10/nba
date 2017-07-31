@@ -1,0 +1,2 @@
+class BasicUser < User
+end
