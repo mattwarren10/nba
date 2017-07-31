@@ -15,8 +15,8 @@ namespace :team do
         puts "#{t.abbreviation} (id: #{t.id}) has been created.".green        
         teams_created += 1
       else
-        puts "Failure: tried to create: #{t}".red.bold
-        puts "     ==> #{t.errors.full_messages.red}"
+        puts "Failure: tried to create: #{t}".red
+        puts "     ==> #{t.errors.full_messages.red}".red.bold
         break
       end
     end

@@ -1,30 +1,21 @@
 
 module ActivePlayer
-	# basketball-reference
-	# xpath for name, years pro (or hall of fame induction if retired), career stats, and img link basketball-reference
-	# //div/h1|//div[@itemscope]/p[contains(., 'Draft')]|//div[@itemscope]/p[last()]|//div[@class='stats_pullout']/div/div/p[last()]|//div[@id='meta']/div/img/@src
-
-	# same xpath except for last year stats (for active players) basketball-reference
-	# //div/h1|//div[@itemscope]/p[contains(., 'Draft')]|//div[@itemscope]/p[last()]|//div[@class='stats_pullout']/div/div/p[1]|//div[@id='meta']/div/img/@src
-
-	# wikipedia
-	# xpath for selecting born location, which pick in draft, stats from wikipedia player pages
-	# //table[1]/tbody/tr[contains(., 'Born')]/td|//table[1]/tbody/tr[contains(., 'NBA draft')]/td|//h3/following-sibling::table[1]/tbody/tr[contains(., '2016–17')]
-
 	module Credentials
+		# retrieves rosters and player links
 		def self.retrieve
 			credentials = AuthenticTeam::Roster.retrieve
-			info = credentials.first
+			rosters = credentials.first
 			player_links = credentials.last
-			return info, player_links
+			return rosters, player_links
 		end
 
+		# parses each nokogiri element into a string of player credentials and pushes to team
 		def self.parse_players
-			noko_arr = retrieve
+			noko_arr = retrieve.first
 			rosters = []
-			noko_arr.first.each_with_index do |t, i|
+			noko_arr.each_with_index do |t, i|
 				team = []
-				noko_arr.first[i].delete(noko_arr.first[i][0])
+				noko_arr[i].delete(noko_arr[i][0])
 				t.each do |player|					
 					team.push(player.text)
 				end
@@ -33,11 +24,12 @@ module ActivePlayer
 			rosters
 		end
 
+		# parses each nokogiri element into a string of player wiki links and adds it to teams array of hashes
 		def self.parse_links
-			noko_arr = retrieve
+			noko_arr = retrieve.last
 			teams = AuthenticTeam::Attr.get
 			links = []
-			noko_arr.last.each_with_index do |player, i|
+			noko_arr.each_with_index do |player, i|
 				team = []
 				player.each do |link|
 					team.push(link.attribute('href').value.gsub('/wiki/', ''))
@@ -47,6 +39,7 @@ module ActivePlayer
 			teams
 		end
 
+		# cleaning each player string from the team roster wiki
 		def self.separate			
 			rosters = parse_players
 			teams = []
@@ -74,7 +67,8 @@ module ActivePlayer
 			teams
 		end
 
-		module Wiki			
+		module Wiki	
+			# scraping local player wikis and grabbing their draft pick, where they were born, season stats, image src
 			def self.retrieve				
 				teams = Credentials.parse_links				
 				league_data = []
@@ -82,7 +76,11 @@ module ActivePlayer
 					team_data = []
 					team_hash[:wiki_links].each do |link|
 						url = "vendor/player_wiki/#{team_hash[:abbreviation]}/#{link}.html"
-						xpath = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td|//h3/following-sibling::table[@class='wikitable sortable']|//table[@class='infobox vcard']/tr/td/a/img/@src"
+						which_pick = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]"
+						born_city = "|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td"
+						season_stats = "|//h3/following-sibling::table[@class='wikitable sortable']"
+						image_src = "|//table[@class='infobox vcard']/tr/td/a/img/@src"
+						xpath = which_pick + born_city + season_stats +image_src
 						puts "Calling Nokogiri for #{link}"
 						data = CallNokogiri.xpath url, xpath
 						player_data = data.text.split("\n")
@@ -93,6 +91,7 @@ module ActivePlayer
 				league_data
 			end
 
+			# organize each player data from retrieve method
 			def self.modify
 				league_data = retrieve
 				league = []
@@ -145,10 +144,7 @@ module ActivePlayer
 	end
 
 	module Attr
-		def self.update				
-				
-		end
-
+		# consolidates all player credentials and organizes them into a player hash
 		def self.get
 			player_wikis = Credentials::Wiki.modify
 			teams = Team.all
