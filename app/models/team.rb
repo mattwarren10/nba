@@ -1,6 +1,9 @@
 class Team < ApplicationRecord
 	extend MySportsApi
+	has_many :league_teams
+	has_many :leagues, through: :league_teams
 
+	enum category: { authentic: 0, fantasy: 1 }
 
 	validates :city, presence: true
 	validates :name, presence: true, uniqueness: true
