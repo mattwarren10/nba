@@ -1,6 +1,6 @@
 require 'fileutils'
 
-namespace :players do
+namespace :player do
 
   desc "updates the records for each player"
   task update: :environment do

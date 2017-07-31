@@ -1,12 +1,12 @@
 require 'colorize'
 
-namespace :teams do
+namespace :team do
   desc "creates a record for each nba team from team modules"
   task create: :environment do
-    teams = Team::Attr.get
+    teams = AuthenticTeam::Attr.get
     teams_created = 0
     teams.each do |team|
-      t = StaticTeam.create(
+      t = Team.create(
         city: team[:city],
         name: team[:name],
         abbreviation: team[:abbreviation],        
@@ -20,7 +20,7 @@ namespace :teams do
         break
       end
     end
-    puts "#{teams_created} StaticTeam database records created.".bold
+    puts "#{teams_created} Team database records created.".bold
   end
 
 
@@ -28,8 +28,8 @@ namespace :teams do
     desc "downloads team logos from sportslogos.net"
     task logo: :environment do
       nba_team_logos_created = 0
-      logo_srcs = Team::Logo.src
-      @teams = StaticTeam.all
+      logo_srcs = AuthenticTeam::Logo.src
+      @teams = Team.all
       logo_srcs.each_with_index do |src, i| 
         img_src = open(src)
         img_dest = "app/assets/images/nba_team_logos/#{@teams[i].abbreviation}.gif"
@@ -48,8 +48,8 @@ namespace :teams do
     desc 'downloads team rosters from wikipedia.org'
     task roster: :environment do
       nba_rosters_created = 0
-      roster_urls = Team::Roster.urls
-      @teams = StaticTeam.all
+      roster_urls = AuthenticTeam::Roster.urls
+      @teams = Team.all
       roster_urls.each_with_index do |src, i|
         page_src = open(src)
         page_dest = "vendor/rosters/#{@teams[i].abbreviation.downcase}.html"

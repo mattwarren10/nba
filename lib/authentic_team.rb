@@ -5,7 +5,7 @@ module AuthenticTeam
 
 	module Roster
 		def self.urls
-			teams = StaticTeam.all
+			teams = Team.all
 			urls = []			
 			teams.each do |team|								
 				urls.push("vendor/rosters/#{team.abbreviation}.html")
@@ -13,7 +13,8 @@ module AuthenticTeam
 			urls			
 		end
 
-		def self.retrieve
+		# iterates through downloaded wikipedia roster pages and scrapes each row of players and their wiki links
+		def self.retrieve 
 			urls = Roster.urls
 			rosters = []
 			player_links = []
@@ -31,11 +32,13 @@ module AuthenticTeam
 	end
 
 	module Logo
+		# retrieves links of images of each nba team logo
 		def self.retrieve
 			url = 'http://www.sportslogos.net/teams/list_by_league/6/National_Basketball_Association/NBA/logos/'
 			links = ChromeSelenium.send "//ul/li/a/img", url
 		end
 
+		# 
 		def self.src
 			images = retrieve
 			srcs = []

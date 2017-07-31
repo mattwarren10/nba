@@ -13,7 +13,7 @@ module ActivePlayer
 
 	module Credentials
 		def self.retrieve
-			credentials = Team::Roster.retrieve
+			credentials = AuthenticTeam::Roster.retrieve
 			info = credentials.first
 			player_links = credentials.last
 			return info, player_links
@@ -35,7 +35,7 @@ module ActivePlayer
 
 		def self.parse_links
 			noko_arr = retrieve
-			teams = Team::Attr.get
+			teams = AuthenticTeam::Attr.get
 			links = []
 			noko_arr.last.each_with_index do |player, i|
 				team = []
@@ -151,7 +151,7 @@ module ActivePlayer
 
 		def self.get
 			player_wikis = Credentials::Wiki.modify
-			teams = StaticTeam.all
+			teams = Team.all
 			rosters = Credentials.separate
 			links = Credentials.parse_links
 			league = {}
