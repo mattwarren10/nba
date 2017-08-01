@@ -1,15 +1,15 @@
 FactoryGirl.define do
-	factory :player, class: "Player" do
+	factory :player_fantasy_one, class: "Player" do
 		last_name "Warren"
 		first_name "Matt"
 		jersey_number "33"
 		height "6'2"
 		weight "175"
-		birth_date DateTime.now		
+		birth_date DateTime.now	- 25.years	
 		before_nba "Indiana"
 		is_rookie true
 		position "PG"
-		which_pick "2010 Rnd 1 Pick 1"
+		which_pick "2010 / Round: 1 / Pick: 1st overall"
 		years_pro 0
 		status 0
 		from_city "Bloomington, Indiana"
