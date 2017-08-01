@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :admin_user, class: "AdminUser" do
   	last_name "Warren"
   	first_name "Matt"
+    username "mattwarren"
     email "mwarren@harding.edu"
     password "weeboo"
     password_confirmation "weeboo"    
@@ -10,6 +11,7 @@ FactoryGirl.define do
   factory :basic_user, class: "BasicUser" do
   	last_name "Mardanzai"
   	first_name "Louis"
+    username "louismardanzai"
   	email "malwarr@indiana.edu"
   	password "tarbooz"
   	password_confirmation "tarbooz"
