@@ -3,4 +3,5 @@ class LeagueTeam < ApplicationRecord
 	belongs_to :team
 	belongs_to :user
 	has_many :league_players
+	has_many :stats
 end
