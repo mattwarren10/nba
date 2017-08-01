@@ -1,6 +1,6 @@
 
 FactoryGirl.define do  
-  factory :league_nba do
+  factory :league_nba, class: "League" do
     name "National Basketball Association"
     commissioner "Adam Silver"
     headquarters "New York, NY"
@@ -10,7 +10,7 @@ FactoryGirl.define do
     users { [ FactoryGirl.create(:admin_user) ] }
   end
   
-  factory :league_fantasy_one do
+  factory :league_fantasy_one, class: "League" do
   	name "World Basketball League"
   	commissioner "louismardanzai"
   	headquarters "Indianapolis, IN"
@@ -21,5 +21,18 @@ FactoryGirl.define do
   			  FactoryGirl.create(:basic_user_one), 
   			  FactoryGirl.create(:basic_user_two)
   		   ] }
+  end
+
+  factory :league_fantasy_two, class: "League" do
+    name "Afghanistan League"
+    commissioner "Bubba Jan"
+    headquarters "Kabul, AF"
+    inaugural_season "2008-09"
+    number_of_teams 30
+    abbreviation "AFG"
+    users { [ 
+          # FactoryGirl.create(:basic_user_one), 
+          # FactoryGirl.create(:basic_user_two)
+         ] }
   end
 end
