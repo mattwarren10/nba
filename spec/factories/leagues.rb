@@ -10,14 +10,15 @@ FactoryGirl.define do
     users {[admin_user]}
   end
 
-  basic_user = FactoryGirl.create(:basic_user)
-  factory :league_fantasy do
+  basic_user_one = FactoryGirl.create(:basic_user_one)
+  basic_user_two = FactoryGirl.create(:basic_user_two)
+  factory :league_fantasy_one do
   	name "World Basketball League"
   	commissioner basic_user.username
   	headquarters "Indianapolis, IN"
   	inaugural_season "2017-18"
   	number_of_teams 30
   	abbreviation "WBL"
-  	users { [ admin_user, basic_user ] }
+  	users { [ basic_user_one, basic_user_two ] }
   end
 end
