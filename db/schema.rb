@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170801154207) do
+ActiveRecord::Schema.define(version: 20170801154619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,28 @@ ActiveRecord::Schema.define(version: 20170801154207) do
     t.string "from_city"
   end
 
+  create_table "stats", force: :cascade do |t|
+    t.bigint "league_player_id"
+    t.bigint "league_team_id"
+    t.string "season"
+    t.string "team"
+    t.integer "games_played"
+    t.integer "games_started"
+    t.decimal "minutes_per_game", precision: 3, scale: 1
+    t.decimal "field_goal_percent", precision: 3, scale: 3
+    t.decimal "three_point_percent", precision: 3, scale: 3
+    t.decimal "free_throw_percent", precision: 3, scale: 3
+    t.decimal "rebounds_per_game", precision: 3, scale: 1
+    t.decimal "assists_per_game", precision: 3, scale: 1
+    t.decimal "steals_per_game", precision: 3, scale: 1
+    t.decimal "blocks_per_game", precision: 3, scale: 1
+    t.decimal "points_per_game", precision: 3, scale: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_player_id"], name: "index_stats_on_league_player_id"
+    t.index ["league_team_id"], name: "index_stats_on_league_team_id"
+  end
+
   create_table "teams", force: :cascade do |t|
     t.string "city"
     t.string "name"
@@ -91,4 +113,6 @@ ActiveRecord::Schema.define(version: 20170801154207) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "stats", "league_players"
+  add_foreign_key "stats", "league_teams"
 end
