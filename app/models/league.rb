@@ -13,4 +13,6 @@ class League < ApplicationRecord
   						:abbreviation
 
   validates_uniqueness_of :name, scope: [ :commissioner ]
+
+
 end

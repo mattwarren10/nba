@@ -21,6 +21,7 @@ class User < ApplicationRecord
   validate :validate_username
   validates :last_name, :presence => true
   validates :first_name, :presence => true
+  validates_length_of :leagues, maximum: 10
 
 
   def self.find_for_database_authentication(warden_conditions)

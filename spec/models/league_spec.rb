@@ -58,6 +58,12 @@ RSpec.describe League, type: :model do
       @league_fantasy_two.name = @league_fantasy_one.name
       expect(@league_fantasy_two).to_not be_valid
     end
-
+    xit 'cannot have basic users whose commissioner is an admin user' do
+      @league_nba = FactoryGirl.create(:league_nba)
+      @league_nba.commissioner = @league_nba.users.first.username
+      @league_nba.users.push(@basic_user_one)
+      expect(@league_nba).to_not be_valid
+    end
   end
+
 end
