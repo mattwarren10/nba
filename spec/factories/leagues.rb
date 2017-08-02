@@ -18,8 +18,7 @@ FactoryGirl.define do
   	number_of_teams 30
   	abbreviation "WBL"
   	users { [ 
-  			  FactoryGirl.create(:basic_user_one), 
-  			  FactoryGirl.create(:basic_user_two)
+  			  FactoryGirl.create(:basic_user_one)
   		   ] }
   end
 
@@ -30,9 +29,8 @@ FactoryGirl.define do
     inaugural_season "2008-09"
     number_of_teams 30
     abbreviation "AFG"
-    users { [ 
-          # FactoryGirl.create(:basic_user_one), 
-          # FactoryGirl.create(:basic_user_two)
+    users { [           
+          FactoryGirl.create(:basic_user_two)
          ] }
   end
 end

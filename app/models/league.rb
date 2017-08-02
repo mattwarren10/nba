@@ -12,18 +12,5 @@ class League < ApplicationRecord
   						:number_of_teams,
   						:abbreviation
 
-  validates_uniqueness_of :name, if: :unique_name?
-
-  # forbids a user to create a league of the same name if they are the commissioner
-  def unique_name?
-  	n = self.name
-  	c = self.commissioner
-  	self.users.each do |user|
-  		user.leagues.each do |league|
-  			if c = league.commissioner
-  				true if n != league.name
-  			end
-  		end
-  	end
-  end
+  validates_uniqueness_of :name, scope: [ :commissioner ]
 end
