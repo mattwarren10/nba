@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  attr_accessor :login
+
   has_and_belongs_to_many :leagues
   has_many :league_teams
   # Include default devise modules. Others available are:
@@ -6,16 +8,37 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  EMAIL_REGEX = /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}\Z/i         
+  EMAIL_REGEX = /\A[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}\Z/i
+  USERNAME_REGEX = /^[a-zA-Z0-9_\.]*$/        
 
   validates :email, :presence => true,
   					:format => EMAIL_REGEX
-  
-  validates_presence_of	:last_name,
-  						:first_name,
-  						:username
+  validates :username, :presence => true,
+            :format => { :with => USERNAME_REGEX,
+                         :multiline => true
+                       },
+            :uniqueness => { :case_sensitive => false }
+  validate :validate_username
+  validates :last_name, :presence => true
+  validates :first_name, :presence => true
 
-  validates_uniqueness_of :username
 
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_h).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+    elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+      where(conditions.to_h).first
+    end
+  end
 
+  def validate_username
+    if User.where(email: username).exists?
+      errors.add(:username, :invalid)
+    end
+  end
+
+  def full_name
+    self.first_name + ", " + self.last_name
+  end
 end
