@@ -42,20 +42,22 @@ RSpec.describe League, type: :model do
       @league_fantasy_one = FactoryGirl.create(:league_fantasy_one)
       @league_fantasy_two = FactoryGirl.create(:league_fantasy_two)
     end
-    it 'can have multiple users' do
-      @league_fantasy_one.users.push(@league_fantasy_two.users.first)
-      expect(@league_fantasy_one).to be_valid
-    end
-  	it 'cannot have the same name as another league of the same user' do  		  		
-  		@league_fantasy_two.users.push(@league_fantasy_one.users.first)      
-  		@league_fantasy_two.commissioner = @league_fantasy_one.commissioner
-  		@league_fantasy_two.name = @league_fantasy_one.name
-  		expect(@league_fantasy_two).to_not be_valid
-  	end
-
     it 'can have the same name as another league if users are different' do                 
       @league_fantasy_two.name = @league_fantasy_one.name
       expect(@league_fantasy_two).to be_valid
     end
+
+    # These might need to be in the controller
+    it 'can have multiple users' do
+      @league_fantasy_one.users.push(@league_fantasy_two.users.first)
+      expect(@league_fantasy_one).to be_valid
+    end
+    it 'cannot have the same name as another league of the same user' do            
+      @league_fantasy_two.users.push(@league_fantasy_one.users.first)      
+      @league_fantasy_two.commissioner = @league_fantasy_one.commissioner
+      @league_fantasy_two.name = @league_fantasy_one.name
+      expect(@league_fantasy_two).to_not be_valid
+    end
+
   end
 end
