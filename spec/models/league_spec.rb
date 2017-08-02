@@ -40,7 +40,7 @@ RSpec.describe League, type: :model do
   describe 'uniquness' do
     before do 
       @league_fantasy_one = FactoryGirl.create(:league_fantasy_one)
-      @league_fantasy_two = FactoryGirl.create(:league_fantasy_two)
+      @league_fantasy_two = FactoryGirl.create(:league_fantasy_two)      
     end
     it 'can have the same name as another league if users are different' do                 
       @league_fantasy_two.name = @league_fantasy_one.name
@@ -61,7 +61,7 @@ RSpec.describe League, type: :model do
     xit 'cannot have basic users whose commissioner is an admin user' do
       @league_nba = FactoryGirl.create(:league_nba)
       @league_nba.commissioner = @league_nba.users.first.username
-      @league_nba.users.push(@basic_user_one)
+      @league_nba.users.push(@league_fantasy_one.users.first)
       expect(@league_nba).to_not be_valid
     end
   end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :league_team do
-    league_id 1
-    team_id 1
+  factory :league_team, class: "LeagueTeam" do
+    league_fantasy_one
+    team
   end
 end

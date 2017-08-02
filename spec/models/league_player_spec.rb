@@ -1,5 +1,5 @@
-require 'rails_helper'
+# require 'rails_helper'
 
-RSpec.describe LeaguePlayer, type: :model do
+# RSpec.describe LeaguePlayer, type: :model do
   
-end
+# end

@@ -17,9 +17,7 @@ FactoryGirl.define do
   	inaugural_season "2017-18"
   	number_of_teams 30
   	abbreviation "WBL"
-  	users { [ 
-  			  FactoryGirl.create(:basic_user_one)
-  		   ] }
+  	users { [ FactoryGirl.create(:basic_user_one) ] }
   end
 
   factory :league_fantasy_two, class: "League" do

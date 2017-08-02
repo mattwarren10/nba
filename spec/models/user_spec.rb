@@ -63,12 +63,6 @@ RSpec.describe User, type: :model do
     it 'cannot have more than 10 leagues' do 
       11.times { @basic_user_one.leagues.push(@league_fantasy_two)}
       expect(@basic_user_one).to_not be_valid
-    end
-    xit 'cannot have basic users whose commissioner is an admin user' do
-      @league_nba = FactoryGirl.create(:league_nba)
-      @league_nba.commissioner = @league_nba.users.first.username
-      @league_nba.users.push(@basic_user_one)
-      expect(@league_nba).to_not be_valid
-    end
+    end    
   end
 end
