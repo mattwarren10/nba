@@ -17,6 +17,6 @@ League.create(name: "World Basketball League", commissioner: "alexjones", headqu
 
 Player.create(last_name: "Warren", first_name: "Matt", jersey_number: "33", height: 200, weight: 85, birth_date: DateTime.now	- 25.years, before_nba: "Indiana", is_rookie: true, position: "PG", which_pick: "2010 / Round: 1 / Pick: 1st overall", years_pro: 0, status: 0, from_city: "Bloomington, Indiana", wiki_link: "Matt_Warren", image_link: "//upload.wikimedia.org/Matt_Warren") 
 
-Stat.create(season: "2017-18", team: "Indiana", games_played: 82, games_started: 75, minutes_per_game: 35.4, field_goal_percent: 0.482, three_point_percent: 0.410, free_throw_percent: 0.920, rebounds_per_game: 6.2, assists_per_game: 11.4, steals_per_game: 2.1, blocks_per_game: 1.1, points_per_game: 26.2)
+# Stat.create(season: "2017-18", team: "Indiana", games_played: 82, games_started: 75, minutes_per_game: 35.4, field_goal_percent: 0.482, three_point_percent: 0.410, free_throw_percent: 0.920, rebounds_per_game: 6.2, assists_per_game: 11.4, steals_per_game: 2.1, blocks_per_game: 1.1, points_per_game: 26.2)
 
 
