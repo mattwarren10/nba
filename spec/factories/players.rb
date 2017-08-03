@@ -18,21 +18,21 @@ FactoryGirl.define do
 	end
 
 	factory :player_two, class: "Player" do
-		last_name "James"
-		first_name "LeBron"
-		jersey_number "23"
-		height 210
-		weight 105
-		birth_date DateTime.now	- 32.years	
-		before_nba "St Vincent / St Mary's (OH)"
+		last_name "Bird"
+		first_name "Larry"
+		jersey_number "33"
+		height 206
+		weight 100
+		birth_date DateTime.now	- 60.years	
+		before_nba "Indiana State"
 		is_rookie false
 		position "SF"
-		which_pick "2003 / Round: 1 / Pick: 1st overall"
-		years_pro 14
-		status 0
-		from_city "Akron, Ohio"
-		wiki_link "LeBron_James"
-		image_link "//upload.wikimedia.org/LeBron_James"		
+		which_pick "1980 / Round: 1 / Pick: 6th overall"
+		years_pro 13
+		status 1
+		from_city "West Baden Springs, Indiana"
+		wiki_link "Larry_Bird"
+		image_link "//upload.wikimedia.org/Larry_Bird"		
 	end
 
 	factory :player_three, class: "Player" do
