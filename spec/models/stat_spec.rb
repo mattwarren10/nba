@@ -61,4 +61,20 @@ RSpec.describe Stat, type: :model do
 			expect(@stat).to_not be_valid
 		end
 	end
+
+	describe 'enums' do
+		let(:level) { [:pro, :college, :international, :high_school] }
+		let(:category) { [:authentic, :fantasy] }
+
+		it '(level) has the right index' do
+			level.each_with_index do |item, index|
+				expect(described_class.levels[item]).to eq(index)
+			end	
+		end
+		it '(category) has the right index' do
+			category.each_with_index do |item, index|
+				expect(described_class.categories[item]).to eq(index)
+			end	
+		end
+	end
 end

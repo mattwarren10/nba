@@ -15,5 +15,7 @@ FactoryGirl.define do
 	steals_per_game 2.1
 	blocks_per_game 1.1
 	points_per_game 26.2
+    level 0
+    category 0
   end
 end
