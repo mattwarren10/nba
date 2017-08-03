@@ -26,4 +26,13 @@ RSpec.describe Team, type: :model do
 			expect(team_duplicate).to_not be_valid
 		end
 	end
+	describe 'enums' do		
+		let(:category) { [:authentic, :fantasy] }
+
+		it '(category) has the right index' do
+			category.each_with_index do |item, index|
+				expect(described_class.categories[item]).to eq(index)
+			end	
+		end		
+	end
 end

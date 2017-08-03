@@ -57,5 +57,13 @@ RSpec.describe Player, type: :model do
 			expect(@player).to_not be_valid
 		end
 	end
+	describe 'enums' do		
+		let(:status) { [:active, :retired] }
+		it '(status) has the right index' do
+			status.each_with_index do |item, index|
+				expect(described_class.statuses[item]).to eq(index)
+			end	
+		end		
+	end
 
 end
