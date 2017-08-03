@@ -18,10 +18,10 @@ RSpec.describe Stat, type: :model do
 			expect(@stat).to_not be_valid
 		end
 		# games started wasn't recorded until 1981-82 season
-		# it 'cannot be created without games_started' do
-		# 	@stat.games_started = nil
-		# 	expect(@stat).to_not be_valid
-		# end
+		it 'cannot be created without games_started' do
+			@stat.games_started = nil
+			expect(@stat).to_not be_valid
+		end
 		it 'cannot be created without minutes_per_game' do
 			@stat.minutes_per_game = nil
 			expect(@stat).to_not be_valid
@@ -31,10 +31,10 @@ RSpec.describe Stat, type: :model do
 			expect(@stat).to_not be_valid
 		end
 		# three pointers weren't recorded until 1979-80 season
-		# it 'cannot be created without three_point_percent' do
-		# 	@stat.three_point_percent = nil
-		# 	expect(@stat).to_not be_valid
-		# end
+		it 'cannot be created without three_point_percent' do
+			@stat.three_point_percent = nil
+			expect(@stat).to_not be_valid
+		end
 		it 'cannot be created without free_throw_percent' do
 			@stat.free_throw_percent = nil
 			expect(@stat).to_not be_valid
@@ -47,11 +47,11 @@ RSpec.describe Stat, type: :model do
 			@stat.assists_per_game = nil
 			expect(@stat).to_not be_valid
 		end
-		# steals weren't recorded until 1973-74 season
-		# it 'cannot be created without steals_per_game' do
-		# 	@stat.steals_per_game = nil
-		# 	expect(@stat).to_not be_valid
-		# end
+		# steals and blocks weren't recorded until 1973-74 season
+		it 'cannot be created without steals_per_game' do
+			@stat.steals_per_game = nil
+			expect(@stat).to_not be_valid
+		end
 		it 'cannot be created without blocks_per_game' do
 			@stat.blocks_per_game = nil
 			expect(@stat).to_not be_valid
@@ -61,4 +61,7 @@ RSpec.describe Stat, type: :model do
 			expect(@stat).to_not be_valid
 		end
 	end
+
+	# find the player like this:
+	# player = Player.find(LeaguePlayer.find(stat.league_player_id).id)
 end

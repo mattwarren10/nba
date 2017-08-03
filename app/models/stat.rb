@@ -7,17 +7,25 @@ class Stat < ApplicationRecord
 
   validates_presence_of :season,
   						:team,
-  						:games_played,
-  						# :games_started,
+  						:games_played,  						
   						:minutes_per_game,
   						:field_goal_percent,
-  						# :three_point_percent,
+  						
   						:free_throw_percent,
   						:rebounds_per_game,
   						:assists_per_game,
-  						:blocks_per_game,
+  						
+  						
   						:points_per_game
 
- # add validation for presence of games_started, three_point_percent,
- # steals and blocks only if the player's status is active
+  validates :games_started, presence: true, if: :active_player?
+  validates :three_point_percent, presence: true, if: :active_player?
+  validates :steals_per_game, presence: true, if: :active_player?
+  validates :blocks_per_game, presence: true, if: :active_player?
+
+ def active_player?
+ 	if Player.find(LeaguePlayer.find(self.league_player_id).player_id).status == "active"
+ 		true
+ 	end
+ end
 end
