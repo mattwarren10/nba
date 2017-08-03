@@ -61,7 +61,4 @@ RSpec.describe Stat, type: :model do
 			expect(@stat).to_not be_valid
 		end
 	end
-
-	# find the player like this:
-	# player = Player.find(LeaguePlayer.find(stat.league_player_id).id)
 end
