@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   before do 
-  	@basic_user_one = FactoryGirl.create(:basic_user_one)
+  	@basic_user_one = create(:basic_user_one)
   end
 
   describe 'creation' do
@@ -45,7 +45,7 @@ RSpec.describe User, type: :model do
 
   describe 'uniqueness' do
   	it 'cannot have a duplicate username' do
-  		@basic_user_two = FactoryGirl.create(:basic_user_two)
+  		@basic_user_two = create(:basic_user_two)
   		@basic_user_two.username = 'louismardanzai'
   		expect(@basic_user_two).to_not be_valid
   	end  	
@@ -54,7 +54,7 @@ RSpec.describe User, type: :model do
 # These might need to be in the controller spec
   describe 'leagues' do
     before do
-      @league_fantasy_two = FactoryGirl.create(:league_fantasy_two)
+      @league_fantasy_two = create(:league_fantasy_two)
     end
     it 'can have multiple leagues' do            
       @basic_user_one.leagues.push(@league_fantasy_two)

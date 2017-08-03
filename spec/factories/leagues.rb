@@ -1,7 +1,7 @@
 
 FactoryGirl.define do  
   factory :league_nba, class: "League" do
-    name "National Basketball Association"
+    sequence(:name) { |n| "World Basketball League #{n}"}
     commissioner "Adam Silver"
     headquarters "New York, NY"
     inaugural_season "1946-47"
@@ -11,7 +11,7 @@ FactoryGirl.define do
   end
   
   factory :league_fantasy_one, class: "League" do
-  	name "World Basketball League"
+  	sequence(:name) { |n| "World Basketball League #{n}"}
   	commissioner "louismardanzai"
   	headquarters "Indianapolis, IN"
   	inaugural_season "2017-18"
@@ -21,7 +21,7 @@ FactoryGirl.define do
   end
 
   factory :league_fantasy_two, class: "League" do
-    name "Afghanistan League"
+    sequence(:name) { |n| "World Basketball League #{n}"}
     commissioner "Bubba Jan"
     headquarters "Kabul, AF"
     inaugural_season "2008-09"

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Player, type: :model do
 	before do 		
-		@player = FactoryGirl.create(:player_one)
+		@player = create(:player_one)
 	end
 	describe 'creation' do	
 		it 'can be created without a team id' do

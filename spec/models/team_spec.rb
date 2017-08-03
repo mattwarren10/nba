@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Team, type: :model do
 	before do 
-		@team = FactoryGirl.create(:team)
+		@team = create(:team)
 	end
 	describe 'team creation' do
 		it 'will not be created when city is empty' do
