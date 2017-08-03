@@ -1,6 +1,6 @@
 class LeaguePlayer < ApplicationRecord
 	belongs_to :league
 	belongs_to :player
-	belongs_to :league_team
+	belongs_to :league_team, optional: true
 	has_many :stats
 end

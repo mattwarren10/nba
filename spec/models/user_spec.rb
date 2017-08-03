@@ -46,7 +46,7 @@ RSpec.describe User, type: :model do
   describe 'uniqueness' do
   	it 'cannot have a duplicate username' do
   		@basic_user_two = create(:basic_user_two)
-  		@basic_user_two.username = 'louismardanzai'
+  		@basic_user_two.username = @basic_user_one.username
   		expect(@basic_user_two).to_not be_valid
   	end  	
   end

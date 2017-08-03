@@ -21,8 +21,9 @@ RSpec.describe Team, type: :model do
 
 	describe 'team uniqueness' do
 		it 'cannot be a duplicate of another team' do
-			@team_duplicate = FactoryGirl.build_stubbed(:team_duplicate)
-			expect(@team_duplicate).to_not be_valid
+			team_duplicate = build_stubbed(:team_duplicate)
+			team_duplicate.name = @team.name
+			expect(team_duplicate).to_not be_valid
 		end
 	end
 end
