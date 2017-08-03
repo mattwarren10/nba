@@ -11,7 +11,7 @@ AdminUser.create(last_name: "Warren", first_name: "Matt", username: "mattwarren"
 BasicUser.create(last_name: "Mardanzai", first_name: "Louis", username: "louismardanzai", email: "malwarr@indiana.edu", password: "tarbooz", password_confirmation: "tarbooz")
 BasicUser.create(last_name: "Jones", first_name: "Alex", username: "alexjones", email: "alexjones@gmail.com", password: "rockets", password_confirmation: "rockets")
 
-
+League.create(name: "National Basketball Association", commissioner: "Adam Silver", headquarters: "New York, NY", inaugural_season: "1946-1947", number_of_teams: 30, abbreviation: "NBA")
 League.create(name: "Afghanistan National League", commissioner: "louismardanzai", headquarters: "Kabul, AF", inaugural_season: "2008-09", number_of_teams: 30, abbreviation: "ANL")
 League.create(name: "World Basketball League", commissioner: "alexjones", headquarters: "Indianapolis, IN", inaugural_season: "2017-18", number_of_teams: 30, abbreviation: "WBL")
 
