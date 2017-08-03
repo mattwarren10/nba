@@ -1,5 +1,6 @@
 class Stat < ApplicationRecord
 
+  enum level: { pro: 0, college: 1, international: 2, high_school: 3}
   enum category: { authentic: 0, fantasy: 1 }
 
   belongs_to :league_player, optional: true
