@@ -134,7 +134,12 @@ module ActivePlayer
 						    end
 						  end
 						end						
-						stats.delete_at(-1) if !stats.empty? && stats[-1][0] == 'Career' # deletes career stats					
+						stats.delete_at(-1) if !stats.empty? && stats[-1][0] == 'Career' # deletes career stats
+						stats.each do |stat|
+						  if stat[2].class == String 
+						    stat.delete_at(2) # deletes league for international players
+						  end
+						end
 						player.push(stats.sort{ |x, y| x<=>y})
 						team.push(player)
 					end
