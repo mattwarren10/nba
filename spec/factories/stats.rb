@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :stat do
-    league_team
-    league_player
+    association :league_team, factory: :league_team_one
+    association :league_player, factory: :league_player_one
     season "2017-18"
     team "Indiana"
     games_played 82
