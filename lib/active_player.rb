@@ -48,18 +48,19 @@ module ActivePlayer
 				team.each do |player|					
 					arr = player.split("\n")
 					arr.delete("")
-					arr.first.gsub!(/[\W+\d+]/, '')
-					arr[2] = arr[2].split(", ")					
+					arr.first.gsub!(/[\W+\d+]/, '') # collects player position
+					arr[2] = arr[2].split(", ")	# new array of player last name and first name				
 					str = arr[2][1]
 					unless str.nil? || !str.include?("(")
-					  str = str.slice(0..str.index("(")).delete("(").gsub!(/\u00A0/, "")
+					  str = str.slice(0..str.index("(")).delete("(").gsub!(/\u00A0/, "")				
 					end
-					arr[2][1] = str
-					arr[3][0..19] = ''
-					arr[3] = arr[3][0..5].gsub!(/\D+/, '')
-					arr[3] = arr[3][0].to_i * 12 + arr[3][1].to_i
-					arr[4] = arr[4][0..2].to_i
-					arr[5] = DateTime.parse arr[5]	
+					str = '' if str.nil?
+					arr[2][1] = str # player first name
+					arr[3][0..19] = '' # selecting player height
+					arr[3] = arr[3][0..5].gsub!(/\D+/, '') # removing all non digits
+					arr[3] = arr[3][0].to_i * 12 + arr[3][1].to_i # convert height to cm
+					arr[4] = arr[4][0..2].to_i # weight in kg
+					arr[5] = DateTime.parse arr[5] # convert birthdate string
 					team_roster.push(arr)									
 				end
 				teams.push(team_roster)				
@@ -67,7 +68,7 @@ module ActivePlayer
 			teams
 		end
 
-		module Wiki	
+		module PlayerWiki	
 			# scraping local player wikis and grabbing their draft pick, where they were born, season stats, image src
 			def self.retrieve				
 				teams = Credentials.parse_links				
@@ -78,9 +79,9 @@ module ActivePlayer
 						url = "vendor/player_wiki/#{team_hash[:abbreviation]}/#{link}.html"
 						which_pick = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]"
 						born_city = "|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td"
-						season_stats = "|//h3/following-sibling::table[@class='wikitable sortable']"
+						season_stats = "|//*[self::h3 or self::h4]/following-sibling::table[@class='wikitable sortable']"
 						image_src = "|//table[@class='infobox vcard']/tr/td/a/img/@src"
-						xpath = which_pick + born_city + season_stats +image_src
+						xpath = which_pick + born_city + season_stats + image_src
 						puts "Calling Nokogiri for #{link}"
 						data = CallNokogiri.xpath url, xpath
 						player_data = data.text.split("\n")
@@ -101,39 +102,40 @@ module ActivePlayer
 					team_data.each do |player_data|
 						player_data.delete ""
 						player = []
-						if player_data[0].include?("upload.wikimedia.org")						  
-						  player.push(player_data[0][0..player_data[0].index('(')].delete('('))
+						if player_data[0].include?("upload.wikimedia.org") 						  
+						  player.push(player_data[0][0..player_data[0].index('(')].delete('(')) # selects image link
 						end
-						if player_data[1].include?(",")
+						if player_data[1].include?(", ") # very fragile, but selects city where player was born
 						  player.push(player_data[1])
 						end
-						draft = player_data.grep(/draft/)[0]
-						index = player_data.index(draft) + 1
-						which_pick = player_data[index]						
-						player.push(which_pick)			
-						years_pro = Time.now.year - which_pick[0..3].to_i
+						draft = player_data.grep(/draft/)[0] 
+						i = player_data.index(draft) + 1
+						which_pick = player_data[i]	# selects the draft pick					
+						player.push(which_pick)
+						year_drafted = which_pick[0..3]
+						years_pro = Time.now.year - year_drafted.to_i # calculates years pro						
 						if years_pro == 0
 						  is_rookie = true 
 						else 
 						  is_rookie = false
 						end
 						player.push(is_rookie)
-						player.push(years_pro)			
-						stats = []						
+						player.push(years_pro)																		
+						stats = []
 						player_data.each do |str|
-						  str.gsub!("*", "")							
-						  if str.include?("\u2013")						  	
-						  	str.gsub!("\u2013", "-")
-						    str.gsub!("\u2020", "")
-						    if player_data.count(str) == 1						    	
-						      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12])
-						    elsif player_data.count(str) > 1						     
+						  str.gsub!("*", "")						  						  
+						  if str.include?("\u2013")	# selects only str with unicode dash					  	
+						  	str.gsub!("\u2013", "-") # replaces unicode dash with utf-8 dash
+						    str.gsub!("\u2020", "")	# removes unicode dagger  
+						    if player_data.count(str) == 1 # if player had one team during a season
+						      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12]) 					      
+						    elsif player_data.count(str) > 1 # if player had more than one team during a season    							     
 						      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
 						    end
 						  end
-						end
-						
-						player.push(stats)
+						end						
+						stats.delete_at(-1) if !stats.empty? && stats[-1][0] == 'Career' # deletes career stats					
+						player.push(stats.sort{ |x, y| x<=>y})
 						team.push(player)
 					end
 					league.push(team)
@@ -146,7 +148,7 @@ module ActivePlayer
 	module Attr
 		# consolidates all player credentials and organizes them into a player hash
 		def self.get
-			player_wikis = Credentials::Wiki.modify
+			player_wikis = Credentials::PlayerWiki.modify
 			teams = Team.all
 			rosters = Credentials.separate
 			links = Credentials.parse_links
