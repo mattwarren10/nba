@@ -63,7 +63,7 @@ RSpec.describe Stat, type: :model do
 	end
 
 	describe 'enums' do
-		let(:level) { [:pro, :college, :international, :high_school] }
+		let(:level) { [:pro, :college] }
 		let(:category) { [:authentic, :fantasy] }
 
 		it '(level) has the right index' do
