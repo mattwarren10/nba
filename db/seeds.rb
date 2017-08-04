@@ -8,12 +8,12 @@
 
 AdminUser.create(last_name: "Warren", first_name: "Matt", username: "mattwarren", email: "mwarren@harding.edu", password: "weeboo", password_confirmation: "weeboo")
 
-BasicUser.create(last_name: "Mardanzai", first_name: "Louis", username: "louismardanzai", email: "malwarr@indiana.edu", password: "tarbooz", password_confirmation: "tarbooz")
-BasicUser.create(last_name: "Jones", first_name: "Alex", username: "alexjones", email: "alexjones@gmail.com", password: "rockets", password_confirmation: "rockets")
+BasicUser.create(last_name: "Mardanzai", first_name: "Louis", username: "louismardanzai", email: "louismardanzai@indiana.com", password: "pacers", password_confirmation: "pacers")
+BasicUser.create(last_name: "Mardanzai", first_name: "Mosa", username: "mosamardanzai", email: "mosamardanzai@indiana.edu", password: "tarbooz", password_confirmation: "tarbooz")
 
 League.create(name: "National Basketball Association", commissioner: "Adam Silver", headquarters: "New York, NY", inaugural_season: "1946-1947", number_of_teams: 30, abbreviation: "NBA")
+League.create(name: "World Basketball League", commissioner: "mosamardanzai", headquarters: "Indianapolis, IN", inaugural_season: "2017-18", number_of_teams: 30, abbreviation: "WBL")
 League.create(name: "Afghanistan National League", commissioner: "louismardanzai", headquarters: "Kabul, AF", inaugural_season: "2008-09", number_of_teams: 30, abbreviation: "ANL")
-League.create(name: "World Basketball League", commissioner: "alexjones", headquarters: "Indianapolis, IN", inaugural_season: "2017-18", number_of_teams: 30, abbreviation: "WBL")
 
 Player.create(last_name: "Warren", first_name: "Matt", jersey_number: "33", height: 200, weight: 85, birth_date: DateTime.now	- 25.years, before_nba: "Indiana", is_rookie: true, position: "PG", which_pick: "2010 / Round: 1 / Pick: 1st overall", years_pro: 0, status: 0, from_city: "Bloomington, Indiana", wiki_link: "Matt_Warren", image_link: "//upload.wikimedia.org/Matt_Warren") 
 
