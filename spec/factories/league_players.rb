@@ -5,8 +5,8 @@ FactoryGirl.define do
     association :league_team, factory: :league_team_one
   end
   factory :league_player_two, class: "LeaguePlayer" do
-    association :league, factory: :league_fantasy_one
-    association :player, factory: :player_one
+    association :league, factory: :league_fantasy_two
+    association :player, factory: :player_two
     association :league_team, factory: :league_team_two
   end
 end
