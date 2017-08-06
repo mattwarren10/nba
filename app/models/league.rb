@@ -10,7 +10,8 @@ class League < ApplicationRecord
   						:headquarters,
   						:inaugural_season,
   						:number_of_teams,
-  						:abbreviation
+  						:abbreviation,
+              :users
 
   validates_uniqueness_of :name, scope: [ :commissioner ]
 

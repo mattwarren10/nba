@@ -16,7 +16,7 @@ RSpec.describe LeaguePlayer, type: :model do
   		@league_player_one.player_id = nil
   		expect(@league_player_one).to_not be_valid
   	end
-  	it 'cannot be created without a league_team_id' do
+  	it 'can be created without a league_team_id' do
   		@league_player_one.league_team_id = nil
   		expect(@league_player_one).to be_valid
   	end  	
@@ -28,11 +28,7 @@ RSpec.describe LeaguePlayer, type: :model do
   	end
   end
   describe 'associations' do
-  	xit 'cannot be added to a league_team more than once' do
-  		@league_team = create(:league_team)
-  		@league_team.league_players.push(@league_player_one)
-  		expect(@league_player_one).to_not be_valid
-  	end
+
 
   end
 

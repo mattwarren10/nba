@@ -5,5 +5,5 @@ class LeaguePlayer < ApplicationRecord
 	has_many :stats
 
 	validates :league_id, uniqueness: { scope: :player_id }
-	validates :league_team, uniqueness: { scope: [:league_id, :player_id]}
+	
 end

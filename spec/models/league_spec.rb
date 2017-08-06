@@ -35,6 +35,10 @@ RSpec.describe League, type: :model do
   		@league_nba.abbreviation = nil
   		expect(@league_nba).to_not be_valid
   	end
+    it 'must have a user' do
+      @league_nba.users.clear
+      expect(@league_nba).to_not be_valid
+    end
   end
 
   describe 'uniquness' do
