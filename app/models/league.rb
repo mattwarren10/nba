@@ -9,8 +9,7 @@ class League < ApplicationRecord
   validates_presence_of :name,
             						:commissioner,
             						:headquarters,
-            						:inaugural_season,
-            						:number_of_teams,
+            						:inaugural_season,            						
             						:abbreviation,
                         :users
 

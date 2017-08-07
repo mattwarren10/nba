@@ -27,10 +27,6 @@ RSpec.describe League, type: :model do
   		@league_nba.inaugural_season = nil
   		expect(@league_nba).to_not be_valid
   	end
-  	it 'cannot be created without a number_of_teams' do
-  		@league_nba.number_of_teams = nil
-  		expect(@league_nba).to_not be_valid
-  	end
   	it 'cannot be created without an abbreviation' do
   		@league_nba.abbreviation = nil
   		expect(@league_nba).to_not be_valid
