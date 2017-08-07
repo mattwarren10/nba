@@ -60,9 +60,14 @@ RSpec.describe User, type: :model do
       @basic_user_one.leagues.push(@league_fantasy_two)
       expect(@basic_user_one).to be_valid
     end
-    it 'cannot have more than 10 leagues' do 
-      11.times { @basic_user_one.leagues.push(@league_fantasy_two)}
-      expect(@basic_user_one).to_not be_valid
+    it 'cannot have more than 5 leagues' do
+      @basic_user_three = create(:basic_user_three)      
+      leagues = {}
+      6.times do |i| 
+        leagues["l#{i}"] = create("league#{i}") 
+        @basic_user_three.leagues.push(leagues["l#{i}"])
+      end      
+      expect(@basic_user_three).to_not be_valid
     end    
   end
 end

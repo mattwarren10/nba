@@ -48,8 +48,8 @@ FactoryGirl.define do
     before(:create) {|league_fantasy_two| league_fantasy_two.users = [create(:basic_user_two)]}    
   end
 
-  5.times do |i|
-    factory "league_#{i}", class: "League" do
+  6.times do |i|
+    factory "league#{i}", class: "League" do
       name { generate(:league_name) }
       commissioner
       headquarters
