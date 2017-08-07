@@ -1,7 +1,8 @@
 class User < ApplicationRecord
   attr_accessor :login
 
-  has_and_belongs_to_many :leagues
+  has_many :league_users
+  has_many :leagues, through: :league_users
   has_many :league_teams
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

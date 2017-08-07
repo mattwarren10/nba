@@ -55,7 +55,7 @@ RSpec.describe League, type: :model do
     it 'can have multiple users' do
       @league_fantasy_one.users.push(@league_fantasy_two.users.first)
       expect(@league_fantasy_one).to be_valid
-    end
+    end    
     it 'cannot have the same name as another league of the same user' do            
       @league_fantasy_two.users.push(@league_fantasy_one.users.first)      
       @league_fantasy_two.commissioner = @league_fantasy_one.commissioner

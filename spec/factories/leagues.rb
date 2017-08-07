@@ -17,7 +17,7 @@ FactoryGirl.define do
   	inaugural_season "2017-18"
   	number_of_teams 30
   	abbreviation "WBL"
-  	before(:create) {|league_fantasy_one| league_fantasy_one.users = [create(:basic_user_one)]}
+    before(:create) {|league_fantasy_one| league_fantasy_one.users = [create(:basic_user_one)]}
   end
 
   factory :league_fantasy_two, class: "League" do
@@ -27,6 +27,6 @@ FactoryGirl.define do
     inaugural_season "2008-09"
     number_of_teams 30
     abbreviation "AFG"
-    before(:create) {|league_fantasy_two| league_fantasy_two.users = [create(:basic_user_two)]}
+    before(:create) {|league_fantasy_two| league_fantasy_two.users = [create(:basic_user_two)]}    
   end
 end
