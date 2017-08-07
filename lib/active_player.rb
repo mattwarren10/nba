@@ -126,7 +126,9 @@ module ActivePlayer
 						  str.gsub!("*", "")						  						  
 						  if str.include?("\u2013")	# selects only str with unicode dash					  	
 						  	str.gsub!("\u2013", "-") # replaces unicode dash with utf-8 dash
-						    str.gsub!("\u2020", "")	# removes unicode dagger  
+						    str.gsub!("\u2020", "")	# removes unicode dagger 
+
+						    # add a level (pro or college 0 or 1) for each stat
 						    if player_data.count(str) == 1 # if player had one team during a season
 						      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12]) 					      
 						    elsif player_data.count(str) > 1 # if player had more than one team during a season    							     
@@ -135,11 +137,17 @@ module ActivePlayer
 						  end
 						end						
 						stats.delete_at(-1) if !stats.empty? && stats[-1][0] == 'Career' # deletes career stats
-						stats.each do |stat|
-						  if stat[2].class == String 
-						    stat.delete_at(2) # deletes league for international players
-						  end
-						end
+						stats.each_with_index do |stat, i|
+					  	 if stat[1].scan(/[a-zA-Z]/).empty?
+					  	    stat.delete_at(-1)
+					  	    stat.delete_at(-2)
+					  	    stat.insert(1, stats[i-1][1])
+					  	    stat.delete_at(-1)
+					  	  end
+					  	  if stat[2].scan(/\d/).empty? 
+					  	    stat.delete_at(2) # deletes league for international players
+					  	  end
+					  	end
 						player.push(stats.sort{ |x, y| x<=>y})
 						team.push(player)
 					end
