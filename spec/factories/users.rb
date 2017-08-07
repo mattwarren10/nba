@@ -31,4 +31,13 @@ FactoryGirl.define do
     password "rockets"
     password_confirmation "rockets"
   end
+
+  factory :basic_user_three, class: "BasicUser" do
+    last_name "Smith"
+    first_name "John"
+    username { generate :username }
+    email { generate :email }
+    password "pacers"
+    password_confirmation "pacers"
+  end
 end
