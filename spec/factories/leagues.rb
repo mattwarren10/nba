@@ -20,27 +20,27 @@ FactoryGirl.define do
  
   factory :league_nba, class: "League" do
     name { generate(:league_name)}
-    commissioner "Adam Silver"
+    commissioner { generate(:commissioner) }
     headquarters "New York, NY"
     inaugural_season "1946-47"
     number_of_teams 30
     abbreviation "NBA"
-    before(:create) {|league_nba| league_nba.users = [create(:admin_user)]}
+    before(:create) {|league_nba| league_nba.users = [ create(:admin_user) ]}
   end
   
   factory :league_fantasy_one, class: "League" do
   	name { generate(:league_name)}
-  	commissioner "louismardanzai"
+  	commissioner { generate(:commissioner) }
   	headquarters "Indianapolis, IN"
   	inaugural_season "2017-18"
   	number_of_teams 30
   	abbreviation "WBL"
-    before(:create) {|league_fantasy_one| league_fantasy_one.users = [create(:basic_user_one)]}
+    before(:create) {|league_fantasy_one| league_fantasy_one.users = [ create(:basic_user_one) ]}
   end
 
   factory :league_fantasy_two, class: "League" do
     name { generate(:league_name)}
-    commissioner "Bubba Jan"
+    commissioner { generate(:commissioner) }
     headquarters "Kabul, AF"
     inaugural_season "2008-09"
     number_of_teams 30

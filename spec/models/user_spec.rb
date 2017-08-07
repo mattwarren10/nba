@@ -68,6 +68,8 @@ RSpec.describe User, type: :model do
         @basic_user_three.leagues.push(leagues["l#{i}"])
       end      
       expect(@basic_user_three).to_not be_valid
-    end    
+    end
+    xit 'cannot join the same league more than once' do
+    end   
   end
 end

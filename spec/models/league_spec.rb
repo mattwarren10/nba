@@ -41,7 +41,7 @@ RSpec.describe League, type: :model do
     end
   end
 
-  describe 'uniquness' do
+  describe 'uniqueness' do
     before do 
       @league_fantasy_one = create(:league_fantasy_one)
       @league_fantasy_two = create(:league_fantasy_two)      
@@ -62,9 +62,7 @@ RSpec.describe League, type: :model do
       @league_fantasy_two.name = @league_fantasy_one.name
       expect(@league_fantasy_two).to_not be_valid
     end
-    xit 'cannot have basic users whose commissioner is an admin user' do
-      @league_nba = create(:league_nba)
-      @league_nba.commissioner = @league_nba.users.first.username
+    it 'cannot have basic users join a league that has an admin user' do                
       @league_nba.users.push(@league_fantasy_one.users.first)
       expect(@league_nba).to_not be_valid
     end
