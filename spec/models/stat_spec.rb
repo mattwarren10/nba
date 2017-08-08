@@ -9,6 +9,10 @@ RSpec.describe Stat, type: :model do
 			@stat.season = nil
 			expect(@stat).to_not be_valid
 		end
+		it 'cannot be created if season is incorrect length' do
+			@stat.season = '2016'
+			expect(@stat).to_not be_valid
+		end
 		it 'cannot be created without a team' do
 			@stat.team = nil
 			expect(@stat).to_not be_valid
@@ -58,6 +62,19 @@ RSpec.describe Stat, type: :model do
 		end
 		it 'cannot be created without points_per_game' do
 			@stat.points_per_game = nil
+			expect(@stat).to_not be_valid
+		end		
+		it 'cannot be created without a league_team if league_player is nil' do
+			@stat.league_player_id = nil
+			expect(@stat).to be_valid
+		end
+		it 'cannot be created without a league_player if league_team is nil' do
+			@stat.league_team_id = nil
+			expect(@stat).to be_valid
+		end
+		it 'cannot be created without both league_player and league_team' do
+			@stat.league_player_id = nil
+			@stat.league_team_id = nil
 			expect(@stat).to_not be_valid
 		end
 	end

@@ -6,27 +6,49 @@ class Stat < ApplicationRecord
   belongs_to :league_player, optional: true
   belongs_to :league_team, optional: true
 
-  validates_presence_of :season,
-  						:team,
-  						:games_played,  						
-  						:minutes_per_game,
-  						:field_goal_percent,
-  						
-  						:free_throw_percent,
-  						:rebounds_per_game,
-  						:assists_per_game,
-  						
-  						
-  						:points_per_game
+  # the next two validations says an active player's stat can be without a team or a league
+  validates :league_player, presence: true, unless: :team_exist?  
+  validates :league_team, presence: true, unless: :player_exist?
+  validates :season, presence: true, length: { is: 7 }
+  validates_presence_of :team,
+            						:games_played,  						
+            						:minutes_per_game,
+            						:field_goal_percent,  						
+            						:free_throw_percent,
+            						:rebounds_per_game,
+            						:assists_per_game,  						  						
+            						:points_per_game
 
-  validates :games_started, presence: true, if: :active_player?
-  validates :three_point_percent, presence: true, if: :active_player?
-  validates :steals_per_game, presence: true, if: :active_player?
-  validates :blocks_per_game, presence: true, if: :active_player?
+  validates :games_started, presence: true, if: :active_player? || :team_exist?
+  validates :three_point_percent, presence: true, if: :active_player? || :team_exist?
+  validates :steals_per_game, presence: true, if: :active_player? || :team_exist?
+  validates :blocks_per_game, presence: true, if: :active_player? || :team_exist?
 
- def active_player?
- 	if Player.find(LeaguePlayer.find(self.league_player_id).player_id).status == "active"
- 		true
- 	end
- end
+  def team_exist?
+    league_team = LeagueTeam.find(self.league_team_id) rescue nil
+    if league_team.nil?
+      false
+    elsif Team.find(league_team.team_id)
+      true
+    end
+  end
+
+  def player_exist?
+    league_player = LeaguePlayer.find(self.league_player_id) rescue nil
+    if league_player.nil?
+      false
+    elsif Player.find(league_player.player_id)
+      true
+    end
+  end
+
+  def active_player?
+    league_player = LeaguePlayer.find(self.league_player_id) rescue nil
+  	if league_player.nil?      
+  		false
+    elsif Player.find(league_player.player_id).status == "active"
+      true
+  	end
+  end
+  
 end
