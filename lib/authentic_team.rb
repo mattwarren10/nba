@@ -56,7 +56,7 @@ module AuthenticTeam
 	module CityNameAbbr
 		# grabs each city, name, and abbreviation from wikipedia
 		def self.retrieve
-			url = 'vendor/city_name_abbr.html'
+			url = 'vendor/teams_info/city_name_abbr.html'
 			table = CallNokogiri.css url, "tr"
 
 		end
