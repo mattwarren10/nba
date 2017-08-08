@@ -6,10 +6,10 @@ module AuthenticTeam
 	module Roster
 		#  creates local urls to iterate through
 		def self.urls
-			teams = Team.all
+			teams = Attr.get
 			urls = []			
-			teams.each do |team|								
-				urls.push("vendor/rosters/#{team.abbreviation}.html")
+			teams.each do |team, value|								
+				urls.push("vendor/rosters/#{team[:abbreviation]}.html")
 			end					
 			urls			
 		end
