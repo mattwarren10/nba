@@ -136,18 +136,21 @@ module ActivePlayer
 						    end
 						  end
 						end						
-						stats.delete_at(-1) if !stats.empty? && stats[-1][0] == 'Career' # deletes career stats
-						stats.each_with_index do |stat, i|
-					  	 if stat[1].scan(/[a-zA-Z]/).empty?
-					  	    stat.delete_at(-1)
-					  	    stat.delete_at(-2)
-					  	    stat.insert(1, stats[i-1][1])
-					  	    stat.delete_at(-1)
-					  	  end
-					  	  if stat[2].scan(/\d/).empty? 
-					  	    stat.delete_at(2) # deletes league for international players
-					  	  end
-					  	end
+						national_stats = []
+						teams = AuthenticTeam::Attr.get
+						if stats[0][0][0..3] >= year_drafted
+						  stats.each do |s|
+						    teams.each do |t|
+						      if s[1] == t[:city]
+						        national_stats.push(s)
+						      end  
+						    end
+						  end
+						else
+						  stats.each do |s|
+						    national_stats.push(s)
+						  end
+						end
 						player.push(stats.sort{ |x, y| x<=>y})
 						team.push(player)
 					end
