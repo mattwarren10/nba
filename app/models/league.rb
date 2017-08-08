@@ -14,6 +14,7 @@ class League < ApplicationRecord
                         :users
 
   validates_uniqueness_of :name, scope: [ :commissioner ]
+  validates_length_of :teams, maximum: 30
   validate :prevent_basic_users
 
   def prevent_basic_users

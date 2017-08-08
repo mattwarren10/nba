@@ -64,4 +64,15 @@ RSpec.describe League, type: :model do
     end
   end
 
+  describe 'teams' do
+    it 'cannot have more than 30 teams' do
+      @league_fantasy_one = create(:league_fantasy_one)
+      teams = {}
+      31.times do |i|
+        teams["t#{i}"] = create("team#{i}")
+        @league_fantasy_one.teams.push(teams["t#{i}"])
+      end
+      expect(@league_fantasy_one).to_not be_valid
+    end
+  end
 end

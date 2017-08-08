@@ -1,4 +1,7 @@
 FactoryGirl.define do
+	sequence :city do |c|
+		"City #{c}"
+	end
 	sequence :name do |n|
 		"Team Name #{n}"
 	end
@@ -45,6 +48,15 @@ FactoryGirl.define do
 		name { generate :name}
 		abbreviation { generate :abbreviation}
 		category 1
+	end
+
+	31.times do |i|
+		factory "team#{i}", class: "Team" do
+			city { generate :city }
+			name { generate :name }
+			abbreviation { generate :abbreviation }
+			category 1
+		end
 	end
 
 end
