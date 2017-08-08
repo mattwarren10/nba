@@ -138,18 +138,20 @@ module ActivePlayer
 						end						
 						national_stats = []
 						teams = AuthenticTeam::Attr.get
-						if stats[0][0][0..3] >= year_drafted
-						  stats.each do |s|
-						    teams.each do |t|
-						      if s[1] == t[:city]
-						        national_stats.push(s)
-						      end  
-						    end
-						  end
-						else
-						  stats.each do |s|
-						    national_stats.push(s)
-						  end
+						if stats.count > 0							
+							if stats[0][0][0..3] >= year_drafted
+							  stats.each do |s|
+							    teams.each do |t|
+							      if s[1] == t[:city]
+							        national_stats.push(s)
+							      end  
+							    end
+							  end
+							else
+							  stats.each do |s|
+							    national_stats.push(s)
+							  end
+							end
 						end
 						player.push(stats.sort{ |x, y| x<=>y})
 						team.push(player)
