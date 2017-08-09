@@ -77,8 +77,8 @@ module RetiredPlayer
 			retired_players_data.each do |player_data|
 				player_data.delete ""
 				retired_player = []
-				img_link, birth_date = player_data[0].split(";")
-				birth_date = DateTime.parse birth_date[1..10]
+				img_link = player_data[0].split(";")[0]
+				birth_date = DateTime.parse player_data[0].match(/\d+\-\d+\-\d+/)[0]
 				retired_player.push(img_link, birth_date)
 				born_city, height, weight, high_school = player_data[1].split(";")
 				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "")
@@ -99,7 +99,8 @@ module RetiredPlayer
 				which_pick = player_data[i]
 				puts "Currently at #{which_pick}"
 				retired_player.push(which_pick)
-				position, number = player_data[5].split(";")[1..2]
+				i += 1
+				position, number = player_data[i].split(";")[1..2]
 				position.downcase!
 				# changes format of position
 				# refactor this
@@ -122,8 +123,6 @@ module RetiredPlayer
 				  if str.include?("\u2013")	# selects only str with unicode dash					  	
 				  	str.gsub!("\u2013", "-") # replaces unicode dash with utf-8 dash
 				    str.gsub!("\u2020", "")	# removes unicode dagger 
-
-				    # add a level (pro or college 0 or 1) for each stat
 				    if player_data.count(str) == 1 # if player had one team during a season
 				      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12]) 					      
 				    elsif player_data.count(str) > 1 # if player had more than one team during a season    							     
@@ -131,17 +130,29 @@ module RetiredPlayer
 				    end
 				  end
 				end
-				stats.delete_at(0)
-				teams = AuthenticTeam::Attr.get				
+
+				# only select seasons retired player played
+				nba_stats = []
+				stats.each do |stat|
+				  season = stat[0].match(/\d+\-\d+/)
+				  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+				    if season != nil 
+				      if season[0].length == 7 || season[0].length == 9				        
+				        nba_stats.push(stat)
+				      end
+				    end
+				  end
+				end
+
 				# calculate years pro
 				year = '46' # year nba was chartered. fix this code in 2046.
-				retired_player_last_year = stats[-1][0][-2..-1]
-				if retired_player_last_year >= year
-				  retired_player_last_year.prepend('19')
+				last_year_played = stats[-1][0][-2..-1]
+				if last_year_played >= year
+				  last_year_played.prepend('19')
 				else
-				  retired_player_last_year.prepend('20')
+				  last_year_played.prepend('20')
 				end
-				years_pro = retired_player_last_year.to_i - year_drafted.to_i
+				years_pro = last_year_played.to_i - year_drafted.to_i
 				retired_player.push(years_pro)
 
 				retired_player.push(stats.sort{ |x, y| x<=>y})
