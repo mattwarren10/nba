@@ -83,17 +83,26 @@ module RetiredPlayer
 				born_city, height, weight, high_school = player_data[1].split(";")
 				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "")
 				weight = weight[weight.index("(")..weight.index(")")].gsub!(/\D/, "")
-				high_school += " " + player_data[2].split(";")[0]
+				high_school_city = player_data[2].split(";")[0]
+				if high_school.nil?
+				  high_school = high_school_city
+				else
+				  high_school += " " + high_school_city 
+				end
 				college = player_data[2].split(";")[1]
-				college = college[0..college.index("(")].delete("(").rstrip
+				if college != nil
+					college = college[0..college.index("(")].delete("(").rstrip
+				end
 				retired_player.push(born_city, height, weight, high_school, college)
 				draft = player_data.grep(/draft/)[0]
 				i = player_data.index(draft) + 1
 				which_pick = player_data[i]
+				puts "Currently at #{which_pick}"
 				retired_player.push(which_pick)
 				position, number = player_data[5].split(";")[1..2]
 				position.downcase!
 				# changes format of position
+				# refactor this
 				if position.include?("guard") && position.include?("forward")
 				  position.gsub!(/(.)+/, "GF")  
 				elsif position.include?("forward") && position.include?("center")
@@ -101,7 +110,9 @@ module RetiredPlayer
 				elsif position.include?("guard")
 				  position.gsub!(/(.)+/, "G")
 				elsif position.include?("forward")
-				  position.gsub!(/(.)+/, "F")  
+				  position.gsub!(/(.)+/, "F") 
+			  	elsif position.include?("center")
+				  position.gsub!(/(.)+/, "C") 
 				end
 				retired_player.push(position, number)
 				year_drafted = which_pick[0..3]
@@ -121,21 +132,7 @@ module RetiredPlayer
 				  end
 				end
 				stats.delete_at(0)
-				teams = AuthenticTeam::Attr.get
-				national_stats = []
-				if stats[0][0][0..3] >= year_drafted
-				  stats.each do |s|
-				    teams.each do |t|
-				      if s[1] == t[:city]
-				        national_stats.push(s)
-				      end  
-				    end
-				  end
-				else
-				  stats.each do |s|
-				    national_stats.push(s)
-				  end
-				end
+				teams = AuthenticTeam::Attr.get				
 				# calculate years pro
 				year = '46' # year nba was chartered. fix this code in 2046.
 				retired_player_last_year = stats[-1][0][-2..-1]
@@ -147,7 +144,7 @@ module RetiredPlayer
 				years_pro = retired_player_last_year.to_i - year_drafted.to_i
 				retired_player.push(years_pro)
 
-				retired_player.push(national_stats.sort{ |x, y| x<=>y})
+				retired_player.push(stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)
 			end
 			retired_players
