@@ -91,6 +91,63 @@ module RetiredPlayer
 				i = player_data.index(draft) + 1
 				which_pick = player_data[i]
 				retired_player.push(which_pick)
+				position, number = player_data[5].split(";")[1..2]
+				position.downcase!
+				# changes format of position
+				if position.include?("guard") && position.include?("forward")
+				  position.gsub!(/(.)+/, "GF")  
+				elsif position.include?("forward") && position.include?("center")
+				  position.gsub!(/(.)+/, "FC") 
+				elsif position.include?("guard")
+				  position.gsub!(/(.)+/, "G")
+				elsif position.include?("forward")
+				  position.gsub!(/(.)+/, "F")  
+				end
+				retired_player.push(position, number)
+				year_drafted = which_pick[0..3]
+				stats = []
+				player_data.each do |str|
+				  str.gsub!("*", "")						  						  
+				  if str.include?("\u2013")	# selects only str with unicode dash					  	
+				  	str.gsub!("\u2013", "-") # replaces unicode dash with utf-8 dash
+				    str.gsub!("\u2020", "")	# removes unicode dagger 
+
+				    # add a level (pro or college 0 or 1) for each stat
+				    if player_data.count(str) == 1 # if player had one team during a season
+				      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12]) 					      
+				    elsif player_data.count(str) > 1 # if player had more than one team during a season    							     
+				      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
+				    end
+				  end
+				end
+				stats.delete_at(0)
+				teams = AuthenticTeam::Attr.get
+				national_stats = []
+				if stats[0][0][0..3] >= year_drafted
+				  stats.each do |s|
+				    teams.each do |t|
+				      if s[1] == t[:city]
+				        national_stats.push(s)
+				      end  
+				    end
+				  end
+				else
+				  stats.each do |s|
+				    national_stats.push(s)
+				  end
+				end
+				# calculate years pro
+				year = '46' # year nba was chartered. fix this code in 2046.
+				retired_player_last_year = stats[-1][0][-2..-1]
+				if retired_player_last_year >= year
+				  retired_player_last_year.prepend('19')
+				else
+				  retired_player_last_year.prepend('20')
+				end
+				years_pro = retired_player_last_year.to_i - year_drafted.to_i
+				retired_player.push(years_pro)
+
+				retired_player.push(national_stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)
 			end
 			retired_players
