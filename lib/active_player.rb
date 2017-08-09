@@ -33,7 +33,7 @@ module ActivePlayer
 				team = []
 				player.each do |link|
 					team.push(link.attribute('href').value.gsub('/wiki/', ''))
-					teams[i][:wiki_links] = team
+					teams[i][:wiki_links] = team # adds player wiki links to each team
 				end				
 			end
 			teams
@@ -69,7 +69,7 @@ module ActivePlayer
 		end
 
 		module PlayerWiki	
-			# scraping local player wikis and grabbing their draft pick, where they were born, season stats, image src
+			# scraping local active player wikis and grabbing their draft pick, where they were born, season stats, image src
 			def self.retrieve				
 				teams = Credentials.parse_links				
 				league_data = []
