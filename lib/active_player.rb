@@ -76,7 +76,7 @@ module ActivePlayer
 				teams.each do |team_hash|
 					team_data = []
 					team_hash[:wiki_links].each do |link|
-						url = "vendor/player_wiki/#{team_hash[:abbreviation]}/#{link}.html"
+						url = "vendor/active_player_wiki/#{team_hash[:abbreviation]}/#{link}.html"
 						which_pick = "//table[@class='infobox vcard']/tr[contains(., 'NBA draft')]"
 						born_city = "|//table[@class='infobox vcard']/tr[contains(., 'Born')]/td"
 						season_stats = "|//*[self::h3 or self::h4]/following-sibling::table[@class='wikitable sortable']"

@@ -93,17 +93,16 @@ namespace :player do
 end
 
 namespace :player do
-  namespace :download do
-    desc 'downloads player wikis from wikipedia.org'
+  namespace :active do
+    desc 'downloads active player wikis from wikipedia.org'
     task wiki: :environment do
       player_wikis_count = 0
       teams_looped_through = 0
       league = ActivePlayer::Attr.get
-      league.each do |team_abbr, roster|
-        
+      league.each do |team_abbr, roster|        
         roster.each do |player|          
           link_src = open("https://en.wikipedia.org/wiki/#{player[:link]}")
-          link_dest = "vendor/player_wiki/#{team_abbr.downcase}/#{player[:link]}.html"          
+          link_dest = "vendor/active_player_wiki/#{team_abbr.downcase}/#{player[:link]}.html"          
           IO.copy_stream(link_src, link_dest)
           if File.file?(link_dest)
             player_wikis_count += 1
@@ -118,6 +117,30 @@ namespace :player do
         end
       puts "#{player_wikis_count} player wikis downloaded".bold
       end
+    end
+  end
+end
+
+namespace :player do
+  namespace :retired do
+    desc 'downloads retired player wikis from wikipedia.org'
+    task wiki: :environment do
+      player_wikis_count = 0
+      wiki_links = RetiredPlayer::WikiList.separate_wiki_links
+      wiki_links.each do |link|
+        link_src = open("https://en.wikipedia.org/wiki/#{link}")
+          link_dest = "vendor/retired_player_wiki/link.html"
+          IO.copy_stream(link_src, link_dest)
+          if File.file?(link_dest)
+            player_wikis_count += 1
+            puts "#{player_wikis_count}: #{link}'s wiki has been stored at".green
+            puts "==>#{link_dest}"
+          else
+            puts "Failed to store #{player[:last_name]}'s wiki page".red.bold
+            break player
+          end   
+      end
+      puts "#{player_wikis_count} player wikis downloaded".bold
     end
   end
 end

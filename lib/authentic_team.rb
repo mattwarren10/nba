@@ -1,8 +1,5 @@
 
-module AuthenticTeam	
-	include CallNokogiri
-	include ChromeSelenium
-
+module AuthenticTeam
 	module Roster
 		#  creates local urls to iterate through
 		def self.urls

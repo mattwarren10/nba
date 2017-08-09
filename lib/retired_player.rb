@@ -1,5 +1,5 @@
 module RetiredPlayer
-	module ListWiki
+	module WikiList
 
 		# collect each xpath
 		URL = 'vendor/nba_allstars.html'
@@ -36,12 +36,10 @@ module RetiredPlayer
 
 		def self.separate_wiki_links
 			noko_elements = retrieve_wiki_links
-			wiki_links = noko_elements.text.split("/wiki")
+			wiki_links = noko_elements.text.split("/wiki/")
 			wiki_links.delete("")
 			wiki_links
 		end
-
-
 	end
 
 end
