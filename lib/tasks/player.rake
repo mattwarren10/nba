@@ -136,7 +136,7 @@ namespace :player do
             puts "#{player_wikis_count}: #{link}'s wiki has been stored at".green
             puts "==>#{link_dest}"
           else
-            puts "Failed to store #{player[:last_name]}'s wiki page".red.bold
+            puts "Failed to store #{link}'s wiki page".red.bold
             break player
           end   
       end
