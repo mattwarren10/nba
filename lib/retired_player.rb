@@ -13,7 +13,7 @@ module RetiredPlayer
 		def self.retrieve_names	
 			span_names = "/span[@class='sortkey']"			
 			xpath = HALL_OF_FAMERS + span_names +'|' + OTHER + span_names
-			data = CallNokogiri.xpath URL, xpath
+			data = CallNokogiri.xpath(URL, xpath)
 		end
 
 		# get wiki_links of players
@@ -21,7 +21,7 @@ module RetiredPlayer
 			href = "/a/@href"
 			span_wiki_links = "/span[@class='vcard']/span[@class='fn']"
 			xpath = HALL_OF_FAMERS + span_wiki_links + href + '|' + OTHER + span_wiki_links + href
-			data = CallNokogiri.xpath URL, xpath
+			data = CallNokogiri.xpath(URL, xpath)
 		end
 
 		def self.separate_names
@@ -51,21 +51,21 @@ module RetiredPlayer
 			links.each do |link|
 				url = "vendor/retired_player_wiki/#{link}.html"
 				vcard = "//table[@class='infobox vcard']"
-				splitter = "[concat(string(';'), .)]"
+				text = ""
 				chain_vcard = "|" + vcard			
 				image_src = vcard + "/tr/td/a/img/@src"
-				birth_date_and_city = chain_vcard + "//tr[contains(., 'Born')]/td" + splitter
-				height = chain_vcard + "/tr[contains(., 'Listed height')]/td" + splitter
-				weight = chain_vcard + "/tr[contains(., 'Listed weight')]/td" + splitter
-				high_school = chain_vcard + "/tr[contains(., 'High school')]/td" + splitter
-				college = chain_vcard + "/tr[contains(., 'College')]/td" + splitter
-				position = chain_vcard + "/tr[contains(., 'Position')]/td" + splitter
-				number = chain_vcard + "/tr[contains(., 'Number')]/td" + splitter
-				which_pick = chain_vcard + "/tr[contains(., 'NBA draft')]/td" + splitter
+				birth_date_and_city = chain_vcard + "//tr[contains(., 'Born')]/td" + text
+				height = chain_vcard + "/tr[contains(., 'Listed height')]/td" + text
+				weight = chain_vcard + "/tr[contains(., 'Listed weight')]/td" + text
+				high_school = chain_vcard + "/tr[contains(., 'High school')]/td" + text
+				college = chain_vcard + "/tr[contains(., 'College')]/td" + text
+				position = chain_vcard + "/tr[contains(., 'Position')]/td" + text
+				number = chain_vcard + "/tr[contains(., 'Number')]/td" + text
+				which_pick = chain_vcard + "/tr[contains(., 'NBA draft')]/td" + text
 				season_stats = "|//*[self::h3]/following-sibling::table[@class='wikitable sortable']"
 				xpath = image_src + birth_date_and_city + height + weight + high_school + college + position + number + which_pick + season_stats
-				data = CallNokogiri.xpath url, xpath
-				player_data.push(data.text.split("\n"))
+				data = CallNokogiri.xpath(url, xpath).map(&:text).join(";")
+				player_data.push(data.split("\n"))
 				player_wiki_count += 1
 				puts "#{player_wiki_count} retired wikis retrieved, currently on #{link}"
 			end
