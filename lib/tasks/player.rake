@@ -129,7 +129,7 @@ namespace :player do
       wiki_links = RetiredPlayer::WikiList.separate_wiki_links
       wiki_links.each do |link|
         link_src = open("https://en.wikipedia.org/wiki/#{link}")
-          link_dest = "vendor/retired_player_wiki/link.html"
+          link_dest = "vendor/retired_player_wiki/#{link}.html"
           IO.copy_stream(link_src, link_dest)
           if File.file?(link_dest)
             player_wikis_count += 1
