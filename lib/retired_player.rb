@@ -27,7 +27,18 @@ module RetiredPlayer
 		def self.separate_names
 			noko_elements = retrieve_names
 			names = noko_elements.text.split(/(?<!\-)(?<!\')(?<!Mc)(?<!\s)(?=[A-Z])/)
-			
+			# names.each do |name|
+			# 	 full_name = name.split(", ")
+			# 	 last_name = full_name.first
+			# 	 first_name = full_name.last
+			# end
+		end
+
+		def self.separate_wiki_links
+			noko_elements = retrieve_wiki_links
+			wiki_links = noko_elements.text.split("/wiki")
+			wiki_links.delete("")
+			wiki_links
 		end
 
 
