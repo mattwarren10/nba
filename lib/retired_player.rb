@@ -200,6 +200,7 @@ module RetiredPlayer
 
 	module Attr
 		def self.get
+			links = WikiList.separate_wiki_links
 			retired_players = Credentials.modify
 			players = []
 			retired_players.each do |r|
@@ -212,7 +213,7 @@ module RetiredPlayer
 				player_hash[:weight] = r[4]
 				player_hash[:birth_date] = r[1]
 				player_hash[:before_nba] = r[5]
-				player_hash[:is_rookie] =
+				player_hash[:is_rookie] = false
 				player_hash[:from_city] = r[2]
 				player_hash[:which_pick] = r[6]
 				player_hash[:years_pro] = r[9]
