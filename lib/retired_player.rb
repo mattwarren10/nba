@@ -2,55 +2,61 @@ module RetiredPlayer
 	module WikiList
 
 		# collect each xpath
-		URL = 'vendor/nba_allstars.html'
-		TABLE = "//table[2]/tr/td"
-		SELECT_HOF = "[@bgcolor='#FFFF99']"	# hall of famers
-		SELECT_OTHER = "[@bgcolor='#CCFF99']" # not yet eligible for HOF
-		HALL_OF_FAMERS = TABLE + SELECT_HOF
-		OTHER = TABLE + SELECT_OTHER
+		
 
-		# get names of players
-		def self.retrieve_names	
-			span_names = "/span[@class='sortkey']"			
-			xpath = HALL_OF_FAMERS + span_names +'|' + OTHER + span_names
-			data = CallNokogiri.xpath(URL, xpath)
+		def self.names_and_links
+			url = 'vendor/nba_allstars.html'
+			table = "//table[2]/tr/td"
+			select_hof = "[@bgcolor='#FFFF99']"	# hall of famers
+			select_other = "[@bgcolor='#CCFF99']" # not yet eligible for HOF
+			hall_of_famers = table + select_hof
+			other = table + select_other
+			span = "/span[@class='vcard']/span[@class='fn']"
+			href = "/a/@href"		
+			xpath = hall_of_famers + span + '|' + other + span + '|' + hall_of_famers + span + href + '|' + other + span + href
+			data = CallNokogiri.xpath(url, xpath)
+			data.text
 		end
 
-		# get wiki_links of players
-		def self.retrieve_wiki_links
-			href = "/a/@href"
-			span_wiki_links = "/span[@class='vcard']/span[@class='fn']"
-			xpath = HALL_OF_FAMERS + span_wiki_links + href + '|' + OTHER + span_wiki_links + href
-			data = CallNokogiri.xpath(URL, xpath)
-		end
-
-		def self.separate_names
-			noko_elements = retrieve_names
-			names = noko_elements.text.split(/(?<!\-)(?<!\')(?<!Mc)(?<!\s)(?=[A-Z])/)
+		def self.separate_names_and_links
+			noko_elements = names_and_links
+			data = noko_elements.split(/(?<!\-)(?<!\_)(?<!\d)(?<!\')(?<!Mc)(?<!De)(?<!\s)(?=[A-Z])|(\/wiki\/)/)
 			players = []
-			names.each do |name|
-				 player = {}
-				 full_name = name.split(", ")
-				 player[:last_name] = full_name[0]
-				 player[:first_name] = full_name[1]
-				 players.push(player)
+			data.delete("/wiki/")
+			data.each_with_index do |d, i|				
+				if i.even?
+					player = {}
+					full_name = d.split(" ")
+					player[:last_name] = full_name[1]
+					player[:first_name] = full_name[0]
+				else
+					players[-1][:wiki_link] = d
+				end
+				 players.push(player)				 
+				 if i == 249 # stops after Bill Walton
+				   break name
+				 end
 			end
-			players.first(125)
+			players.delete(nil)
+			players			
 		end
 
 		def self.separate_wiki_links
+			names = separate_names
 			noko_elements = retrieve_wiki_links
 			wiki_links = noko_elements.text.split("/wiki/")
 			wiki_links.delete("")
+			wiki_links.each_with_index do |link, i|
+				p "#{names[i][:last_name]}, #{names[i][:first_name]}: #{link}: #{i}"
+				if i == 125 
+				  break link
+				end
+			end
 			wiki_links.first(125)
 		end
 	end
 
-	module Credentials
-		def self.names
-			names = WikiList.separate_names
-
-		end
+	module Credentials		
 
 		# scraping local retired player wikis and grabbing credentials
 		def self.retrieve
@@ -77,15 +83,20 @@ module RetiredPlayer
 				player_wiki_count += 1
 				puts "#{player_wiki_count} retired wikis retrieved, currently on #{link}"
 			end
-			player_data
+			return links, player_data
 		end
 
 		def self.modify
-			retired_players_data = retrieve
+			credentials = retrieve
+			names = WikiList.separate_names
+			links = credentials[0]
+			retired_players_data = credentials[1]
 			retired_players = []
-			retired_players_data.each do |player_data|
+			retired_players_data.each_with_index do |player_data, player_index|
 				player_data.delete ""
 				if player_data.length < 13
+					names.delete_at(player_index)
+					links.delete_at(player_index)
 					next
 				end				
 				player_data.delete ""
@@ -108,6 +119,8 @@ module RetiredPlayer
 				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
 				if draft.nil?
+				  names.delete_at(player_index)
+				  links.delete_at(player_index)
 				  next
 				else
 				  i = player_data.index(draft) - 1
@@ -203,21 +216,22 @@ module RetiredPlayer
 				retired_player.push(nba_stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)
 			end
-			retired_players
+			return names, links, retired_players
 		end
 	end
 
 	module Attr
 		def self.get
-			links = WikiList.separate_wiki_links
-			retired_players = Credentials.modify
-			players = []
-			retired_players.each do |r|
+			players = Credentials.modify
+			names = players[0]
+			links = players[1]
+			retired_players = players[2]
+			retired_players.each_with_index do |r, i|
 				player_hash = {}
 				player_hash[:position] = r[7]
 				player_hash[:jersey_number] = r[8]
-				player_hash[:last_name] =
-				player_hash[:first_name] =
+				player_hash[:last_name] = names[i][:last_name]
+				player_hash[:first_name] = names[i][:first_name]
 				player_hash[:height] = r[3]
 				player_hash[:weight] = r[4]
 				player_hash[:birth_date] = r[1]
@@ -226,11 +240,12 @@ module RetiredPlayer
 				player_hash[:from_city] = r[2]
 				player_hash[:which_pick] = r[6]
 				player_hash[:years_pro] = r[9]
-				player_hash[:wiki_link] =
+				player_hash[:wiki_link] = links[i]
 				player_hash[:image_link] = r[0]
 				player_hash[:regular_season_stats] = r[10]
 				players.push(player_hash)
 			end
+			players
 		end
 	end
 end
