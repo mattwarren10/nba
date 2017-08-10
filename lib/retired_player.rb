@@ -78,13 +78,13 @@ module RetiredPlayer
 				player_data.delete ""
 				if player_data.length < 13
 					next
-				end
-				p "////////////////START PLAYER//////////////////"
+				end				
 				player_data.delete ""
 				retired_player = []
 				img_link = player_data[0].split(";")[0]
 				birth_date = DateTime.parse player_data[0].match(/\d\d\d\d\-\d\d\-\d\d/)[0]
 				retired_player.push(img_link, birth_date)
+
 				born_city, height, weight, high_school = player_data[1].split(";")
 				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "")
 				weight = weight[weight.index("(")..weight.index(")")].gsub!(/\D/, "")
@@ -95,8 +95,12 @@ module RetiredPlayer
 				  high_school += " " + high_school_city 
 				end
 				high_school.gsub!(" NBA draft", "")
+
+				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
-				unless draft.nil?
+				if draft.nil?
+				  next
+				else
 				  i = player_data.index(draft) - 1
 				  college = player_data[i].split(";")[-1]				
 				  if college != nil
@@ -106,34 +110,36 @@ module RetiredPlayer
 				  end
 				end
 				retired_player.push(born_city, height, weight, high_school, college)
-				if draft.nil?
-				  next
-				end
+				
+				# select which pick
 				i = player_data.index(draft) + 1
-				which_pick = player_data[i]
-				p which_pick			
+				which_pick = player_data[i]					
 				retired_player.push(which_pick)
+
+				# select position and jersey_number
 				i += 1
-				position, number = player_data[i].split(";")[1..2]
+				position, jersey_number = player_data[i].split(";")[1..2]
 				if position.nil?
 					position = 'Forward'
 				end
 				position.downcase!
-				# changes format of position
-				# refactor this
+
+				# changes format of position				
 				if position.include?("guard") && position.include?("forward")
-				  position.gsub!(/(.)+/, "GF")  
+				  position.gsub!(/(.)+/, "GF")
 				elsif position.include?("forward") && position.include?("center")
 				  position.gsub!(/(.)+/, "FC") 
 				elsif position.include?("guard")
 				  position.gsub!(/(.)+/, "G")
 				elsif position.include?("forward")
-				  position.gsub!(/(.)+/, "F") 
+				  position.gsub!(/(.)+/, "F")
 			  	elsif position.include?("center")
-				  position.gsub!(/(.)+/, "C") 
+				  position.gsub!(/(.)+/, "C")
 				end
-				retired_player.push(position, number)
+				retired_player.push(position, jersey_number)
 				year_drafted = which_pick[0..3]
+
+				# organize stats into an array by each season
 				stats = []
 				player_data.each do |str|
 				  str.gsub!("*", "")						  						  
@@ -148,13 +154,13 @@ module RetiredPlayer
 				  end
 				end
 
-				# only select seasons retired player played
+				# only select seasons
 				nba_stats = []
 				stats.each do |stat|
 				  season = stat[0].match(/\d+\-\d+/)
 				  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
 				    if season != nil 
-				      if season[0].length == 7 || season[0].length == 9				        
+				      if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"		        
 				        nba_stats.push(stat)
 				      end
 				    end
@@ -164,7 +170,7 @@ module RetiredPlayer
 				# calculate years pro
 				unless nba_stats.empty?
 					year = '46' # year nba was chartered. fix this code in 2046.
-					retired_player_last_year = nba_stats[-1][0][-2..-1] 
+					retired_player_last_year = nba_stats[-1][0][-2..-1] # i.e. selecting '17' from '2016-17'
 					if retired_player_last_year >= year
 					  retired_player_last_year.prepend('19')
 					else
