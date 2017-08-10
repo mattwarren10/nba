@@ -40,31 +40,17 @@ module RetiredPlayer
 			players.delete(nil)
 			players			
 		end
-
-		def self.separate_wiki_links
-			names = separate_names
-			noko_elements = retrieve_wiki_links
-			wiki_links = noko_elements.text.split("/wiki/")
-			wiki_links.delete("")
-			wiki_links.each_with_index do |link, i|
-				p "#{names[i][:last_name]}, #{names[i][:first_name]}: #{link}: #{i}"
-				if i == 125 
-				  break link
-				end
-			end
-			wiki_links.first(125)
-		end
 	end
 
 	module Credentials		
 
 		# scraping local retired player wikis and grabbing credentials
 		def self.retrieve
-			links = WikiList.separate_wiki_links
+			players = WikiList.separate_names_and_links # 
 			player_wiki_count = 0
 			player_data = []
-			links.each do |link|
-				url = "vendor/retired_player_wiki/#{link}.html"
+			players.each do |player|
+				url = "vendor/retired_player_wiki/#{player[:wiki_link]}.html"
 				vcard = "//table[@class='infobox vcard']"
 				chain_vcard = "|" + vcard			
 				image_src = vcard + "/tr/td/a/img/@src"
@@ -81,22 +67,20 @@ module RetiredPlayer
 				data = CallNokogiri.xpath(url, xpath).map(&:text).join(";")
 				player_data.push(data.split("\n"))
 				player_wiki_count += 1
-				puts "#{player_wiki_count} retired wikis retrieved, currently on #{link}"
+				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"
 			end
-			return links, player_data
+			return players, player_data
 		end
 
 		def self.modify
 			credentials = retrieve
-			names = WikiList.separate_names
-			links = credentials[0]
-			retired_players_data = credentials[1]
+			names_and_links = credentials[0]
+			unmodified_players = credentials[1]
 			retired_players = []
-			retired_players_data.each_with_index do |player_data, player_index|
+			unmodified_players.each_with_index do |player_data, player_index|
 				player_data.delete ""
 				if player_data.length < 13
-					names.delete_at(player_index)
-					links.delete_at(player_index)
+					names_and_links.delete_at(player_index)					
 					next
 				end				
 				player_data.delete ""
@@ -119,8 +103,7 @@ module RetiredPlayer
 				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
 				if draft.nil?
-				  names.delete_at(player_index)
-				  links.delete_at(player_index)
+				  names_and_links.delete_at(player_index)				  
 				  next
 				else
 				  i = player_data.index(draft) - 1
@@ -216,7 +199,7 @@ module RetiredPlayer
 				retired_player.push(nba_stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)
 			end
-			return names, links, retired_players
+			return names_and_links, retired_players
 		end
 	end
 
