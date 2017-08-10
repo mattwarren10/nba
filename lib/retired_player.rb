@@ -60,7 +60,7 @@ module RetiredPlayer
 				college = chain_vcard + "/tr[contains(., 'College')]/td"
 				position = chain_vcard + "/tr[contains(., 'Position')]/td"
 				number = chain_vcard + "/tr[contains(., 'Number')]/td"
-				which_pick = chain_vcard + "/tr[contains(., 'NBA draft')]"
+				which_pick = chain_vcard + "/tr[contains(., ' draft')]"
 				season_stats = "|//*[self::h3]/following-sibling::table[@class='wikitable sortable']"
 				xpath = image_src + birth_date_and_city + height + weight + high_school + college + position + number + which_pick + season_stats
 				data = CallNokogiri.xpath(url, xpath).map(&:text).join(";")
@@ -76,6 +76,9 @@ module RetiredPlayer
 			retired_players = []
 			retired_players_data.each do |player_data|
 				player_data.delete ""
+				if player_data.length < 13
+					next
+				end
 				retired_player = []
 				img_link = player_data[0].split(";")[0]
 				birth_date = DateTime.parse player_data[0].match(/\d+\-\d+\-\d+/)[0]
@@ -145,17 +148,23 @@ module RetiredPlayer
 				end
 
 				# calculate years pro
-				year = '46' # year nba was chartered. fix this code in 2046.
-				last_year_played = stats[-1][0][-2..-1]
-				if last_year_played >= year
-				  last_year_played.prepend('19')
-				else
-				  last_year_played.prepend('20')
+				unless nba_stats.empty?
+					year = '46' # year nba was chartered. fix this code in 2046.
+					retired_player_last_year = nba_stats[-1][0][-2..-1] 
+					if retired_player_last_year >= year
+					  retired_player_last_year.prepend('19')
+					else
+					  retired_player_last_year.prepend('20')
+					end
+					years_pro = retired_player_last_year.to_i - year_drafted.to_i
+					year_difference = years_pro.to_i - nba_stats.count
+					if year_difference < 0
+					  years_pro = nba_stats.count					
+					end 
+					retired_player.push(years_pro)
 				end
-				years_pro = last_year_played.to_i - year_drafted.to_i
-				retired_player.push(years_pro)
 
-				retired_player.push(stats.sort{ |x, y| x<=>y})
+				retired_player.push(nba_stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)
 			end
 			retired_players
