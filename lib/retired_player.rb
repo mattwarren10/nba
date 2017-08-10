@@ -27,11 +27,15 @@ module RetiredPlayer
 		def self.separate_names
 			noko_elements = retrieve_names
 			names = noko_elements.text.split(/(?<!\-)(?<!\')(?<!Mc)(?<!\s)(?=[A-Z])/)
-			# names.each do |name|
-			# 	 full_name = name.split(", ")
-			# 	 last_name = full_name.first
-			# 	 first_name = full_name.last
-			# end
+			players = []
+			names.each do |name|
+				 player = {}
+				 full_name = name.split(", ")
+				 player[:last_name] = full_name[0]
+				 player[:first_name] = full_name[1]
+				 players.push(player)
+			end
+			players.first(125)
 		end
 
 		def self.separate_wiki_links
@@ -43,6 +47,11 @@ module RetiredPlayer
 	end
 
 	module Credentials
+		def self.names
+			names = WikiList.separate_names
+
+		end
+
 		# scraping local retired player wikis and grabbing credentials
 		def self.retrieve
 			links = WikiList.separate_wiki_links
