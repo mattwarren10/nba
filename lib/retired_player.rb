@@ -191,4 +191,28 @@ module RetiredPlayer
 		end
 	end
 
+	module Attr
+		self.get
+		retired_players = Credentials.modify
+		players = []
+		retired_players.each do |retired_player|
+			player_hash = {}
+			player_hash[:position] =
+			player_hash[:jersey_number] =
+			player_hash[:last_name] =
+			player_hash[:first_name] =
+			player_hash[:height] =
+			player_hash[:weight] =
+			player_hash[:birth_date] =
+			player_hash[:before_nba] =
+			player_hash[:is_rookie] =
+			player_hash[:from_city] =
+			player_hash[:which_pick] =
+			player_hash[:years_pro] =
+			player_hash[:wiki_link] =
+			player_hash[:image_link] =
+			player_hash[:regular_season_stats] =
+		end
+	end
+
 end
