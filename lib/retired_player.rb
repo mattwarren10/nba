@@ -86,8 +86,8 @@ module RetiredPlayer
 				retired_player.push(img_link, birth_date)
 
 				born_city, height, weight, high_school = player_data[1].split(";")
-				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "")
-				weight = weight[weight.index("(")..weight.index(")")].gsub!(/\D/, "")
+				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "").to_i
+				weight = weight[weight.index("(")..weight.index(")")].gsub!(/\D/, "").to_i
 				high_school_city = player_data[2].split(";")[0]
 				if high_school.nil?
 				  high_school = high_school_city
@@ -106,10 +106,10 @@ module RetiredPlayer
 				  if college != nil
 					college = college[0..college.index("(")].delete("(").rstrip
 			   	  else
-					college = ""
+					college = high_school
 				  end
 				end
-				retired_player.push(born_city, height, weight, high_school, college)
+				retired_player.push(born_city, height, weight, college)
 				
 				# select which pick
 				i = player_data.index(draft) + 1
@@ -119,6 +119,13 @@ module RetiredPlayer
 				# select position and jersey_number
 				i += 1
 				position, jersey_number = player_data[i].split(";")[1..2]
+				if jersey_number.nil?
+					jersey_number = ""
+				else
+				  if jersey_number.include?(",")
+					jersey_number = jersey_number.split(",")[0]
+				  end
+				end
 				if position.nil?
 					position = 'Forward'
 				end
@@ -192,27 +199,28 @@ module RetiredPlayer
 	end
 
 	module Attr
-		self.get
-		retired_players = Credentials.modify
-		players = []
-		retired_players.each do |retired_player|
-			player_hash = {}
-			player_hash[:position] =
-			player_hash[:jersey_number] =
-			player_hash[:last_name] =
-			player_hash[:first_name] =
-			player_hash[:height] =
-			player_hash[:weight] =
-			player_hash[:birth_date] =
-			player_hash[:before_nba] =
-			player_hash[:is_rookie] =
-			player_hash[:from_city] =
-			player_hash[:which_pick] =
-			player_hash[:years_pro] =
-			player_hash[:wiki_link] =
-			player_hash[:image_link] =
-			player_hash[:regular_season_stats] =
+		def self.get
+			retired_players = Credentials.modify
+			players = []
+			retired_players.each do |r|
+				player_hash = {}
+				player_hash[:position] = r[7]
+				player_hash[:jersey_number] = r[8]
+				player_hash[:last_name] =
+				player_hash[:first_name] =
+				player_hash[:height] = r[3]
+				player_hash[:weight] = r[4]
+				player_hash[:birth_date] = r[1]
+				player_hash[:before_nba] = r[5]
+				player_hash[:is_rookie] =
+				player_hash[:from_city] = r[2]
+				player_hash[:which_pick] = r[6]
+				player_hash[:years_pro] = r[9]
+				player_hash[:wiki_link] =
+				player_hash[:image_link] = r[0]
+				player_hash[:regular_season_stats] = r[10]
+				players.push(player_hash)
+			end
 		end
 	end
-
 end
