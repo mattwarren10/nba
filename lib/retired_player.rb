@@ -79,9 +79,11 @@ module RetiredPlayer
 				if player_data.length < 13
 					next
 				end
+				p "////////////////START PLAYER//////////////////"
+				player_data.delete ""
 				retired_player = []
 				img_link = player_data[0].split(";")[0]
-				birth_date = DateTime.parse player_data[0].match(/\d+\-\d+\-\d+/)[0]
+				birth_date = DateTime.parse player_data[0].match(/\d\d\d\d\-\d\d\-\d\d/)[0]
 				retired_player.push(img_link, birth_date)
 				born_city, height, weight, high_school = player_data[1].split(";")
 				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "")
@@ -92,18 +94,30 @@ module RetiredPlayer
 				else
 				  high_school += " " + high_school_city 
 				end
-				college = player_data[2].split(";")[1]
-				if college != nil
+				high_school.gsub!(" NBA draft", "")
+				draft = player_data.grep(/draft/)[0]
+				unless draft.nil?
+				  i = player_data.index(draft) - 1
+				  college = player_data[i].split(";")[-1]				
+				  if college != nil
 					college = college[0..college.index("(")].delete("(").rstrip
+			   	  else
+					college = ""
+				  end
 				end
 				retired_player.push(born_city, height, weight, high_school, college)
-				draft = player_data.grep(/draft/)[0]
+				if draft.nil?
+				  next
+				end
 				i = player_data.index(draft) + 1
 				which_pick = player_data[i]
-				puts "Currently at #{which_pick}"
+				p which_pick			
 				retired_player.push(which_pick)
 				i += 1
 				position, number = player_data[i].split(";")[1..2]
+				if position.nil?
+					position = 'Forward'
+				end
 				position.downcase!
 				# changes format of position
 				# refactor this
