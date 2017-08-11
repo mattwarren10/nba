@@ -72,24 +72,23 @@ module RetiredPlayer
 			names_and_links = credentials[0]
 			unmodified_players = credentials[1]
 			retired_players = []
-			unmodified_players.each_with_index do |player_data, player_index|
-				p "***NEW PLAYER***"
-				player_data.delete ""
-				p "Player data length is #{player_data.length}"
-				if names_and_links[player_index][:first_name] == "Wilt"
-					p names_and_links[player_index][:first_name]
-				end
-				if player_data.length < 13
-					player_data = nil										
-					next
-				end							
-				player_data.delete ""
+			unmodified_players.each_with_index do |player_data, player_index|								
+				player_data.delete ""				
 				retired_player = []
-				img_link = player_data[0].split(";")[0]
-				p img_link
-				p names_and_links[player_index]
+				if player_data.length < 13
+					retired_players.push(retired_player)
+					next
+
+				end											
+				img_link = player_data[0].split(";")[0]				
+				if img_link.include?("upload.wikimedia.org")
+					retired_player.push(img_link)
+					p img_link
+				else
+					retired_player.push(nil)
+				end				
 				birth_date = DateTime.parse player_data[0].match(/\d\d\d\d\-\d\d\-\d\d/)[0]
-				retired_player.push(img_link, birth_date)
+				retired_player.push(birth_date)
 
 				born_city, height, weight, high_school = player_data[1].split(";")
 				height = height[height.index("(")..height.index(")")].gsub!(/\D/, "").to_i
@@ -104,8 +103,8 @@ module RetiredPlayer
 
 				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
-				if draft.nil?
-				  player_data = nil							  
+				if draft.nil?				  
+				  retired_players.push(retired_player)
 				  next
 				else
 				  i = player_data.index(draft) - 1
@@ -120,7 +119,8 @@ module RetiredPlayer
 				
 				# select which pick
 				i = player_data.index(draft) + 1
-				which_pick = player_data[i]					
+				which_pick = player_data[i]
+				which_pick.gsub!(" /", ",")				
 				retired_player.push(which_pick)
 
 				# select position and jersey_number
@@ -197,7 +197,12 @@ module RetiredPlayer
 					end 
 					retired_player.push(years_pro)
 				end
-
+				puts "******NEW PLAYER******"
+				p names_and_links[player_index]
+				p retired_player
+				puts ""
+				puts ""
+				puts ""
 				retired_player.push(nba_stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)				
 			end			
@@ -210,30 +215,29 @@ module RetiredPlayer
 			players = Credentials.modify
 			names_and_links = players[0]
 			credentials = players[1]
-			players = []
-
-			# some players are missing
+			players = []					
 			credentials.each_with_index do |r, i|
-				player_hash = {}
-				player_hash[:position] = r[7]
-				player_hash[:jersey_number] = r[8]
-				player_hash[:last_name] = names_and_links[i][:last_name]
-				player_hash[:first_name] = names_and_links[i][:first_name]
-				player_hash[:height] = r[3]
-				player_hash[:weight] = r[4]
-				player_hash[:birth_date] = r[1]
-				player_hash[:before_nba] = r[5]
-				player_hash[:is_rookie] = false
-				player_hash[:from_city] = r[2]
-				player_hash[:which_pick] = r[6]
-				player_hash[:years_pro] = r[9]
-				player_hash[:wiki_link] = names_and_links[i][:wiki_link]
-				player_hash[:image_link] = r[0]
-				player_hash[:regular_season_stats] = r[10]
-				players.push(player_hash)
+				unless r.empty?					
+					player_hash = {}
+					player_hash[:position] = r[7]
+					player_hash[:jersey_number] = r[8]
+					player_hash[:last_name] = names_and_links[i][:last_name]
+					player_hash[:first_name] = names_and_links[i][:first_name]
+					player_hash[:height] = r[3]
+					player_hash[:weight] = r[4]
+					player_hash[:birth_date] = r[1]
+					player_hash[:before_nba] = r[5]
+					player_hash[:is_rookie] = false
+					player_hash[:from_city] = r[2]
+					player_hash[:which_pick] = r[6]
+					player_hash[:years_pro] = r[9]
+					player_hash[:wiki_link] = names_and_links[i][:wiki_link]
+					player_hash[:image_link] = r[0]
+					player_hash[:regular_season_stats] = r[10]
+					players.push(player_hash)
+				end
 			end
-			players.reject!{|x| x[:regular_season_stats] == nil}
-			players
+			players.reject!{|x| x[:regular_season_stats] == nil}			
 		end
 	end
 end
