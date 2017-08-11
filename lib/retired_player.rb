@@ -197,12 +197,6 @@ module RetiredPlayer
 					end 
 					retired_player.push(years_pro)
 				end
-				puts "******NEW PLAYER******"
-				p names_and_links[player_index]
-				p retired_player
-				puts ""
-				puts ""
-				puts ""
 				retired_player.push(nba_stats.sort{ |x, y| x<=>y})
 				retired_players.push(retired_player)				
 			end			
