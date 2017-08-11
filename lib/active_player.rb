@@ -141,18 +141,24 @@ module ActivePlayer
 						national_stats = []
 						teams = AuthenticTeam::Attr.get
 						if stats.count > 0						  
-						  stats.each do |s|
+						  stats.each do |stat|
 							teams.each do |t|
 							  # since we are selecting after the draft, we want NBA teams only
-							  if s[1] == t[:city]
+							  if stat[1] == t[:city]
 							    # season year has to be after year_drafted
-								if s[0][0..3] >= year_drafted
-							  	season = s[0].match(/\d+\-\d+/)
+								if stat[0][0..3] >= year_drafted
+							  	season_year = stat[0].match(/\d+\-\d+/)
 							  	# make sure the season year does not contain any letters
-							  	  if s[0].match(/[a-z]/).nil? # bypass arrays that are not a season
-							  	    if season != nil 
-				      				  if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"		        								      
-								   	    national_stats.push(s)
+							  	  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+							  	    if season_year != nil 
+				      				  if season_year[0].length == 7 || season_year[0].length == 9	# i.e. "2006-07" or "2006-2007"
+								   	    stat.each do |s| 
+								   	    	if s == stat[0]
+								   	    		next
+								   	    	end
+								   	    	s.gsub!("-", "0")
+								   	    end
+								   	    national_stats.push(stat)								   	    
 								      end  
 								    end
 							   	  end
@@ -161,8 +167,8 @@ module ActivePlayer
 							end
 						  end
 						else
-						  stats.each do |s|
-						    national_stats.push(s)
+						  stats.each do |stat|
+						    national_stats.push(stat)
 						  end
 						end
 						player.push(national_stats.sort{ |x, y| x<=>y})

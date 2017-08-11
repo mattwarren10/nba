@@ -88,8 +88,7 @@ namespace :player do
               break stat
             end
           end                
-        end
-        puts "##{teams_looped_through}: #{team_abbr} has #{players_created_count} players on roster".bold  
+        end        
       end
       puts "#{players_created_count} total active players created for the #{nba.name}".green.bold
     end
