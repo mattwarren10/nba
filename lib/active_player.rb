@@ -110,7 +110,8 @@ module ActivePlayer
 						end
 						draft = player_data.grep(/draft/)[0] 
 						i = player_data.index(draft) + 1
-						which_pick = player_data[i]	# selects the draft pick					
+						which_pick = player_data[i]	# selects the draft pick
+						which_pick.gsub!(" /", ",")
 						player.push(which_pick)
 						year_drafted = which_pick[0..3]
 						years_pro = Time.now.year - year_drafted.to_i # calculates years pro						
