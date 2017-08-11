@@ -135,25 +135,37 @@ module ActivePlayer
 						      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
 						    end
 						  end
-						end						
+						end
+
+						# select NBA or college seasons
 						national_stats = []
 						teams = AuthenticTeam::Attr.get
-						if stats.count > 0							
-							if stats[0][0][0..3] >= year_drafted
-							  stats.each do |s|
-							    teams.each do |t|
-							      if s[1] == t[:city]
-							        national_stats.push(s)
-							      end  
+						if stats.count > 0						  
+						  stats.each do |s|
+							teams.each do |t|
+							  # since we are selecting after the draft, we want NBA teams only
+							  if s[1] == t[:city]
+							    # season year has to be after year_drafted
+								if s[0][0..3] >= year_drafted
+							  	season = s[0].match(/\d+\-\d+/)
+							  	# make sure the season year does not contain any letters
+							  	  if s[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+							  	    if season != nil 
+				      				  if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"		        								      
+								   	    national_stats.push(s)
+								      end  
+								    end
+							   	  end
 							    end
 							  end
-							else
-							  stats.each do |s|
-							    national_stats.push(s)
-							  end
 							end
+						  end
+						else
+						  stats.each do |s|
+						    national_stats.push(s)
+						  end
 						end
-						player.push(stats.sort{ |x, y| x<=>y})
+						player.push(national_stats.sort{ |x, y| x<=>y})
 						team.push(player)
 					end
 					league.push(team)
