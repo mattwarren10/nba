@@ -54,7 +54,7 @@ module ActivePlayer
 					unless str.nil? || !str.include?("(")
 					  str = str.slice(0..str.index("(")).delete("(").gsub!(/\u00A0/, "")				
 					end
-					str = '' if str.nil?
+					str = '-' if str.nil?
 					arr[2][1] = str # player first name
 					arr[3][0..19] = '' # selecting player height
 					arr[3] = arr[3][0..5].gsub!(/\D+/, '') # removing all non digits
@@ -136,25 +136,43 @@ module ActivePlayer
 						      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
 						    end
 						  end
-						end						
+						end
+
+						# select NBA or college seasons
 						national_stats = []
 						teams = AuthenticTeam::Attr.get
-						if stats.count > 0							
-							if stats[0][0][0..3] >= year_drafted
-							  stats.each do |s|
-							    teams.each do |t|
-							      if s[1] == t[:city]
-							        national_stats.push(s)
-							      end  
+						if stats.count > 0						  
+						  stats.each do |stat|
+							teams.each do |t|
+							  # since we are selecting after the draft, we want NBA teams only
+							  if stat[1] == t[:city]
+							    # season year has to be after year_drafted
+								if stat[0][0..3] >= year_drafted
+							  	season_year = stat[0].match(/\d+\-\d+/)
+							  	# make sure the season year does not contain any letters
+							  	  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+							  	    if season_year != nil 
+				      				  if season_year[0].length == 7 || season_year[0].length == 9	# i.e. "2006-07" or "2006-2007"
+								   	    stat.each do |s| 
+								   	    	if s == stat[0]
+								   	    		next
+								   	    	end
+								   	    	s.gsub!("-", "0")
+								   	    end
+								   	    national_stats.push(stat)								   	    
+								      end  
+								    end
+							   	  end
 							    end
 							  end
-							else
-							  stats.each do |s|
-							    national_stats.push(s)
-							  end
 							end
+						  end
+						else
+						  stats.each do |stat|
+						    national_stats.push(stat)
+						  end
 						end
-						player.push(stats.sort{ |x, y| x<=>y})
+						player.push(national_stats.sort{ |x, y| x<=>y})
 						team.push(player)
 					end
 					league.push(team)
