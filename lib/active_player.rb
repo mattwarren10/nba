@@ -54,7 +54,7 @@ module ActivePlayer
 					unless str.nil? || !str.include?("(")
 					  str = str.slice(0..str.index("(")).delete("(").gsub!(/\u00A0/, "")				
 					end
-					str = '' if str.nil?
+					str = '-' if str.nil?
 					arr[2][1] = str # player first name
 					arr[3][0..19] = '' # selecting player height
 					arr[3] = arr[3][0..5].gsub!(/\D+/, '') # removing all non digits
