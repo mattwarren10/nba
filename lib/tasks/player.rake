@@ -9,7 +9,7 @@ namespace :player do
       teams_looped_through = 0
       nba = League.find(1)
       league = ActivePlayer::Attr.get
-      
+
       # create each player and place them on the correct team
       league.each do |team_abbr, roster|
         roster.each do |player_hash|
@@ -31,14 +31,18 @@ namespace :player do
             from_city: player_hash[:from_city],
             status: 0
           )
+          puts "Adding #{player.last_name} to #{nba.abbreviation}...".yellow
           nba.players.push(player)
-          nba.teams.push(team)          
+          unless LeagueTeam.where(team_id: team.id).exists?
+            puts "Adding #{team.abbreviation} to #{nba.abbreviation}...".yellow
+            nba.teams.push(team)
+          end
           league_player = LeaguePlayer.where(league_id: nba.id, player_id: player.id).first
           league_team = LeagueTeam.where(league_id: nba.id, team_id: team.id).first
           if player.valid?        
             players_created_count += 1
             puts "#{player.last_name}, #{player.first_name} (id: #{player.id}) has been created."
-            puts "==> #{players_created_count} players created so far"            
+            puts "==> #{players_created_count} players created"            
             league_team.league_players.push(league_player)
                          
           else
@@ -83,7 +87,7 @@ namespace :player do
               puts "==> #{stat.errors.full_messages.red}".red.bold
               break stat
             end
-          end
+          end                
         end
         puts "##{teams_looped_through}: #{team_abbr} has #{players_created_count} players on roster".bold  
       end
