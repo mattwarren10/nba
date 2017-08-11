@@ -3,13 +3,13 @@ require 'colorize'
 
 namespace :player do  
   namespace :active do 
-    desc 'accessing active players'
+    desc 'creating active players'
     task create: :environment do
       players_created_count = 0
       teams_looped_through = 0
       nba = League.find(1)
       league = ActivePlayer::Attr.get
-
+      
       # create each player and place them on the correct team
       league.each do |team_abbr, roster|
         roster.each do |player_hash|
@@ -117,6 +117,14 @@ namespace :player do
         end
       puts "#{player_wikis_count} player wikis downloaded".bold
       end
+    end
+  end
+end
+
+namespace :player do
+  namespace :retired do
+    desc 'creating retired players'
+    task create: :environment do
     end
   end
 end
