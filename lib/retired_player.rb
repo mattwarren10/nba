@@ -1,9 +1,7 @@
 module RetiredPlayer
 	module WikiList
 
-		# collect each xpath
-		
-
+		# scraping names and links from nba allstars
 		def self.names_and_links
 			url = 'vendor/nba_allstars.html'
 			table = "//table[2]/tr/td"
@@ -32,13 +30,10 @@ module RetiredPlayer
 				else
 					players[-1][:wiki_link] = d
 				end
-				 players.push(player)				 
-				 if i == 249 # stops after Bill Walton
-				   break name
-				 end
+				 players.push(player)				 				 
 			end
 			players.delete(nil)
-			players			
+			players.first(89)	
 		end
 	end
 
@@ -69,7 +64,7 @@ module RetiredPlayer
 				player_wiki_count += 1
 				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"
 			end
-			return players, player_data
+			return players, player_data.first(89)
 		end
 
 		def self.modify
@@ -78,14 +73,21 @@ module RetiredPlayer
 			unmodified_players = credentials[1]
 			retired_players = []
 			unmodified_players.each_with_index do |player_data, player_index|
+				p "***NEW PLAYER***"
 				player_data.delete ""
+				p "Player data length is #{player_data.length}"
+				if names_and_links[player_index][:first_name] == "Wilt"
+					p names_and_links[player_index][:first_name]
+				end
 				if player_data.length < 13
-					names_and_links.delete_at(player_index)					
+					player_data = nil										
 					next
-				end				
+				end							
 				player_data.delete ""
 				retired_player = []
 				img_link = player_data[0].split(";")[0]
+				p img_link
+				p names_and_links[player_index]
 				birth_date = DateTime.parse player_data[0].match(/\d\d\d\d\-\d\d\-\d\d/)[0]
 				retired_player.push(img_link, birth_date)
 
@@ -103,7 +105,7 @@ module RetiredPlayer
 				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
 				if draft.nil?
-				  names_and_links.delete_at(player_index)				  
+				  player_data = nil							  
 				  next
 				else
 				  i = player_data.index(draft) - 1
@@ -113,7 +115,7 @@ module RetiredPlayer
 			   	  else
 					college = high_school
 				  end
-				end
+				end				
 				retired_player.push(born_city, height, weight, college)
 				
 				# select which pick
@@ -197,8 +199,8 @@ module RetiredPlayer
 				end
 
 				retired_player.push(nba_stats.sort{ |x, y| x<=>y})
-				retired_players.push(retired_player)
-			end
+				retired_players.push(retired_player)				
+			end			
 			return names_and_links, retired_players
 		end
 	end
@@ -206,15 +208,17 @@ module RetiredPlayer
 	module Attr
 		def self.get
 			players = Credentials.modify
-			names = players[0]
-			links = players[1]
-			retired_players = players[2]
-			retired_players.each_with_index do |r, i|
+			names_and_links = players[0]
+			credentials = players[1]
+			players = []
+
+			# some players are missing
+			credentials.each_with_index do |r, i|
 				player_hash = {}
 				player_hash[:position] = r[7]
 				player_hash[:jersey_number] = r[8]
-				player_hash[:last_name] = names[i][:last_name]
-				player_hash[:first_name] = names[i][:first_name]
+				player_hash[:last_name] = names_and_links[i][:last_name]
+				player_hash[:first_name] = names_and_links[i][:first_name]
 				player_hash[:height] = r[3]
 				player_hash[:weight] = r[4]
 				player_hash[:birth_date] = r[1]
@@ -223,11 +227,12 @@ module RetiredPlayer
 				player_hash[:from_city] = r[2]
 				player_hash[:which_pick] = r[6]
 				player_hash[:years_pro] = r[9]
-				player_hash[:wiki_link] = links[i]
+				player_hash[:wiki_link] = names_and_links[i][:wiki_link]
 				player_hash[:image_link] = r[0]
 				player_hash[:regular_season_stats] = r[10]
 				players.push(player_hash)
 			end
+			players.reject!{|x| x[:regular_season_stats] == nil}
 			players
 		end
 	end
