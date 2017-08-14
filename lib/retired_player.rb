@@ -82,8 +82,7 @@ module RetiredPlayer
 				end											
 				img_link = player_data[0].split(";")[0]				
 				if img_link.include?("upload.wikimedia.org")
-					retired_player.push(img_link)
-					p img_link
+					retired_player.push(img_link)					
 				else
 					retired_player.push(nil)
 				end				
@@ -171,12 +170,23 @@ module RetiredPlayer
 				# only select seasons
 				nba_stats = []
 				stats.each do |stat|
+				  # collect the season year
 				  season = stat[0].match(/\d+\-\d+/)
-				  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+				  # bypass arrays that are not a season
+				  if stat[0].match(/[a-z]/).nil?
 				    if season != nil 
-				      if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"		        
+				      if season[0][0..3] >= year_drafted
+				        if season[0].length == 7	# i.e. "2006-07"
+				      	  stat.each do |s|
+			      		    if s == stat[0]
+			      		  	  next
+			      		    end
+			      		    s.gsub!("-", "0")
+			      		    s.gsub!("...", "0")
+				      	  end
 				        nba_stats.push(stat)
-				      end
+				        end
+				  	  end
 				    end
 				  end
 				end

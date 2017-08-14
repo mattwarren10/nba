@@ -147,13 +147,13 @@ module ActivePlayer
 							  if stat[1] == t[:city]
 							    # season year has to be after year_drafted
 								if stat[0][0..3] >= year_drafted
-							  	season_year = stat[0].match(/\d+\-\d+/)
-							  	# make sure the season year does not contain any letters
-							  	  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
-							  	    if season_year != nil 
-				      				  if season_year[0].length == 7 || season_year[0].length == 9	# i.e. "2006-07" or "2006-2007"
-								   	    stat.each do |s| 
-								   	    	if s == stat[0]
+							  	  season_year = stat[0].match(/\d+\-\d+/)
+							  	  # make sure the season year does not contain any letters
+							  	    if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+							  	      if season_year != nil 
+				      				    if season_year[0].length == 7 || season_year[0].length == 9	# i.e. "2006-07" or "2006-2007"
+								   	      stat.each do |s| 
+								   	        if s == stat[0]
 								   	    		next
 								   	    	end
 								   	    	s.gsub!("-", "0")
