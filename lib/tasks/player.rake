@@ -163,12 +163,7 @@ namespace :player do
           break player
         end
         stats_created_count = 0
-        player_hash[:regular_season_stats].each do |s|              
-          if player.is_rookie
-            level = 1
-          else 
-            level = 0
-          end
+        player_hash[:regular_season_stats].each do |s|                       
           stat = Stat.create(
             league_player_id: league_player.id,            
             season: s[0],

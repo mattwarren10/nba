@@ -16,24 +16,76 @@ module RetiredPlayer
 			data.text
 		end
 
+		def self.chosen_names
+			[
+				"Kareem Abdul-Jabbar",
+				"Kobe Bryant",
+				"Tim Duncan",
+				"Kevin Garnett",
+				"Shaquille O'Neal",
+				"Michael Jordan",
+				"Karl Malone",
+				"Larry Bird",
+				"Elvin Hayes",
+				"Magic Johnson",
+				"Moses Malone",
+				"Hakeem Olajuwon",
+				"Isiah Thomas",
+				"Charles Barkley",
+				"Elgin Baylor",
+				"Julius Erving",
+				"Patrick Ewing",
+				"Allen Iverson",
+				"Ray Allen",
+				"Clyde Drexler",
+				"Jason Kidd",
+				"Paul Pierce",
+				"David Robinson",
+				"John Stockton",
+				"George Gervin",
+				"Robert Parish",
+				"Gary Payton",				
+				"Dominique Wilkins",
+				"Rick Barry",
+				"Dikembe Mutombo",
+				"Steve Nash",
+				"Grant Hill",
+				"Tracy McGrady",
+				"Kevin McHale",
+				"Alonzo Mourning",
+				"Scottie Pippen",
+				"Jermaine O'Neal",
+				"Mitch Richmond",
+				"Amar'e Stoudemire",
+				"Chauncey Billups",
+				"Pete Maravich",
+				"Reggie Miller"
+			]
+		end
+
 		def self.separate_names_and_links
 			noko_elements = names_and_links
-			data = noko_elements.split(/(?<!\-)(?<!\_)(?<!\d)(?<!\')(?<!Mc)(?<!De)(?<!\s)(?=[A-Z])|(\/wiki\/)/)
+			data = noko_elements.split(/(?<!\-)(?<!\_)(?<!\d)(?<!\')(?<!Mc)(?<!\s)(?=[A-Z])|(\/wiki\/)/)
+			retired_players = chosen_names			
 			players = []
 			data.delete("/wiki/")
-			data.each_with_index do |d, i|				
+			data.each_with_index do |d, i|	
+				# names are even indices and wiki_links are odd indices 
 				if i.even?
-					player = {}
-					full_name = d.split(" ")
-					player[:last_name] = full_name[1]
-					player[:first_name] = full_name[0]
-				else
-					players[-1][:wiki_link] = d
+				  if retired_players.include?(d)				    
+				    player = {}					
+				    full_name = d.split(" ")						
+				    player[:last_name] = full_name[1]
+				    player[:first_name] = full_name[0]									    
+				    players.push(player)				 				 
+				  end
+				elsif i.odd? && d.include?(players[-1][:first_name])
+				  # capture the wiki_link
+				  players[-1][:wiki_link] = d
 				end
-				 players.push(player)				 				 
 			end
 			players.delete(nil)
-			players.first(89)	
+			players	
 		end
 	end
 
@@ -183,8 +235,9 @@ module RetiredPlayer
 			      		    end
 			      		    s.gsub!("-", "0")
 			      		    s.gsub!("...", "0")
-				      	  end
-				        nba_stats.push(stat)
+			      		    s.gsub!("…", "0")
+				      	  end				      	  
+				          nba_stats.push(stat)
 				        end
 				  	  end
 				    end
