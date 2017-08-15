@@ -1,6 +1,5 @@
 
-class Player < ApplicationRecord
-  extend MySportsApi
+class Player < ApplicationRecord  
   enum status: { active: 0, retired: 1 }
 
   has_many :league_players
