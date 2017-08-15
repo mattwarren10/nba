@@ -54,8 +54,7 @@ module RetiredPlayer
 				"Kevin McHale",
 				"Alonzo Mourning",
 				"Scottie Pippen",
-				"Jermaine O'Neal",
-				"Mitch Richmond",
+				"Jermaine O'Neal",				
 				"Amar'e Stoudemire",
 				"Chauncey Billups",
 				"Pete Maravich",
@@ -116,7 +115,7 @@ module RetiredPlayer
 				player_wiki_count += 1
 				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"
 			end
-			return players, player_data.first(89)
+			return players, player_data
 		end
 
 		def self.modify
@@ -178,11 +177,7 @@ module RetiredPlayer
 				i += 1
 				position, jersey_number = player_data[i].split(";")[1..2]
 				if jersey_number.nil?
-					jersey_number = ""
-				else
-				  if jersey_number.include?(",")
-					jersey_number = jersey_number.split(",")[0]
-				  end
+					jersey_number = ""				
 				end
 				if position.nil?
 					position = 'Forward'
@@ -294,7 +289,8 @@ module RetiredPlayer
 					players.push(player_hash)
 				end
 			end
-			players.reject!{|x| x[:regular_season_stats] == nil}			
+			players.reject!{|x| x[:regular_season_stats] == nil}
+			players
 		end
 	end
 end

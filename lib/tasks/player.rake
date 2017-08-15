@@ -202,17 +202,17 @@ namespace :player do
     desc 'downloads retired player wikis from wikipedia.org'
     task wiki: :environment do
       player_wikis_count = 0
-      wiki_links = RetiredPlayer::WikiList.separate_wiki_links
-      wiki_links.each do |link|
-        link_src = open("https://en.wikipedia.org/wiki/#{link}")
-          link_dest = "vendor/retired_player_wiki/#{link}.html"
+      players = RetiredPlayer::WikiList.separate_names_and_links
+      players.each do |player|
+        link_src = open("https://en.wikipedia.org/wiki/#{player[:wiki_link]}")
+          link_dest = "vendor/retired_player_wiki/#{player[:wiki_link]}.html"
           IO.copy_stream(link_src, link_dest)
           if File.file?(link_dest)
             player_wikis_count += 1
-            puts "#{player_wikis_count}: #{link}'s wiki has been stored at".green
+            puts "#{player_wikis_count}: #{player[:last_name]}'s wiki has been stored at".green
             puts "==>#{link_dest}"
           else
-            puts "Failed to store #{link}'s wiki page".red.bold
+            puts "Failed to store #{player[:last_name]}'s wiki page".red.bold
             break player
           end   
       end
