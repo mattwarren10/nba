@@ -163,7 +163,7 @@ namespace :player do
           break player
         end
         stats_created_count = 0
-        player_hash[:regular_season_stats].each do |s|                       
+        r[:regular_season_stats].each do |s|                       
           stat = Stat.create(
             league_player_id: league_player.id,            
             season: s[0],
@@ -179,7 +179,7 @@ namespace :player do
             steals_per_game: BigDecimal.new(s[10]),
             blocks_per_game: BigDecimal.new(s[11]),
             points_per_game: BigDecimal.new(s[12]),
-            level: level,
+            level: 0,
             category: 0
           )
           if stat.valid?

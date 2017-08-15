@@ -17,6 +17,8 @@ module RetiredPlayer
 		end
 
 		def self.chosen_names
+			# if adding to this array, re-run
+			# task `rails player:retired:wiki`
 			[
 				"Kareem Abdul-Jabbar",
 				"Kobe Bryant",
@@ -158,14 +160,18 @@ module RetiredPlayer
 				  next
 				else
 				  i = player_data.index(draft) - 1
-				  college = player_data[i].split(";")[-1]				
-				  if college != nil
-					college = college[0..college.index("(")].delete("(").rstrip
-			   	  else
-					college = high_school
-				  end
+				  before_nba = player_data[i].split(";")[-1]				
 				end				
-				retired_player.push(born_city, height, weight, college)
+			    if before_nba != nil
+				  before_nba = before_nba[0..before_nba.index("(")].delete("(").rstrip
+				  if before_nba == ""
+				    before_nba = high_school
+				  end
+		   	    elsif before_nba == nil || before_nba.to_s.strip.empty?
+				  before_nba = high_school
+			    end
+				p high_school
+				retired_player.push(born_city, height, weight, before_nba)
 				
 				# select which pick
 				i = player_data.index(draft) + 1
