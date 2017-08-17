@@ -31,7 +31,6 @@ module RetiredPlayer
 				"Elvin Hayes",
 				"Magic Johnson",
 				"Moses Malone",
-				"Hakeem Olajuwon",
 				"Isiah Thomas",
 				"Charles Barkley",
 				"Elgin Baylor",
@@ -43,21 +42,17 @@ module RetiredPlayer
 				"Jason Kidd",
 				"Paul Pierce",
 				"David Robinson",
-				"John Stockton",
-				"George Gervin",
+				"John Stockton",				
 				"Robert Parish",
-				"Gary Payton",				
-				"Dominique Wilkins",
+				"Gary Payton",								
 				"Rick Barry",
 				"Dikembe Mutombo",
 				"Steve Nash",
 				"Grant Hill",
 				"Tracy McGrady",
 				"Kevin McHale",
-				"Alonzo Mourning",
-				"Scottie Pippen",
+				"Alonzo Mourning",				
 				"Jermaine O'Neal",				
-				"Amar'e Stoudemire",
 				"Chauncey Billups",
 				"Pete Maravich",
 				"Reggie Miller"
@@ -71,7 +66,8 @@ module RetiredPlayer
 			players = []
 			data.delete("/wiki/")
 			data.each_with_index do |d, i|	
-				# names are even indices and wiki_links are odd indices 
+				# names are even indices and wiki_links are odd indices
+				d.gsub!("%27", "'")
 				if i.even?
 				  if retired_players.include?(d)				    
 				    player = {}					
@@ -80,7 +76,7 @@ module RetiredPlayer
 				    player[:first_name] = full_name[0]									    
 				    players.push(player)				 				 
 				  end
-				elsif i.odd? && d.include?(players[-1][:first_name])
+				elsif i.odd? && d.include?(players[-1][:last_name])
 				  # capture the wiki_link
 				  players[-1][:wiki_link] = d
 				end
@@ -115,7 +111,7 @@ module RetiredPlayer
 				data = CallNokogiri.xpath(url, xpath).map(&:text).join(";")
 				player_data.push(data.split("\n"))
 				player_wiki_count += 1
-				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"
+				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"				
 			end
 			return players, player_data
 		end
@@ -129,9 +125,9 @@ module RetiredPlayer
 				player_data.delete ""				
 				retired_player = []
 				if player_data.length < 13
+					# adding an empty array for placement purposes
 					retired_players.push(retired_player)
 					next
-
 				end											
 				img_link = player_data[0].split(";")[0]				
 				if img_link.include?("upload.wikimedia.org")
@@ -155,7 +151,8 @@ module RetiredPlayer
 
 				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
-				if draft.nil?				  
+				if draft.nil?
+				  # adding an empty array for placement purposes 
 				  retired_players.push(retired_player)
 				  next
 				else
@@ -169,8 +166,7 @@ module RetiredPlayer
 				  end
 		   	    elsif before_nba == nil || before_nba.to_s.strip.empty?
 				  before_nba = high_school
-			    end
-				p high_school
+			    end				
 				retired_player.push(born_city, height, weight, before_nba)
 				
 				# select which pick
@@ -212,10 +208,11 @@ module RetiredPlayer
 				  if str.include?("\u2013")	# selects only str with unicode dash					  	
 				  	str.gsub!("\u2013", "-") # replaces unicode dash with utf-8 dash
 				    str.gsub!("\u2020", "")	# removes unicode dagger 
+				    season_index = player_data.index(str)
 				    if player_data.count(str) == 1 # if player had one team during a season
-				      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12]) 					      
+				      stats.push(player_data[season_index..season_index + 12]) 					      
 				    elsif player_data.count(str) > 1 # if player had more than one team during a season    							     
-				      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
+				      stats.push(player_data[season_index + 13..season_index + 25])
 				    end
 				  end
 				end
@@ -229,9 +226,18 @@ module RetiredPlayer
 				  if stat[0].match(/[a-z]/).nil?
 				    if season != nil 
 				      if season[0][0..3] >= year_drafted
-				        if season[0].length == 7	# i.e. "2006-07"
+				      	# correct length
+				        if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"				          
 				      	  stat.each do |s|
 			      		    if s == stat[0]
+		      		    	  if s == stat[0]
+		      		    	  	# correct format
+			    		        if s.match(/\d\d\d\d\-\d\d/)[0]
+			                  	  s = s[0..6]
+			              		elsif s.match(/\d\d\d\d\-\d\d\d\d/)[0]
+			                	  s = s[0..8]
+			              		end
+			    		      end
 			      		  	  next
 			      		    end
 			      		    s.gsub!("-", "0")

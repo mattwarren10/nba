@@ -41,6 +41,7 @@ gem 'colorize', '~> 0.8.1'
 gem 'progress_bar', '~> 1.1'
 gem 'devise', '~> 4.3'
 gem 'nokogiri', '~> 1.8'
+gem 'htmlentities', '~> 4.3', '>= 4.3.4'
 
 
 group :development, :test do

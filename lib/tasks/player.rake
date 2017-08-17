@@ -187,7 +187,7 @@ namespace :player do
             puts "==> #{stat.season}, (id: #{stat.id}) has been created.".light_blue              
             puts "==> #{stats_created_count} stats created for #{player.last_name} so far".light_blue                                     
           else
-            puts "Failure: tried to create stat: #{stat}".red
+            puts "Failure: tried to create stat: #{stat.inspect}".red
             puts "==> #{stat.errors.full_messages.red}".red.bold
             break stat
           end
