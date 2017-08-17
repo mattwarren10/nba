@@ -8,11 +8,7 @@ RSpec.describe Stat, type: :model do
 		it 'cannot be created without a season' do
 			@stat.season = nil
 			expect(@stat).to_not be_valid
-		end
-		it 'cannot be created if season is incorrect length' do
-			@stat.season = '2016'
-			expect(@stat).to_not be_valid
-		end
+		end		
 		it 'cannot be created without a team' do
 			@stat.team = nil
 			expect(@stat).to_not be_valid
@@ -76,7 +72,15 @@ RSpec.describe Stat, type: :model do
 			@stat.league_player_id = nil
 			@stat.league_team_id = nil
 			expect(@stat).to_not be_valid
+		end			
+		it 'has to have the correct length' do				
+			@stat.season = "2016"
+			expect(@stat).to_not be_valid
 		end
+		it 'has to be the correct format' do
+			@stat.season = "2016-[d]"
+			expect(@stat).to_not be_valid
+		end	
 	end
 
 	describe 'enums' do
