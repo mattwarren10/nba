@@ -53,7 +53,7 @@ namespace :player do
 
           # create stats for a player's single season
           stats_created_count = 0
-          player_hash[:regular_season_stats].each do |stat|              
+          player_hash[:regular_season_stats].each do |s|              
             if player.is_rookie
               level = 1
             else 
@@ -62,19 +62,19 @@ namespace :player do
             stat = Stat.create(
               league_player_id: league_player.id,
               league_team_id: league_team.id,
-              season: stat[0],
-              team: stat[1],
-              games_played: BigDecimal.new(stat[2]),
-              games_started: BigDecimal.new(stat[3]),
-              minutes_per_game: BigDecimal.new(stat[4]),
-              field_goal_percent: BigDecimal.new(stat[5]),
-              three_point_percent: BigDecimal.new(stat[6]),
-              free_throw_percent: BigDecimal.new(stat[7]),
-              rebounds_per_game: BigDecimal.new(stat[8]),
-              assists_per_game: BigDecimal.new(stat[9]),
-              steals_per_game: BigDecimal.new(stat[10]),
-              blocks_per_game: BigDecimal.new(stat[11]),
-              points_per_game: BigDecimal.new(stat[12]),
+              season: s[0],
+              team: s[1],
+              games_played: BigDecimal.new(s[2]),
+              games_started: BigDecimal.new(s[3]),
+              minutes_per_game: BigDecimal.new(s[4]),
+              field_goal_percent: BigDecimal.new(s[5]),
+              three_point_percent: BigDecimal.new(s[6]),
+              free_throw_percent: BigDecimal.new(s[7]),
+              rebounds_per_game: BigDecimal.new(s[8]),
+              assists_per_game: BigDecimal.new(s[9]),
+              steals_per_game: BigDecimal.new(s[10]),
+              blocks_per_game: BigDecimal.new(s[11]),
+              points_per_game: BigDecimal.new(s[12]),
               level: level,
               category: 0
             )
@@ -128,6 +128,71 @@ namespace :player do
   namespace :retired do
     desc 'creating retired players'
     task create: :environment do
+      players_created_count = 0
+      nba = League.find(1)
+      retired_players = RetiredPlayer::Attr.get
+      retired_players.each do |r|
+        player = Player.create(
+          last_name: r[:last_name],
+          first_name: r[:first_name],
+          jersey_number: r[:jersey_number],
+          height: r[:height],
+          weight: r[:weight],
+          before_nba: r[:before_nba],
+          is_rookie: r[:is_rookie],
+          position: r[:position],
+          birth_date: r[:birth_date],
+          which_pick: r[:which_pick],
+          years_pro: r[:years_pro],
+          wiki_link: r[:wiki_link],
+          image_link: r[:image_link],
+          from_city: r[:from_city],
+          status: 1
+        )
+        puts "Adding #{player.last_name} to #{nba.abbreviation}...".yellow
+        nba.players.push(player)        
+        league_player = LeaguePlayer.where(league_id: nba.id, player_id: player.id).first        
+        if player.valid?        
+          players_created_count += 1
+          puts "#{player.last_name}, #{player.first_name} (id: #{player.id}) has been created."
+          puts "==> #{players_created_count} players created"                      
+                       
+        else
+          puts "Failure: tried to create player: #{player}".red
+          puts "  ==> #{player.errors.full_messages.red}".red.bold
+          break player
+        end
+        stats_created_count = 0
+        r[:regular_season_stats].each do |s|                       
+          stat = Stat.create(
+            league_player_id: league_player.id,            
+            season: s[0],
+            team: s[1],
+            games_played: BigDecimal.new(s[2]),
+            games_started: BigDecimal.new(s[3]),
+            minutes_per_game: BigDecimal.new(s[4]),
+            field_goal_percent: BigDecimal.new(s[5]),
+            three_point_percent: BigDecimal.new(s[6]),
+            free_throw_percent: BigDecimal.new(s[7]),
+            rebounds_per_game: BigDecimal.new(s[8]),
+            assists_per_game: BigDecimal.new(s[9]),
+            steals_per_game: BigDecimal.new(s[10]),
+            blocks_per_game: BigDecimal.new(s[11]),
+            points_per_game: BigDecimal.new(s[12]),
+            level: 0,
+            category: 0
+          )
+          if stat.valid?
+            stats_created_count += 1
+            puts "==> #{stat.season}, (id: #{stat.id}) has been created.".light_blue              
+            puts "==> #{stats_created_count} stats created for #{player.last_name} so far".light_blue                                     
+          else
+            puts "Failure: tried to create stat: #{stat.inspect}".red
+            puts "==> #{stat.errors.full_messages.red}".red.bold
+            break stat
+          end
+        end
+      end
     end
   end
 end
@@ -137,17 +202,17 @@ namespace :player do
     desc 'downloads retired player wikis from wikipedia.org'
     task wiki: :environment do
       player_wikis_count = 0
-      wiki_links = RetiredPlayer::WikiList.separate_wiki_links
-      wiki_links.each do |link|
-        link_src = open("https://en.wikipedia.org/wiki/#{link}")
-          link_dest = "vendor/retired_player_wiki/#{link}.html"
+      players = RetiredPlayer::WikiList.separate_names_and_links
+      players.each do |player|
+        link_src = open("https://en.wikipedia.org/wiki/#{player[:wiki_link]}")
+          link_dest = "vendor/retired_player_wiki/#{player[:wiki_link]}.html"
           IO.copy_stream(link_src, link_dest)
           if File.file?(link_dest)
             player_wikis_count += 1
-            puts "#{player_wikis_count}: #{link}'s wiki has been stored at".green
+            puts "#{player_wikis_count}: #{player[:last_name]}'s wiki has been stored at".green
             puts "==>#{link_dest}"
           else
-            puts "Failed to store #{link}'s wiki page".red.bold
+            puts "Failed to store #{player[:last_name]}'s wiki page".red.bold
             break player
           end   
       end

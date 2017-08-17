@@ -6,10 +6,14 @@ class Stat < ApplicationRecord
   belongs_to :league_player, optional: true
   belongs_to :league_team, optional: true
 
+  SEASON_REGEX = /\d\d\d\d\-(\d\d|\d\d\d\d)/
+
   # the next two validations says an active player's stat can be without a team or a league
   validates :league_player, presence: true, unless: :team_exist?  
   validates :league_team, presence: true, unless: :player_exist?
-  validates :season, presence: true, length: { is: 7 }
+  validates :season, presence: true, 
+            :length => { minimum: 7, maximum: 9 },
+            :format => SEASON_REGEX
   validates_presence_of :team,
             						:games_played,  						
             						:minutes_per_game,

@@ -1,5 +1,4 @@
-class Team < ApplicationRecord
-	extend MySportsApi
+class Team < ApplicationRecord	
 	has_many :league_teams
 	has_many :leagues, through: :league_teams
 

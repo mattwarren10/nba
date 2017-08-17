@@ -16,24 +16,73 @@ module RetiredPlayer
 			data.text
 		end
 
+		def self.chosen_names
+			# if adding to this array, re-run
+			# task `rails player:retired:wiki`
+			[
+				"Kareem Abdul-Jabbar",
+				"Kobe Bryant",
+				"Tim Duncan",
+				"Kevin Garnett",
+				"Shaquille O'Neal",
+				"Michael Jordan",
+				"Karl Malone",
+				"Larry Bird",
+				"Elvin Hayes",
+				"Magic Johnson",
+				"Moses Malone",
+				"Isiah Thomas",
+				"Charles Barkley",
+				"Elgin Baylor",
+				"Julius Erving",
+				"Patrick Ewing",
+				"Allen Iverson",
+				"Ray Allen",
+				"Clyde Drexler",
+				"Jason Kidd",
+				"Paul Pierce",
+				"David Robinson",
+				"John Stockton",				
+				"Robert Parish",
+				"Gary Payton",								
+				"Rick Barry",
+				"Dikembe Mutombo",
+				"Steve Nash",
+				"Grant Hill",
+				"Tracy McGrady",
+				"Kevin McHale",
+				"Alonzo Mourning",				
+				"Jermaine O'Neal",				
+				"Chauncey Billups",
+				"Pete Maravich",
+				"Reggie Miller"
+			]
+		end
+
 		def self.separate_names_and_links
 			noko_elements = names_and_links
-			data = noko_elements.split(/(?<!\-)(?<!\_)(?<!\d)(?<!\')(?<!Mc)(?<!De)(?<!\s)(?=[A-Z])|(\/wiki\/)/)
+			data = noko_elements.split(/(?<!\-)(?<!\_)(?<!\d)(?<!\')(?<!Mc)(?<!\s)(?=[A-Z])|(\/wiki\/)/)
+			retired_players = chosen_names			
 			players = []
 			data.delete("/wiki/")
-			data.each_with_index do |d, i|				
+			data.each_with_index do |d, i|	
+				# names are even indices and wiki_links are odd indices
+				d.gsub!("%27", "'")
 				if i.even?
-					player = {}
-					full_name = d.split(" ")
-					player[:last_name] = full_name[1]
-					player[:first_name] = full_name[0]
-				else
-					players[-1][:wiki_link] = d
+				  if retired_players.include?(d)				    
+				    player = {}					
+				    full_name = d.split(" ")						
+				    player[:last_name] = full_name[1]
+				    player[:first_name] = full_name[0]									    
+				    players.push(player)				 				 
+				  end
+				elsif i.odd? && d.include?(players[-1][:last_name])
+				  # capture the wiki_link
+				  players[-1][:wiki_link] = d
 				end
-				 players.push(player)				 				 
 			end
 			players.delete(nil)
-			players.first(89)	
+			players	
 		end
 	end
 
@@ -62,9 +111,9 @@ module RetiredPlayer
 				data = CallNokogiri.xpath(url, xpath).map(&:text).join(";")
 				player_data.push(data.split("\n"))
 				player_wiki_count += 1
-				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"
+				puts "#{player_wiki_count} retired wikis retrieved, currently on #{player[:wiki_link]}"				
 			end
-			return players, player_data.first(89)
+			return players, player_data
 		end
 
 		def self.modify
@@ -76,14 +125,13 @@ module RetiredPlayer
 				player_data.delete ""				
 				retired_player = []
 				if player_data.length < 13
+					# adding an empty array for placement purposes
 					retired_players.push(retired_player)
 					next
-
 				end											
 				img_link = player_data[0].split(";")[0]				
 				if img_link.include?("upload.wikimedia.org")
-					retired_player.push(img_link)
-					p img_link
+					retired_player.push(img_link)					
 				else
 					retired_player.push(nil)
 				end				
@@ -103,19 +151,23 @@ module RetiredPlayer
 
 				# use "NBA draft" str as a reference point
 				draft = player_data.grep(/draft/)[0]
-				if draft.nil?				  
+				if draft.nil?
+				  # adding an empty array for placement purposes 
 				  retired_players.push(retired_player)
 				  next
 				else
 				  i = player_data.index(draft) - 1
-				  college = player_data[i].split(";")[-1]				
-				  if college != nil
-					college = college[0..college.index("(")].delete("(").rstrip
-			   	  else
-					college = high_school
-				  end
+				  before_nba = player_data[i].split(";")[-1]				
 				end				
-				retired_player.push(born_city, height, weight, college)
+			    if before_nba != nil
+				  before_nba = before_nba[0..before_nba.index("(")].delete("(").rstrip
+				  if before_nba == ""
+				    before_nba = high_school
+				  end
+		   	    elsif before_nba == nil || before_nba.to_s.strip.empty?
+				  before_nba = high_school
+			    end				
+				retired_player.push(born_city, height, weight, before_nba)
 				
 				# select which pick
 				i = player_data.index(draft) + 1
@@ -127,11 +179,7 @@ module RetiredPlayer
 				i += 1
 				position, jersey_number = player_data[i].split(";")[1..2]
 				if jersey_number.nil?
-					jersey_number = ""
-				else
-				  if jersey_number.include?(",")
-					jersey_number = jersey_number.split(",")[0]
-				  end
+					jersey_number = ""				
 				end
 				if position.nil?
 					position = 'Forward'
@@ -160,10 +208,11 @@ module RetiredPlayer
 				  if str.include?("\u2013")	# selects only str with unicode dash					  	
 				  	str.gsub!("\u2013", "-") # replaces unicode dash with utf-8 dash
 				    str.gsub!("\u2020", "")	# removes unicode dagger 
+				    season_index = player_data.index(str)
 				    if player_data.count(str) == 1 # if player had one team during a season
-				      stats.push(player_data[player_data.index(str)..player_data.index(str) + 12]) 					      
+				      stats.push(player_data[season_index..season_index + 12]) 					      
 				    elsif player_data.count(str) > 1 # if player had more than one team during a season    							     
-				      stats.push(player_data[player_data.index(str) + 13..player_data.index(str) + 25])
+				      stats.push(player_data[season_index + 13..season_index + 25])
 				    end
 				  end
 				end
@@ -171,12 +220,33 @@ module RetiredPlayer
 				# only select seasons
 				nba_stats = []
 				stats.each do |stat|
+				  # collect the season year
 				  season = stat[0].match(/\d+\-\d+/)
-				  if stat[0].match(/[a-z]/).nil? # bypass arrays that are not a season
+				  # bypass arrays that are not a season
+				  if stat[0].match(/[a-z]/).nil?
 				    if season != nil 
-				      if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"		        
-				        nba_stats.push(stat)
-				      end
+				      if season[0][0..3] >= year_drafted
+				      	# correct length
+				        if season[0].length == 7 || season[0].length == 9	# i.e. "2006-07" or "2006-2007"				          
+				      	  stat.each do |s|
+			      		    if s == stat[0]
+		      		    	  if s == stat[0]
+		      		    	  	# correct format
+			    		        if s.match(/\d\d\d\d\-\d\d/)[0]
+			                  	  s = s[0..6]
+			              		elsif s.match(/\d\d\d\d\-\d\d\d\d/)[0]
+			                	  s = s[0..8]
+			              		end
+			    		      end
+			      		  	  next
+			      		    end
+			      		    s.gsub!("-", "0")
+			      		    s.gsub!("...", "0")
+			      		    s.gsub!("…", "0")
+				      	  end				      	  
+				          nba_stats.push(stat)
+				        end
+				  	  end
 				    end
 				  end
 				end
@@ -231,7 +301,8 @@ module RetiredPlayer
 					players.push(player_hash)
 				end
 			end
-			players.reject!{|x| x[:regular_season_stats] == nil}			
+			players.reject!{|x| x[:regular_season_stats] == nil}
+			players
 		end
 	end
 end
