@@ -1,52 +1,7 @@
-<h1>Players</h1>
-
 <table>
-	<thead>		
-		<td>Last Name</td>
-		<td>First Name</td>
-		<td>Number</td>
-		<td>Position</td>
-		<td>Height</td>
-		<td>Weight</td>
-		<td>Birthday</td>
-		<td>Age</td>
-		<td>Rookie?</td>
-		<td>NBA.com ID</td>
-		<td>Team ID</td>
-	</thead>
-	<tbody>
-	<% player_count = 0 %>
-	<% nba_com = 0 %>
-	<% @result['activeplayers']['playerentry'].each do |data| %>
-		<tr>
-			
-			<td><%= data['player']['LastName'] %></td>
-			<td><%= data['player']['FirstName'] %></td>
-			<td><%= data['player']['JerseyNumber'] %></td>
-			<td><%= data['player']['Position'] %></td>
-			<td><%= data['player']['Height'] %></td>
-			<td><%= data['player']['Weight'] %></td>
-			<td><%= data['player']['BirthDate'] %></td>
-			<td><%= data['player']['Age'] %></td>
-			<td><%= data['player']['IsRookie'] %></td>
-			<td>
-				<% if data['player']['externalMapping'].nil? %>
-					<%= 0 %>
-				<% else %>
-					<%= data['player']['externalMapping']['ID'].to_i %>
-					<% nba_com += 1 %>
-				<% end %>
-			</td>
-			<td>
-				<%= data['team'] %>
-					
-													
-			</td>
-			
-		</tr>
-		<% player_count += 1 %>
-	<% end %>
-	<p><%= "Player count #{player_count}" %></p>
-	<p><%= "Players with nba_com #{nba_com}" %></p>
-	</tbody>
+<% @players.retired.each do |player| %>
+<tr>
+	<td><%= player.inspect %></td>
+</tr>
+<% end %>
 </table>

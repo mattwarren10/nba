@@ -1,6 +1,7 @@
 class PlayersController < ApplicationController
   def index
-  	@result = Player.call_active_players_from_api
+  	@players = Player.all
+  	render json: @players
   end
 
   def show
